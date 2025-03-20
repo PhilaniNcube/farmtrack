@@ -10,9 +10,6 @@ const UserComponent = async () => {
 
     const user = await stackServerApp.getUser()
 
-    if (!user) {
-        return null
-    }
 
     return (
         <div>
