@@ -1,4 +1,6 @@
 import type React from "react"
+import { StackProvider, StackTheme } from "@stackframe/stack";
+import { stackServerApp } from "../stack";
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -20,14 +22,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className}><StackProvider app={stackServerApp}><StackTheme>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <div className="flex min-h-screen flex-col container mx-auto">
            
             {children}
           </div>
         </ThemeProvider>
-      </body>
+      </StackTheme></StackProvider></body>
     </html>
   )
 }
