@@ -25,7 +25,7 @@ export default async function Dashboard() {
   const activeCrops = crops.filter((crop) => crop.status === "growing" || crop.status === "planted")
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen w-full ">
       <main className="flex-1 p-4 md:p-6">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>

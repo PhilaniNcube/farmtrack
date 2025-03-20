@@ -22,14 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}><StackProvider app={stackServerApp}><StackTheme>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <div className="flex min-h-screen flex-col container mx-auto">
-
-            {children}
-          </div>
-        </ThemeProvider>
-      </StackTheme></StackProvider></body>
+      <body className={inter.className}>
+        <StackProvider app={stackServerApp}>
+          <StackTheme>
+            <div className="flex min-h-screen flex-col">
+              {children}
+            </div>
+          </StackTheme></StackProvider></body>
     </html>
   )
 }

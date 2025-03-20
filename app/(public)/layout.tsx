@@ -16,9 +16,8 @@ const PublicLayout = ({ children }: { children: ReactNode }) => {
                             </span>
                         </Link>
                     </div>
-                    
+
                     <div className="flex items-center gap-x-4">
-                        
                         <UserComponent />
                     </div>
                 </div>
