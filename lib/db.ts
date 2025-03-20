@@ -1,19 +1,23 @@
-import { neon } from "@neondatabase/serverless"
-import { drizzle } from "drizzle-orm/neon-http"
+import 'dotenv/config';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon, neonConfig } from '@neondatabase/serverless';
+import ws from 'ws';
+import { schema } from './schema';
 
-// Create a SQL client with the database URL from environment variables
-const sql = neon(process.env.DATABASE_URL!)
 
-// Create a drizzle client
-export const db = drizzle(sql)
+neonConfig.webSocketConstructor = ws;
+// To work in edge environments (Cloudflare Workers, Vercel Edge, etc.), enable querying over fetch
+neonConfig.poolQueryViaFetch = true;
+const sql = neon(process.env.DATABASE_URL!);
+export const db = drizzle(sql, { schema });
 
-// Helper function for direct SQL queries
-export async function query(sql: string, params: any[] = []) {
+// Helper function for raw SQL queries (for backward compatibility)
+export async function query(text: string, params?: any[]) {
   try {
-    return await db.execute(sql, params)
+    const result = await sql(text, params);
+    return { rows: result };
   } catch (error) {
-    console.error("Database query error:", error)
-    throw error
+    console.error('Database query error:', error);
+    throw error;
   }
 }
-
