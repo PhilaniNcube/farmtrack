@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1742500987828,
+      "tag": "0000_melted_norrin_radd",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1742502236476,
+      "tag": "0001_early_doomsday",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742503944481,
+      "tag": "0002_worried_carnage",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1742504628717,
+      "tag": "0003_soft_sunspot",
+      "breakpoints": true
+    }
+  ]
+}

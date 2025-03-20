@@ -29,6 +29,7 @@ import {
     SidebarProvider,
     SidebarTrigger
 } from '@/components/ui/sidebar'
+import { UserButton } from '@stackframe/stack'
 
 export function DashboardSidebar() {
     const pathname = usePathname()
@@ -39,6 +40,12 @@ export function DashboardSidebar() {
             icon: <LayoutDashboard />,
             href: "/dashboard",
             active: pathname === "/dashboard"
+        },
+        {
+            title: "Profile",
+            icon: <UserCog />,
+            href: "/dashboard/profile",
+            active: pathname === "/dashboard/profile"
         },
         {
             title: "Crops",
@@ -86,20 +93,6 @@ export function DashboardSidebar() {
         }
     ]
 
-    const settingsRoutes = [
-        {
-            title: "Profile",
-            icon: <UserCog />,
-            href: "/dashboard/profile",
-            active: pathname === "/dashboard/profile"
-        },
-        {
-            title: "Settings",
-            icon: <Settings />,
-            href: "/dashboard/settings",
-            active: pathname === "/dashboard/settings"
-        }
-    ]
 
     return (
 
@@ -108,7 +101,7 @@ export function DashboardSidebar() {
                 <Link href="/dashboard" className="flex items-center gap-2 px-2">
                     <h1 className="text-xl font-bold">FarmTrack</h1>
                 </Link>
-                <SidebarTrigger />
+                {/* <SidebarTrigger /> */}
             </SidebarHeader>
             <SidebarContent>
                 <SidebarMenu>
@@ -147,20 +140,15 @@ export function DashboardSidebar() {
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
-                    {settingsRoutes.map((route) => (
-                        <SidebarMenuItem key={route.href}>
-                            <SidebarMenuButton
-                                asChild
-                                isActive={route.active}
-                                tooltip={route.title}
-                            >
-                                <Link href={route.href}>
-                                    {route.icon}
-                                    <span>{route.title}</span>
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                    ))}
+                   
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            asChild
+                            tooltip="Help"
+                        >
+                            <UserButton />
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarFooter>
         </Sidebar>

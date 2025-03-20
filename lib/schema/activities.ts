@@ -1,4 +1,5 @@
 import { pgTable, serial, varchar, timestamp, text, integer } from 'drizzle-orm/pg-core';
+import { farms } from './farms';
 
 export const activities = pgTable('activities', {
   id: serial('id').primaryKey(),
@@ -9,7 +10,7 @@ export const activities = pgTable('activities', {
   category: varchar('category', { length: 100 }).notNull(), // crops, livestock, etc.
   related_to: varchar('related_to', { length: 255 }), // specific crop, livestock, etc.
   notes: text('notes'),
-  user_id: varchar('user_id', { length: 255 }).notNull(),
+  farm_id: integer('farm_id').references(() => farms.id).notNull(),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });

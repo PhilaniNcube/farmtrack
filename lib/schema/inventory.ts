@@ -1,4 +1,5 @@
 import { pgTable, serial, varchar, timestamp, text, numeric, integer } from 'drizzle-orm/pg-core';
+import { farms } from './farms';
 
 export const inventory = pgTable('inventory', {
   id: serial('id').primaryKey(),
@@ -13,7 +14,7 @@ export const inventory = pgTable('inventory', {
   storage_location: varchar('storage_location', { length: 255 }),
   reorder_level: numeric('reorder_level'),
   notes: text('notes'),
-  user_id: varchar('user_id', { length: 255 }).notNull(),
+  farm_id: integer('farm_id').references(() => farms.id).notNull(),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });

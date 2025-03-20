@@ -7,6 +7,7 @@ import { inventory } from "./inventory";
 import { finances } from "./finances";
 import { crops } from "./crops";
 import { activities } from "./activities";
+import { farms } from "./farms";
 
 export const schema = {
   users,
@@ -16,6 +17,7 @@ export const schema = {
   finances,
   crops,
   activities,
+  farms,
 };
 
 export * from "./users";
@@ -25,3 +27,4 @@ export * from "./inventory";
 export * from "./finances";
 export * from "./crops";
 export * from "./activities";
+export * from "./farms";

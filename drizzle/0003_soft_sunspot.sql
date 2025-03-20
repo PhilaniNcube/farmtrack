@@ -1,0 +1,1 @@
+ALTER TABLE "farms" ADD COLUMN "created_by" varchar(255) NOT NULL;

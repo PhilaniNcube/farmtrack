@@ -1,15 +1,38 @@
-
 import { stackServerApp } from '@/stack'
 import { UserButton } from '@stackframe/stack'
 import Link from 'next/link'
 import React from 'react'
 import { Button } from '../ui/button'
 import { LucideLogIn, UserPlus } from 'lucide-react'
+import { db } from '@/lib/db';
+import { users } from '@/lib/schema/users';
+import { eq } from 'drizzle-orm';
 
 const UserComponent = async () => {
+    const user = await stackServerApp.getUser();
 
-    const user = await stackServerApp.getUser()
+    if (user !== null) {
+        // Check if the user exists in the database
+        const existingUser = await db.select().from(users).where(eq(users.id, user.id)).limit(1);
 
+        if (existingUser.length === 0) {
+            // Insert the user into the database if they don't exist
+            await db.insert(users).values({
+                id: user.id,
+                email: user.primaryEmail!,
+                name: user.displayName || 'Anonymous',
+                profile_image_url: user.profileImageUrl || '', // Ensure profile_image_url is always a string
+                is_active: true,
+                role: 'user', // Default role, you can change this based on your logic
+                last_login: new Date(),
+                created_at: new Date(),
+                updated_at: new Date(),
+            })
+        } else {
+            // Update the last login time for the existing user
+            await db.update(users).set({ last_login: new Date() }).where(eq(users.id, user.id));
+        }
+    }
 
     return (
         <div>

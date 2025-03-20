@@ -3,6 +3,7 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { migrate } from 'drizzle-orm/neon-http/migrator';
 import { neon, neonConfig } from '@neondatabase/serverless';
 import ws from 'ws';
+import { db } from './db';
 
 // Required for Neon serverless
 neonConfig.webSocketConstructor = ws;
@@ -25,7 +26,30 @@ const runMigrations = async () => {
   process.exit(0);
 };
 
-runMigrations().catch((error) => {
-  console.error('Migration failed:', error);
-  process.exit(1);
-});
+async function dropAllTables() {
+  const sql = neon(process.env.DATABASE_URL!);
+  const db = drizzle(sql);
+
+  const tables = await db.execute(
+    `SELECT tablename FROM pg_tables WHERE schemaname = 'public';`
+  );
+
+  for (const table of tables.rows) {
+    await db.execute(`DROP TABLE IF EXISTS "${table.tablename}" CASCADE;`);
+  }
+
+  console.log('All tables dropped successfully.');
+}
+
+// Ensure dropAllTables completes before running migrations
+const main = async () => {
+  try {
+    await dropAllTables();
+    await runMigrations();
+  } catch (error) {
+    console.error('Error during database reset and migration:', error);
+    process.exit(1);
+  }
+};
+
+main();
