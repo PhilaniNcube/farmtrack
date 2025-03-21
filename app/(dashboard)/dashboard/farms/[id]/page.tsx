@@ -13,13 +13,21 @@ import {
 import { MapPin, Calendar } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
 import { Separator } from "@/components/ui/separator"
+import { stackServerApp } from "@/stack"
+import { addMeAsFarmMember } from "@/app/actions/farm-members"
+import { Button } from "@/components/ui/button"
+import AddMe from "./add-me"
 
 export default async function FarmDetailsPage({
   params
 }: {
-  params: { id: string }
+  params: Promise<{ id: number }>
 }) {
-  const farmId = parseInt(params.id)
+
+  const resolvedParams = await params  
+
+  const farmId = resolvedParams.id
+  const currentUser = await stackServerApp.getUser()
   
   if (isNaN(farmId)) {
     return notFound()
@@ -34,7 +42,7 @@ export default async function FarmDetailsPage({
   }
 
   return (
-    <div className="container py-6 space-y-8">
+    <div className="container p-6 space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{farmData.name}</h1>
         {farmData.location && (
@@ -45,7 +53,7 @@ export default async function FarmDetailsPage({
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader className="pb-3">
@@ -68,6 +76,13 @@ export default async function FarmDetailsPage({
                 <span>
                   Created {formatDistanceToNow(new Date(farmData.created_at), { addSuffix: true })}
                 </span>
+                {/* If I am the creator of the farm add a button to add me as a member */}
+                <div>
+                {farmData.created_by === currentUser?.id && (
+                 <AddMe farmId={farmId} addMeAsFarmMember={addMeAsFarmMember} />
+                )}
+                </div>
+                
               </div>
             </CardContent>
           </Card>
@@ -75,7 +90,7 @@ export default async function FarmDetailsPage({
           {/* Additional farm information cards can be added here */}
         </div>
         
-        <div className="space-y-6">
+        <div className="space-y-6 col-span-1 lg:col-span-2">
           <FarmMembers farmId={farmId} />
         </div>
       </div>

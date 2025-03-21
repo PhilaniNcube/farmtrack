@@ -1,4 +1,4 @@
-import { getFarmMembers } from "@/lib/queries/farms"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Card,
@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { getFarmMembers } from "@/lib/queries/farm-members"
 import { formatDistanceToNow } from "date-fns"
 import { UserPlusIcon } from "lucide-react"
 
@@ -46,31 +47,24 @@ export async function FarmMembers({ farmId }: FarmMembersProps) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">User</TableHead>
+                <TableHead className="">User</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Role</TableHead>
-                <TableHead className="text-right">Joined</TableHead>
+          
               </TableRow>
             </TableHeader>
             <TableBody>
               {members.map((member) => (
-                <TableRow key={member.id}>
-                  <TableCell className="font-medium">
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={member.profile_image_url || ""} alt={member.name} />
-                        <AvatarFallback>{member.name.substring(0, 2).toUpperCase()}</AvatarFallback>
-                      </Avatar>
-                      <span>{member.name}</span>
+                <TableRow key={member.farm_members.id}>
+                  <TableCell className="font-medium w-fit">
+                    <div className="">
+                     
+                      <span>{member.users?.name}</span>
                     </div>
                   </TableCell>
-                  <TableCell>{member.email}</TableCell>
-                  <TableCell className="capitalize">{member.role}</TableCell>
-                  <TableCell className="text-right text-sm text-muted-foreground">
-                    {member.created_at
-                      ? formatDistanceToNow(new Date(member.created_at), { addSuffix: true })
-                      : "Unknown"}
-                  </TableCell>
+                  <TableCell>{member.users?.email}</TableCell>
+                  <TableCell className="capitalize">{member.farm_members?.role}</TableCell>
+                
                 </TableRow>
               ))}
             </TableBody>
