@@ -9,6 +9,7 @@ import ProfileForm from './profile-form'
 import { getCurrentUser } from '@/lib/queries/users'
 import { FarmsList } from './farm-list'
 import { CreateFarmForm } from './create-farm-form'
+import { FarmMembersTable } from './farm-members-table'
 
 export const metadata: Metadata = {
     title: "Profile",
@@ -77,6 +78,8 @@ const ProfilePage = async () => {
                             </CardHeader>
                             <CardContent>
                                 <CreateFarmForm />
+                                
+                             
                             </CardContent>
                         </Card>
                     </TabsContent>

@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/queries/users"
-import { farms, users } from "@/lib/schema"
+import { farms, users, farmMembers } from "@/lib/schema"
 import { eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
@@ -29,6 +29,17 @@ export async function createFarm(prevState:unknown, formData: FormData) {
                 updated_at: new Date(),
             })
             .returning({ id: farms.id })
+
+        // Add the creator as a member of the farm with the role of 'creator'
+        await db.insert(farmMembers).values({
+            farm_id: newFarm.id,
+            user_id: authUser.id,
+            role: "creator",
+            joined_at: new Date(),
+            is_active: true,
+            created_at: new Date(),
+            updated_at: new Date(),
+        });
 
         // Update the user's farm_id if they don't have one yet
         if (authUser && !authUser.farm_id) {

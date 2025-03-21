@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation"
 import { createFarm } from "@/app/actions/farms"
 import { CircleDashed } from "lucide-react"
 
+
+
 export function CreateFarmForm() {
     const { toast } = useToast()
     const router = useRouter()
@@ -24,10 +26,7 @@ export function CreateFarmForm() {
 
     const [state, formAction, isPending] = useActionState(createFarm, null)
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target
-        setFormData((prev) => ({ ...prev, [name]: value }))
-    }
+
 
 
 
@@ -68,6 +67,8 @@ export function CreateFarmForm() {
             <Button type="submit" disabled={isPending}>
                 {isPending ? <CircleDashed className='animate-spin' /> : "Create Farm"}
             </Button>
+            
+          
         </form>
     )
 }
