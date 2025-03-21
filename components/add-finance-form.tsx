@@ -34,7 +34,7 @@ export function AddFinanceForm() {
 
   const router = useRouter()
   const [date, setDate] = useState<Date>(new Date())
-  const [isSubmitting, setIsSubmitting] = useState(false)
+
 
   const [state, formAction, isPending] = useActionState(createFinance, null)
   
@@ -46,6 +46,7 @@ export function AddFinanceForm() {
         <CardDescription>Record a new financial transaction.</CardDescription>
       </CardHeader>
       <form action={formAction}>
+        <Input type="hidden" name="farm_id" value={farmId?.toString()} />
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="type">Transaction Type</Label>
@@ -171,9 +172,8 @@ export function AddFinanceForm() {
           <Button
             type="submit"
             className={type === "income" ? "bg-green-600 hover:bg-green-700" : "bg-blue-600 hover:bg-blue-700"}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Saving..." : `Save ${type === "income" ? "Income" : "Expense"}`}
+            disabled={isPending}>
+            {isPending ? "Saving..." : `Save ${type === "income" ? "Income" : "Expense"}`}
           </Button>
         </CardFooter>
       </form>

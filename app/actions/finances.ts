@@ -71,6 +71,8 @@ export async function createFinance(prevState: unknown, formData: FormData) {
 
     const result = await db.insert(finances).values([financeData]); // Wrap in array
 
+    console.log("Inserted finance:", result);
+
     revalidatePath(`/dashboard/farms/${farmId}/finances`);
     return { finance: result.rows[0] as Finance };
   } catch (error) {
