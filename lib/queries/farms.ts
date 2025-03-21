@@ -2,7 +2,7 @@ import "server-only";
 
 import { db } from "@/lib/db";
 import { stackServerApp } from "@/stack";
-
+import { getUserFarms } from "./farm-members";
 
 export async function getMyFarms() {
   const authUser = await stackServerApp.getUser();
@@ -15,6 +15,18 @@ export async function getMyFarms() {
   });
 
   return farms;
+}
+
+export async function getAllMyFarms() {
+  const authUser = await stackServerApp.getUser();
+  if (!authUser?.id) {
+    return [];
+  }
+
+  // Get all farms where the user is a member
+  const userFarms = await getUserFarms();
+  
+  return userFarms.map(({ farm }) => farm);
 }
 
 export async function getFarmMembers(farmId: number) {

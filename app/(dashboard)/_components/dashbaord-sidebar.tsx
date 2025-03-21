@@ -1,8 +1,8 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import {
     LayoutDashboard,
     Wheat,
@@ -27,12 +27,46 @@ import {
     SidebarMenuSubButton,
     SidebarMenuSubItem,
     SidebarProvider,
-    SidebarTrigger
+    SidebarTrigger,
+    SidebarSeparator
 } from '@/components/ui/sidebar'
 import { UserButton } from '@stackframe/stack'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { UserFarms } from '@/lib/queries/farm-members'
 
-export function DashboardSidebar() {
+// Farm type definition
+interface Farm {
+    id: number
+    name: string
+    location?: string
+    description?: string
+    created_at: string
+    updated_at: string
+}
+
+export function DashboardSidebar({farms}: { farms: UserFarms[] }) {
     const pathname = usePathname()
+    const params = useParams()
+
+    console.log("Params: ", params)
+
+    const farmId = params.farmId as string
+    const farmIdNum = parseInt(farmId)
+
+    const [selectedFarm, setSelectedFarm] = useState<number | null>(farms[0]?.farm?.id || null)
+    const router = useRouter()
+
+
+
+    // Handle farm change
+    const handleFarmChange = (farmId: string) => {
+        setSelectedFarm(parseInt(farmId))
+        if (farmId === "manage") {
+            router.push("/dashboard/profile")
+        } else {
+            router.push(`/dashboard/farms/${farmId}`)
+        }
+    }
 
     const routes = [
         {
@@ -50,46 +84,46 @@ export function DashboardSidebar() {
         {
             title: "Crops",
             icon: <Wheat />,
-            href: "/dashboard/crops",
-            active: pathname === "/dashboard/crops" || pathname.startsWith("/dashboard/crops/"),
+            href: `/dashboard/farms/${selectedFarm}/crops`,
+            active: pathname === `/dashboard/farms/${selectedFarm}/crops` || pathname.startsWith(`/dashboard/farms/${selectedFarm}/crops`),
             subItems: [
                 {
                     title: "Add Crop",
-                    href: "/dashboard/crops/add",
-                    active: pathname === "/dashboard/crops/add"
+                    href:   `/dashboard/farms/${selectedFarm}/crops/add`,
+                    active: pathname === `/dashboard/farms/${selectedFarm}/crops/add`
                 }
             ]
         },
         {
             title: "Finances",
             icon: <PiggyBank />,
-            href: "/dashboard/finances",
-            active: pathname === "/dashboard/finances" || pathname.startsWith("/dashboard/finances/"),
+            href: `/dashboard/farms/${selectedFarm}/finances`,
+            active: pathname === `/dashboard/farms/${selectedFarm}/finances` || pathname.startsWith(`/dashboard/farms/${selectedFarm}/finances`),
             subItems: [
                 {
                     title: "Add Transaction",
-                    href: "/dashboard/finances/add",
-                    active: pathname === "/dashboard/finances/add"
+                    href: `/dashboard/farms/${selectedFarm}/finances/add`,
+                    active: pathname === `/dashboard/farms/${selectedFarm}/finances/add`
                 }
             ]
         },
         {
             title: "Inventory",
             icon: <PackageIcon />,
-            href: "/dashboard/inventory",
-            active: pathname === "/dashboard/inventory" || pathname.startsWith("/dashboard/inventory/")
+            href: `/dashboard/farms/${selectedFarm}/inventory`,
+            active: pathname === `/dashboard/farms/${selectedFarm}/inventory` || pathname.startsWith(`/dashboard/farms/${selectedFarm}/inventory`)
         },
         {
             title: "Livestock",
             icon: <Beef />,
-            href: "/dashboard/livestock",
-            active: pathname === "/dashboard/livestock" || pathname.startsWith("/dashboard/livestock/")
+            href: `/dashboard/farms/${selectedFarm}/livestock`,
+            active: pathname === `/dashboard/farms/${selectedFarm}/livestock` || pathname.startsWith(`/dashboard/farms/${selectedFarm}/livestock`)
         },
         {
             title: "Reports",
             icon: <BarChart3 />,
-            href: "/dashboard/reports",
-            active: pathname === "/dashboard/reports" || pathname.startsWith("/dashboard/reports/")
+            href: `/dashboard/farms/${selectedFarm}/reports`,
+            active: pathname === `/dashboard/farms/${selectedFarm}/reports` || pathname.startsWith(`/dashboard/farms/${selectedFarm}/reports`)
         }
     ]
 
@@ -104,6 +138,26 @@ export function DashboardSidebar() {
                 {/* <SidebarTrigger /> */}
             </SidebarHeader>
             <SidebarContent>
+                {/* Farm Selector Dropdown */}
+                <div className="px-2 pb-2 mt-4">
+                    <Select onValueChange={handleFarmChange} value={selectedFarm?.toString()} defaultValue={selectedFarm?.toString()}>
+                        <SelectTrigger className="w-full bg-sidebar-accent/10 border-sidebar-border">
+                            <SelectValue placeholder="Select a farm" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {farms.length > 0 && farms.map((farm) => (
+                                <SelectItem key={farm.farm?.id} value={farm.farm?.id.toString()!}>
+                                    {farm.farm?.name}
+                                </SelectItem>
+                            ))}
+                            <SidebarSeparator />
+                            <SelectItem value="manage">
+                                <Link href="/dashboard/profile" className="flex w-full">Manage Farms</Link>
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                
                 <SidebarMenu>
                     {routes.map((route) => (
                         <SidebarMenuItem key={route.href}>

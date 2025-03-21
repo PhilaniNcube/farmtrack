@@ -23,6 +23,18 @@ export async function addMeAsFarmMember(farmId: number) {
     return;
   }
 
+  // Check if the user is already a member of the farm
+  const existingMember = await db.query.farmMembers.findFirst({
+    where: (farmMembers, { eq }) => eq(farmMembers.user_id, currentUser.id),
+  });
+
+  if (existingMember) {
+    console.log("User is already a member of the farm");
+    return;
+  }
+
+
+
   try {
     const [newFarmMember] = await db
       .insert(farmMembers)
