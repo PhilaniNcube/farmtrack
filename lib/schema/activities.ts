@@ -14,3 +14,7 @@ export const activities = pgTable('activities', {
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });
+
+// Example activity types
+export type Activity = typeof activities.$inferSelect
+export type ActivityInsert = typeof activities.$inferInsert

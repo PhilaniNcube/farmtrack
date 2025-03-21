@@ -18,3 +18,6 @@ export const inventory = pgTable('inventory', {
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });
+
+export type Inventory = typeof inventory.$inferSelect;
+export type InventoryInsert = typeof inventory.$inferInsert;

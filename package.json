@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate:pg --schema ./drizzle/schema.ts",
-    "db:push": "drizzle-kit push:pg",
+    "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:migrate": "tsx lib/migrate.ts"
   },
@@ -85,6 +85,7 @@
     "react-hook-form": "^7.54.1",
     "react-resizable-panels": "^2.1.7",
     "recharts": "latest",
+    "server-only": "^0.0.1",
     "sonner": "^1.7.1",
     "sql.js": "latest",
     "sqlite3": "latest",

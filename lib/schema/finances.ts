@@ -15,3 +15,6 @@ export const finances = pgTable('finances', {
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });
+
+export type Finance = typeof finances.$inferSelect;
+export type FinanceInsert = typeof finances.$inferInsert;

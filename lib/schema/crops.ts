@@ -16,3 +16,6 @@ export const crops = pgTable('crops', {
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });
+
+export type Crop = typeof crops.$inferSelect;
+export type CropInsert = typeof crops.$inferInsert;

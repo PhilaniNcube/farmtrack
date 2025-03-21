@@ -16,3 +16,6 @@ export const livestock = pgTable('livestock', {
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });
+
+export type Livestock = typeof livestock.$inferSelect;
+export type LivestockInsert = typeof livestock.$inferInsert;
