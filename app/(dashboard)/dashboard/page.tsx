@@ -11,16 +11,15 @@ import { UpcomingTasks } from "@/components/upcoming-tasks"
 
 import { getCrops } from "@/app/actions/crops"
 import { getLivestock } from "@/app/actions/livestock"
-import { getFinancialSummary } from "@/app/actions/finances"
 import { getRecentActivities } from "@/app/actions/activities"
 import { getUpcomingTasks } from "@/app/actions/tasks"
 
 export default async function Dashboard() {
   const { crops = [] } = (await getCrops()) || {}
-  const { livestock = [] } = (await getLivestock()) || {}
-  const financialSummary = await getFinancialSummary()
-  const { activities = [] } = (await getRecentActivities()) || {}
-  const { tasks = [] } = (await getUpcomingTasks()) || {}
+  const { livestock = [] } =  {}
+
+  const { activities = [] } = {}
+  const { tasks = [] } =  {}
 
   const activeCrops = crops.filter((crop) => crop.status === "growing" || crop.status === "planted")
 
@@ -72,9 +71,9 @@ export default async function Dashboard() {
               <DollarSign className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${financialSummary.totalExpenses?.toFixed(2) || "0.00"}</div>
+              <div className="text-2xl font-bold">${ "0.00"}</div>
               <p className="text-xs text-muted-foreground">
-                {financialSummary.error ? "Error loading data" : "-12% from last month"}
+                {"-12% from last month"}
               </p>
             </CardContent>
           </Card>

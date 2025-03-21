@@ -33,20 +33,21 @@ import {
 import { UserButton } from '@stackframe/stack'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UserFarms } from '@/lib/queries/farm-members'
+import { useSelectedFarm } from '@/lib/stores/use-selected-farm'
 
 
 
 export function DashboardSidebar({farms}: { farms: UserFarms[] }) {
     const pathname = usePathname()
    
-    const [selectedFarm, setSelectedFarm] = useState<number | null>(farms[0]?.farm?.id || null)
+    const {farmId, setFarmId} = useSelectedFarm()
     const router = useRouter()
 
 
 
     // Handle farm change
     const handleFarmChange = (farmId: string) => {
-        setSelectedFarm(parseInt(farmId))
+        setFarmId(parseInt(farmId))
         if (farmId === "manage") {
             router.push("/dashboard/profile")
         } else {
@@ -70,46 +71,46 @@ export function DashboardSidebar({farms}: { farms: UserFarms[] }) {
         {
             title: "Crops",
             icon: <Wheat />,
-            href: `/dashboard/farms/${selectedFarm}/crops`,
-            active: pathname === `/dashboard/farms/${selectedFarm}/crops` || pathname.startsWith(`/dashboard/farms/${selectedFarm}/crops`),
+            href: `/dashboard/farms/${farmId}/crops`,
+            active: pathname === `/dashboard/farms/${farmId}/crops` || pathname.startsWith(`/dashboard/farms/${farmId}/crops`),
             subItems: [
                 {
                     title: "Add Crop",
-                    href:   `/dashboard/farms/${selectedFarm}/crops/add`,
-                    active: pathname === `/dashboard/farms/${selectedFarm}/crops/add`
+                    href:   `/dashboard/farms/${farmId}/crops/add`,
+                    active: pathname === `/dashboard/farms/${farmId}/crops/add`
                 }
             ]
         },
         {
             title: "Finances",
             icon: <PiggyBank />,
-            href: `/dashboard/farms/${selectedFarm}/finances`,
-            active: pathname === `/dashboard/farms/${selectedFarm}/finances` || pathname.startsWith(`/dashboard/farms/${selectedFarm}/finances`),
+            href: `/dashboard/farms/${farmId}/finances`,
+            active: pathname === `/dashboard/farms/${farmId}/finances` || pathname.startsWith(`/dashboard/farms/${farmId}/finances`),
             subItems: [
                 {
                     title: "Add Transaction",
-                    href: `/dashboard/farms/${selectedFarm}/finances/add`,
-                    active: pathname === `/dashboard/farms/${selectedFarm}/finances/add`
+                    href: `/dashboard/farms/${farmId}/finances/add`,
+                    active: pathname === `/dashboard/farms/${farmId}/finances/add`
                 }
             ]
         },
         {
             title: "Inventory",
             icon: <PackageIcon />,
-            href: `/dashboard/farms/${selectedFarm}/inventory`,
-            active: pathname === `/dashboard/farms/${selectedFarm}/inventory` || pathname.startsWith(`/dashboard/farms/${selectedFarm}/inventory`)
+            href: `/dashboard/farms/${farmId}/inventory`,
+            active: pathname === `/dashboard/farms/${farmId}/inventory` || pathname.startsWith(`/dashboard/farms/${farmId}/inventory`)
         },
         {
             title: "Livestock",
             icon: <Beef />,
-            href: `/dashboard/farms/${selectedFarm}/livestock`,
-            active: pathname === `/dashboard/farms/${selectedFarm}/livestock` || pathname.startsWith(`/dashboard/farms/${selectedFarm}/livestock`)
+            href: `/dashboard/farms/${farmId}/livestock`,
+            active: pathname === `/dashboard/farms/${farmId}/livestock` || pathname.startsWith(`/dashboard/farms/${farmId}/livestock`)
         },
         {
             title: "Reports",
             icon: <BarChart3 />,
-            href: `/dashboard/farms/${selectedFarm}/reports`,
-            active: pathname === `/dashboard/farms/${selectedFarm}/reports` || pathname.startsWith(`/dashboard/farms/${selectedFarm}/reports`)
+            href: `/dashboard/farms/${farmId}/reports`,
+            active: pathname === `/dashboard/farms/${farmId}/reports` || pathname.startsWith(`/dashboard/farms/${farmId}/reports`)
         }
     ]
 
@@ -126,7 +127,7 @@ export function DashboardSidebar({farms}: { farms: UserFarms[] }) {
             <SidebarContent>
                 {/* Farm Selector Dropdown */}
                 <div className="px-2 pb-2 mt-4">
-                    <Select onValueChange={handleFarmChange} value={selectedFarm?.toString()} defaultValue={selectedFarm?.toString()}>
+                    <Select onValueChange={handleFarmChange} value={farmId?.toString()} defaultValue={farmId?.toString()}>
                         <SelectTrigger className="w-full bg-sidebar-accent/10 border-sidebar-border">
                             <SelectValue placeholder="Select a farm" />
                         </SelectTrigger>

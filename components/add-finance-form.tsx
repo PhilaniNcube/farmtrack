@@ -2,10 +2,10 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useActionState, useState } from "react"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -18,41 +18,26 @@ import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { createFinance } from "@/app/actions/finances"
 import { createActivity } from "@/app/actions/activities"
+import { useSelectedFarm } from "@/lib/stores/use-selected-farm"
+import { create } from "domain"
 
 export function AddFinanceForm() {
+
+  const {farmId} = useSelectedFarm()
+
+  const searchParams = useSearchParams()
+
+  const type = searchParams.get("type") as "income" | "expense" || "income"
+  
+
+  console.log({farmId})
+
   const router = useRouter()
   const [date, setDate] = useState<Date>(new Date())
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [type, setType] = useState<"income" | "expense">("income")
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setIsSubmitting(true)
-
-    const formData = new FormData(event.currentTarget)
-
-    try {
-      const result = await createFinance(formData)
-
-      if (result.finance) {
-        // Create activity record
-        await createActivity(
-          formData.get("transaction_date") as string,
-          type,
-          formData.get("description") as string,
-          "finances",
-          result.finance.id,
-        )
-
-        router.refresh()
-        // Reset form or close modal
-      }
-    } catch (error) {
-      console.error("Error creating finance record:", error)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  const [state, formAction, isPending] = useActionState(createFinance, null)
+  
 
   return (
     <Card>
@@ -60,11 +45,11 @@ export function AddFinanceForm() {
         <CardTitle>Add New {type === "income" ? "Income" : "Expense"}</CardTitle>
         <CardDescription>Record a new financial transaction.</CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit}>
+      <form action={formAction}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="type">Transaction Type</Label>
-            <Select name="type" defaultValue={type} onValueChange={(value) => setType(value as "income" | "expense")}>
+            <Select name="type" defaultValue={type} >
               <SelectTrigger>
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>

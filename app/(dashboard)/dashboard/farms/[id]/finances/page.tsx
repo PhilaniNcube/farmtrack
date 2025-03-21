@@ -17,12 +17,20 @@ import {
 import { FinancialSummary } from "@/components/financial-summary"
 import { Skeleton } from "@/components/ui/skeleton"
 
-import { getFinances, getFinancialSummary } from "@/app/actions/finances"
+import { getFinances,  } from "@/app/actions/finances"
 import { format } from "date-fns"
+import { notFound } from "next/navigation"
+import Link from "next/link"
 
-export default async function FinancesPage() {
+export default async function FinancesPage({params}:{ params: Promise<{ id: string }>}) {
   const { finances = [] } = (await getFinances()) || {}
-  const financialSummary = await getFinancialSummary()
+ 
+  const resolvedParams = await params
+  const farmId = Number(resolvedParams.id)
+
+  if (isNaN(farmId)) {
+    return notFound()
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -30,14 +38,18 @@ export default async function FinancesPage() {
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold tracking-tight">Financial Management</h1>
           <div className="flex gap-2">
+            <Link href={`/dashboard/farms/${farmId}/finances/add?type=expense`} className="flex items-center">
             <Button variant="outline">
               <TrendingDown className="mr-2 h-4 w-4" />
               Record Expense
             </Button>
+            </Link>
+            <Link href={`/dashboard/farms/${farmId}/finances/add?type=income`} className="flex items-center">
             <Button className="bg-green-600 hover:bg-green-700">
               <TrendingUp className="mr-2 h-4 w-4" />
               Record Income
             </Button>
+            </Link>
           </div>
         </div>
 
@@ -48,7 +60,7 @@ export default async function FinancesPage() {
               <TrendingUp className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${financialSummary.totalIncome || "0.00"}</div>
+              <div className="text-2xl font-bold">${"0.00"}</div>
               <p className="text-xs text-muted-foreground">+20.1% from last year</p>
             </CardContent>
           </Card>
@@ -59,7 +71,7 @@ export default async function FinancesPage() {
               <TrendingDown className="h-4 w-4 text-red-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${financialSummary.totalExpenses || "0.00"}</div>
+              <div className="text-2xl font-bold">${"0.00"}</div>
               <p className="text-xs text-muted-foreground">+4.5% from last year</p>
             </CardContent>
           </Card>
@@ -70,7 +82,7 @@ export default async function FinancesPage() {
               <DollarSign className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${financialSummary.netProfit || "0.00"}</div>
+              <div className="text-2xl font-bold">${"0.00"}</div>
               <p className="text-xs text-muted-foreground">+32.5% from last year</p>
             </CardContent>
           </Card>
@@ -81,7 +93,7 @@ export default async function FinancesPage() {
               <BarChart3 className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{financialSummary.profitMargin || "0.0"}%</div>
+              <div className="text-2xl font-bold">{"0.0"}%</div>
               <p className="text-xs text-muted-foreground">+8.2% from last year</p>
             </CardContent>
           </Card>
@@ -95,11 +107,11 @@ export default async function FinancesPage() {
             <CardContent>
               <Suspense fallback={<Skeleton className="h-[350px] w-full" />}>
                 <FinancialSummary
-                  data={(financialSummary.monthlyData || []).map(item => ({
-                    month: String(item.month || ''),
-                    income: Number(item.income || 0),
-                    expenses: Number(item.expenses || 0),
-                    profit: Number(item.profit || 0)
+                  data={( []).map(item => ({
+                    month: String( ''),
+                    income: Number( 0),
+                    expenses: Number( 0),
+                    profit: Number( 0)
                   }))}
                 />
               </Suspense>
