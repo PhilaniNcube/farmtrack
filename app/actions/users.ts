@@ -10,7 +10,7 @@ import { revalidatePath } from "next/cache"
 
 
 // Update user profile
-export async function updateUserProfile(formData: FormData) {
+export async function updateUserProfile(prevState:unknown, formData: FormData) {
   const authUser = await stackServerApp.getUser()
   if (!authUser?.id) {
     return { error: "Not authenticated" }
@@ -18,7 +18,7 @@ export async function updateUserProfile(formData: FormData) {
 
   const name = formData.get("name") as string
   const email = formData.get("email") as string
-  const profileImageUrl = formData.get("profileImageUrl") as string
+  
 
   try {
     await db
@@ -26,7 +26,7 @@ export async function updateUserProfile(formData: FormData) {
       .set({
         name,
         email,
-        profile_image_url: profileImageUrl,
+  
         updated_at: new Date(),
       })
       .where(eq(users.id, authUser.id))

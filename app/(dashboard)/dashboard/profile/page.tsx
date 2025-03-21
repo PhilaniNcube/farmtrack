@@ -7,6 +7,8 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 import ProfileForm from './profile-form'
 import { getCurrentUser } from '@/lib/queries/users'
+import { FarmsList } from './farm-list'
+import { CreateFarmForm } from './create-farm-form'
 
 export const metadata: Metadata = {
     title: "Profile",
@@ -52,7 +54,29 @@ const ProfilePage = async () => {
                                 {userProfile && (
                                     <ProfileForm user={userProfile} />
                                 )}
-                               
+
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+
+                    <TabsContent value="farms" className="mt-6 space-y-6">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Your Farms</CardTitle>
+                                <CardDescription>Farms you have created or are a member of.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <FarmsList />
+                            </CardContent>
+                        </Card>
+
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Create New Farm</CardTitle>
+                                <CardDescription>Create a new farm to manage your agricultural activities.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <CreateFarmForm />
                             </CardContent>
                         </Card>
                     </TabsContent>
