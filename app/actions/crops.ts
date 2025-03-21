@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { query } from "@/lib/db"
+import { db, query } from "@/lib/db"
 
 export type Crop = {
   id: number
@@ -17,6 +17,12 @@ export type Crop = {
   created_at: string
   updated_at: string
 }
+
+// create a zod object for the Crop type
+import { z } from "zod"
+import { crops, CropSchema } from "@/lib/schema"
+
+
 
 export async function getCrops() {
   try {
@@ -38,7 +44,10 @@ export async function getCropById(id: number) {
   }
 }
 
-export async function createCrop(formData: FormData) {
+
+export async function createCrop(prevState:unknown, formData: FormData) {
+
+  
   const name = formData.get("name") as string
   const variety = formData.get("variety") as string
   const planting_date = formData.get("planting_date") as string
@@ -48,17 +57,45 @@ export async function createCrop(formData: FormData) {
   const area_unit = formData.get("area_unit") as string
   const status = formData.get("status") as string
   const notes = formData.get("notes") as string
+  const farm_id = Number.parseInt(formData.get("farm_id") as string)
 
   try {
-    const result = await query(
-      `INSERT INTO crops (name, variety, planting_date, expected_harvest_date, location, area, area_unit, status, notes)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       RETURNING *`,
-      [name, variety, planting_date, expected_harvest_date, location, area, area_unit, status, notes],
-    )
+    const validatedFields = CropSchema.safeParse({
+      name,
+      variety,
+      planting_date,
+      expected_harvest_date,
+      location,
+      area,
+      area_unit,
+      status,
+      notes,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      farm_id
+    })
 
-    revalidatePath("/crops")
-    return { crop: result.rows[0] as Crop }
+    if (!validatedFields.success) {
+      console.error("Validation failed:", validatedFields.error.format())
+      return { error: "Validation failed" }
+    }
+
+    // Insert the crop record - convert string dates to Date objects for DB
+    await db.insert(crops).values({
+      name,
+      variety,
+      planting_date: new Date(planting_date),
+      expected_harvest_date: new Date(expected_harvest_date),
+      location,
+      area: area.toString(),
+      area_unit,
+      status,
+      notes,
+      farm_id
+    })
+
+    revalidatePath(`/dashbaord/farms/${farm_id}/crops`)
+    return { success: true }
   } catch (error) {
     console.error("Failed to create crop:", error)
     return { error: "Failed to create crop" }

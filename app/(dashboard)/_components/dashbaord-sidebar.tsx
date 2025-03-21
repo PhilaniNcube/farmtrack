@@ -34,25 +34,11 @@ import { UserButton } from '@stackframe/stack'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UserFarms } from '@/lib/queries/farm-members'
 
-// Farm type definition
-interface Farm {
-    id: number
-    name: string
-    location?: string
-    description?: string
-    created_at: string
-    updated_at: string
-}
+
 
 export function DashboardSidebar({farms}: { farms: UserFarms[] }) {
     const pathname = usePathname()
-    const params = useParams()
-
-    console.log("Params: ", params)
-
-    const farmId = params.farmId as string
-    const farmIdNum = parseInt(farmId)
-
+   
     const [selectedFarm, setSelectedFarm] = useState<number | null>(farms[0]?.farm?.id || null)
     const router = useRouter()
 

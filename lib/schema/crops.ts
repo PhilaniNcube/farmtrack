@@ -1,5 +1,6 @@
 import { pgTable, serial, varchar, timestamp, text, numeric, integer } from 'drizzle-orm/pg-core';
 import { farms } from './farms';
+import { z } from 'zod';
 
 export const crops = pgTable('crops', {
   id: serial('id').primaryKey(),
@@ -19,3 +20,18 @@ export const crops = pgTable('crops', {
 
 export type Crop = typeof crops.$inferSelect;
 export type CropInsert = typeof crops.$inferInsert;
+
+export const CropSchema = z.object({
+  name: z.string(),
+  variety: z.string(),
+  planting_date: z.string(),
+  expected_harvest_date: z.string(),
+  location: z.string(),
+  area: z.coerce.number(),
+  area_unit: z.string(),
+  status: z.string(),
+  notes: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
+  farm_id: z.coerce.number(),
+})

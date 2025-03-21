@@ -2,10 +2,10 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { use, useActionState, useEffect, useState } from "react"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -18,40 +18,35 @@ import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { createCrop } from "@/app/actions/crops"
 import { createActivity } from "@/app/actions/activities"
+import { toast } from "./ui/use-toast"
 
 export function AddCropForm() {
+
+  const params = useParams()
+
+  const { id } = params
+  const farmId = Number(id)
+
+  console.log("Farm ID: ", farmId)
+
   const router = useRouter()
   const [plantingDate, setPlantingDate] = useState<Date>()
   const [harvestDate, setHarvestDate] = useState<Date>()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setIsSubmitting(true)
+  const [state, formAction, isPending] = useActionState(createCrop, null)
 
-    const formData = new FormData(event.currentTarget)
+  useEffect(() => {
 
-    try {
-      const result = await createCrop(formData)
+    toast({
+      title: state?.error ? "Error" : "Success",
+      description: state?.error || "Crop added successfully",
+      variant: "default",
+    })
+    
+  }, [state])
 
-      if (result.crop) {
-        // Create activity record
-        await createActivity(
-          new Date().toISOString().split("T")[0],
-          "crop",
-          `Added new crop: ${formData.get("name")} (${formData.get("variety")})`,
-          "crops",
-          result.crop.id,
-        )
-
-        router.push("/crops")
-      }
-    } catch (error) {
-      console.error("Error creating crop:", error)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  
 
   return (
     <Card>
@@ -59,7 +54,8 @@ export function AddCropForm() {
         <CardTitle>Add New Crop</CardTitle>
         <CardDescription>Enter the details for your new crop.</CardDescription>
       </CardHeader>
-      <form onSubmit={handleSubmit}>
+      <form  action={formAction} >
+        <Input type="hidden" name="farm_id" value={farmId} />
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -205,8 +201,8 @@ export function AddCropForm() {
           <Button variant="outline" type="button" onClick={() => router.back()}>
             Cancel
           </Button>
-          <Button className="bg-green-600 hover:bg-green-700" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Saving..." : "Add Crop"}
+          <Button className="bg-green-600 hover:bg-green-700" type="submit" disabled={isPending}>
+            {isPending ? "Saving..." : "Add Crop"}
           </Button>
         </CardFooter>
       </form>
