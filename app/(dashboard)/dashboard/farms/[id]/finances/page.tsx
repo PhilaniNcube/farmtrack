@@ -19,7 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { format } from "date-fns"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { getFinances } from "@/lib/queries/finances"
+import { getFinances, getTotalFinances } from "@/lib/queries/finances"
 
 export default async function FinancesPage({params}:{ params: Promise<{ id: string }>}) {
    
@@ -31,6 +31,7 @@ export default async function FinancesPage({params}:{ params: Promise<{ id: stri
   }
 
   const  finances = await getFinances(farmId)
+  const totalFinances = await getTotalFinances(farmId)
   console.log("finances", finances)
 
   return (
@@ -61,8 +62,8 @@ export default async function FinancesPage({params}:{ params: Promise<{ id: stri
               <TrendingUp className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${"0.00"}</div>
-              <p className="text-xs text-muted-foreground">+20.1% from last year</p>
+              <div className="text-2xl font-bold">${totalFinances.totalIncome}</div>
+              {/* <p className="text-xs text-muted-foreground">+20.1% from last year</p> */}
             </CardContent>
           </Card>
 
@@ -72,8 +73,8 @@ export default async function FinancesPage({params}:{ params: Promise<{ id: stri
               <TrendingDown className="h-4 w-4 text-red-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${"0.00"}</div>
-              <p className="text-xs text-muted-foreground">+4.5% from last year</p>
+              <div className="text-2xl font-bold">${totalFinances.totalExpenses}</div>
+              {/* <p className="text-xs text-muted-foreground">+4.5% from last year</p> */}
             </CardContent>
           </Card>
 
@@ -83,8 +84,8 @@ export default async function FinancesPage({params}:{ params: Promise<{ id: stri
               <DollarSign className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${"0.00"}</div>
-              <p className="text-xs text-muted-foreground">+32.5% from last year</p>
+              <div className="text-2xl font-bold">${totalFinances.net_profit}</div>
+              {/* <p className="text-xs text-muted-foreground">+32.5% from last year</p> */}
             </CardContent>
           </Card>
 
@@ -94,8 +95,8 @@ export default async function FinancesPage({params}:{ params: Promise<{ id: stri
               <BarChart3 className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{"0.0"}%</div>
-              <p className="text-xs text-muted-foreground">+8.2% from last year</p>
+              <div className="text-2xl font-bold">{totalFinances.profit_margin}</div>
+              {/* <p className="text-xs text-muted-foreground">+8.2% from last year</p> */}
             </CardContent>
           </Card>
         </div>
