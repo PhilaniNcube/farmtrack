@@ -2,7 +2,7 @@
 
 import React, { ReactNode } from 'react'
 import DashboardSidebar from './_components/dashbaord-sidebar'
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { SidebarProvider } from '@/components/ui/sidebar'
 import { getUserFarms } from '@/lib/queries/farm-members'
 
 const DashboardLayout = async ({ children }: { children: ReactNode }) => {

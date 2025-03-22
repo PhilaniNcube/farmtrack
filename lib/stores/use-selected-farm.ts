@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { useFarmStore } from './farm-store';
 import type { Farm } from '@/lib/schema/farms';
+import { getUserFarms } from '../queries/farm-members';
 
 /**
  * A hook that combines the farm store with farm data fetching functionality.
@@ -14,9 +15,16 @@ export function useSelectedFarm(options?: {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
+
+
   // Fetch farm data if we only have the ID but not the full farm data
   useEffect(() => {
+
+
     const loadFarm = async () => {
+
+      
+
       if (selectedFarmId && !selectedFarm && fetchFarm) {
         try {
           setIsLoading(true);

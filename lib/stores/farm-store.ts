@@ -2,6 +2,13 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Farm } from '@/lib/schema/farms';
 
+
+// get the initial state of the farm store
+import { getUserFarms } from '@/lib/queries/farm-members';
+
+
+
+
 interface FarmState {
   // The currently selected farm
   selectedFarm: Farm | null;
@@ -15,11 +22,15 @@ interface FarmState {
   clearSelectedFarm: () => void;
 }
 
+
+
+
+
 export const useFarmStore = create<FarmState>()(
   persist(
     (set) => ({
       selectedFarm: null,
-      selectedFarmId: null,
+      selectedFarmId:  null,
       
       setSelectedFarm: (farm) => set({ 
         selectedFarm: farm, 
