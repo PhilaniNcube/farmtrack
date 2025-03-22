@@ -13,17 +13,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Link from "next/link"
 
-export default function InventoryPage() {
+export default async function InventoryPage({params}:{params: Promise<{ id: string }>}) {
+  const farmId = (await params).id
+  const farmIdNumber = Number(farmId)
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-1 p-4 md:p-6">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold tracking-tight">Inventory Management</h1>
+          <Link href={`/dashboard/farms/${farmIdNumber}/inventory/add`} className="inline-flex items-center">
           <Button className="bg-green-600 hover:bg-green-700">
             <Plus className="mr-2 h-4 w-4" />
             Add Item
           </Button>
+          </Link>
         </div>
 
         <Tabs defaultValue="all" className="mb-6">

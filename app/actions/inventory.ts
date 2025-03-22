@@ -1,107 +1,93 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { query } from "@/lib/db"
+import { db, query } from "@/lib/db"
+import { inventory, InventoryInsert, InventorySchema } from "@/lib/schema"
 
-export type Inventory = {
-  id: number
-  name: string
-  category: string
-  quantity: number
-  unit: string
-  location: string
-  purchase_date: string
-  expiry_date: string
-  status: string
-  notes: string
-  created_at: string
-  updated_at: string
-}
 
-export async function getInventory() {
-  try {
-    const result = await query("SELECT * FROM inventory ORDER BY name ASC")
-    return { inventory: result.rows as Inventory[] }
-  } catch (error) {
-    console.error("Failed to fetch inventory:", error)
-    return { error: "Failed to fetch inventory" }
-  }
-}
 
-export async function getInventoryById(id: number) {
-  try {
-    const result = await query("SELECT * FROM inventory WHERE id = $1", [id])
-    return { item: result.rows[0] as Inventory }
-  } catch (error) {
-    console.error(`Failed to fetch inventory item with id ${id}:`, error)
-    return { error: "Failed to fetch inventory item" }
-  }
-}
 
-export async function createInventoryItem(formData: FormData) {
-  const name = formData.get("name") as string
-  const category = formData.get("category") as string
-  const quantity = Number.parseFloat(formData.get("quantity") as string)
-  const unit = formData.get("unit") as string
-  const location = formData.get("location") as string
-  const purchase_date = formData.get("purchase_date") as string
-  const expiry_date = formData.get("expiry_date") as string
-  const status = formData.get("status") as string
-  const notes = formData.get("notes") as string
+export async function createInventoryItem(prevState: unknown, formData: FormData) {
 
   try {
-    const result = await query(
-      `INSERT INTO inventory (name, category, quantity, unit, location, purchase_date, expiry_date, status, notes)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       RETURNING *`,
-      [name, category, quantity, unit, location, purchase_date, expiry_date, status, notes],
-    )
+    const item_name = formData.get("item_name") as string
+    const category = formData.get("category") as string
+    const quantity = Number.parseFloat(formData.get("quantity") as string)
+    const unit = formData.get("unit") as string
+    const purchase_date = formData.get("purchase_date") as string
+    const expiry_date = formData.get("expiry_date") as string
+    const notes = formData.get("notes") as string
+    const farm_id = Number.parseInt(formData.get("farm_id") as string)
+    const purchase_price = Number.parseFloat(formData.get("purchase_price") as string)
+    const supplier = formData.get("supplier") as string
+    const storage_location = formData.get("storage_location") as string
+    const reorder_level = Number.parseFloat(formData.get("reorder_level") as string)
 
-    revalidatePath("/inventory")
-    return { item: result.rows[0] as Inventory }
+    console.log({
+      item_name,
+      category,
+      quantity,
+      unit,
+      purchase_date,
+      expiry_date,
+      notes,
+      farm_id,
+      purchase_price,
+      supplier,
+      storage_location,
+      reorder_level
+    })
+
+    const validatedFields = InventorySchema.safeParse({
+      item_name,
+      category,
+      quantity,
+      unit,
+      purchase_date,
+      expiry_date,
+      notes,
+      farm_id,
+      purchase_price,
+      supplier,
+      storage_location,
+      reorder_level
+    })
+
+    if (!validatedFields.success) {
+      console.error("Validation failed:", validatedFields.error.format())
+      return { error: "Validation failed" }
+    }
+
+    console.log("Validated fields:", validatedFields.data)
+
+    const values: InventoryInsert = {
+      item_name,
+      category,
+      quantity: String(quantity),
+      unit,
+      purchase_date: purchase_date ? new Date(purchase_date) : null,
+      expiry_date: expiry_date ? new Date(expiry_date) : null,
+      notes,
+      farm_id,
+      purchase_price:String(purchase_price),
+      supplier,
+      storage_location,
+      reorder_level: String(reorder_level),
+      created_at: new Date(),
+      updated_at: new Date(),
+    }
+
+    const result = await db.insert(inventory).values(values).returning()
+
+
+    revalidatePath(`/dashboard/farms/${farm_id}/inventory`)
+    return { success: true, data: result[0] }
+
+
   } catch (error) {
     console.error("Failed to create inventory item:", error)
     return { error: "Failed to create inventory item" }
+  } finally {
+    revalidatePath(`/dashboard/farms/${formData.get("farm_id")}/inventory`)
   }
 }
-
-export async function updateInventoryItem(id: number, formData: FormData) {
-  const name = formData.get("name") as string
-  const category = formData.get("category") as string
-  const quantity = Number.parseFloat(formData.get("quantity") as string)
-  const unit = formData.get("unit") as string
-  const location = formData.get("location") as string
-  const purchase_date = formData.get("purchase_date") as string
-  const expiry_date = formData.get("expiry_date") as string
-  const status = formData.get("status") as string
-  const notes = formData.get("notes") as string
-
-  try {
-    const result = await query(
-      `UPDATE inventory 
-       SET name = $1, category = $2, quantity = $3, unit = $4, location = $5, 
-           purchase_date = $6, expiry_date = $7, status = $8, notes = $9, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $10
-       RETURNING *`,
-      [name, category, quantity, unit, location, purchase_date, expiry_date, status, notes, id],
-    )
-
-    revalidatePath("/inventory")
-    return { item: result.rows[0] as Inventory }
-  } catch (error) {
-    console.error(`Failed to update inventory item with id ${id}:`, error)
-    return { error: "Failed to update inventory item" }
-  }
-}
-
-export async function deleteInventoryItem(id: number) {
-  try {
-    await query("DELETE FROM inventory WHERE id = $1", [id])
-    revalidatePath("/inventory")
-    return { success: true }
-  } catch (error) {
-    console.error(`Failed to delete inventory item with id ${id}:`, error)
-    return { error: "Failed to delete inventory item" }
-  }
-}
-
