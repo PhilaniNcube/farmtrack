@@ -2,44 +2,15 @@
 
 import { revalidatePath } from "next/cache"
 import { db, query } from "@/lib/db"
-import { desc, eq } from "drizzle-orm"
+
 import { FinanceInsert, finances } from "@/lib/schema"
-import { format } from "path"
-import { formatDate } from "date-fns"
 
-export type Finance = {
-  id: number
-  transaction_date: string
-  description: string
-  category: string
-  type: "income" | "expense"
-  amount: number
-  payment_method: string
-  reference_number: string
-  notes: string
-  created_at: string
-  updated_at: string
-}
 
-export async function getFinances() {
-  try {
-    const result = await query("SELECT * FROM finances ORDER BY transaction_date DESC")
-    return { finances: result.rows as Finance[] }
-  } catch (error) {
-    console.error("Failed to fetch finances:", error)
-    return { error: "Failed to fetch finances" }
-  }
-}
 
-export async function getFinanceById(id: number) {
-  try {
-    const result = await query("SELECT * FROM finances WHERE id = $1", [id])
-    return { finance: result.rows[0] as Finance }
-  } catch (error) {
-    console.error(`Failed to fetch finance with id ${id}:`, error)
-    return { error: "Failed to fetch finance" }
-  }
-}
+
+
+
+
 
 export async function createFinance(prevState: unknown, formData: FormData) {
   const transaction_date = formData.get("transaction_date") as string;
@@ -74,7 +45,7 @@ export async function createFinance(prevState: unknown, formData: FormData) {
    
 
     revalidatePath(`/dashboard/farms/${farmId}/finances`);
-    return { finance: result.rows[0] as Finance };
+    return { finance: result.rows[0] };
   } catch (error) {
     console.error("Failed to create finance:", error);
     return { error: "Failed to create finance" };
@@ -101,8 +72,8 @@ export async function updateFinance(id: number, formData: FormData) {
       [transaction_date, description, category, type, amount, payment_method, reference_number, notes, id],
     )
 
-    revalidatePath("/finances")
-    return { finance: result.rows[0] as Finance }
+    revalidatePath(`/dashboard/farms/${id}/finances`)
+    return { finance: result.rows[0]  }
   } catch (error) {
     console.error(`Failed to update finance with id ${id}:`, error)
     return { error: "Failed to update finance" }

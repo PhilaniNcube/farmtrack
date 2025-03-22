@@ -16,21 +16,22 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { FinancialSummary } from "@/components/financial-summary"
 import { Skeleton } from "@/components/ui/skeleton"
-
-import { getFinances,  } from "@/app/actions/finances"
 import { format } from "date-fns"
 import { notFound } from "next/navigation"
 import Link from "next/link"
+import { getFinances } from "@/lib/queries/finances"
 
 export default async function FinancesPage({params}:{ params: Promise<{ id: string }>}) {
-  const { finances = [] } = (await getFinances()) || {}
- 
+   
   const resolvedParams = await params
   const farmId = Number(resolvedParams.id)
 
   if (isNaN(farmId)) {
     return notFound()
   }
+
+  const  finances = await getFinances(farmId)
+  console.log("finances", finances)
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -165,18 +166,18 @@ export default async function FinancesPage({params}:{ params: Promise<{ id: stri
                           <TableCell>
                             <Badge
                               className={
-                                finance.type === "income"
+                                finance.transaction_type === "income"
                                   ? "bg-green-500"
                                   : "text-red-500 border-red-500 bg-transparent"
                               }
                             >
-                              {finance.type === "income" ? "Income" : "Expense"}
+                              {finance.transaction_type === "income" ? "Income" : "Expense"}
                             </Badge>
                           </TableCell>
                           <TableCell
-                            className={`text-right font-medium ${finance.type === "income" ? "text-green-600" : "text-red-600"}`}
+                            className={`text-right font-medium ${finance.transaction_type === "income" ? "text-green-600" : "text-red-600"}`}
                           >
-                            {finance.type === "income" ? "+" : "-"}${finance.amount}
+                            {finance.transaction_type === "income" ? "+" : "-"}${finance.amount}
                           </TableCell>
                           <TableCell>
                             <DropdownMenu>
@@ -203,17 +204,163 @@ export default async function FinancesPage({params}:{ params: Promise<{ id: stri
           </TabsContent>
 
           <TabsContent value="expenses" className="mt-4">
+          <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Input placeholder="Search transactions..." className="max-w-xs" />
+                <Button variant="outline" size="icon">
+                  <Filter className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+
             <Card>
-              <CardContent className="pt-6">
-                <p>Your expense records will appear here.</p>
+              <CardContent className="p-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead className="text-right">Amount</TableHead>
+                      <TableHead></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {finances.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                          No transactions found
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      finances.map((finance) => {
+
+                        if (finance.transaction_type !== "expense") {
+                          return null
+                        }
+
+                        return  (
+                          <TableRow key={finance.id}>
+                            <TableCell>{format(new Date(finance.transaction_date), "MMM d, yyyy")}</TableCell>
+                            <TableCell className="font-medium">{finance.description}</TableCell>
+                            <TableCell>{finance.category}</TableCell>
+                            <TableCell>
+                              <Badge
+                                className="text-red-500 border-red-500 bg-transparent"
+                              >
+                                {finance.transaction_type}
+                              </Badge>
+                            </TableCell>
+                            <TableCell
+                              className={`text-right font-medium text-red-600`}
+                            >
+                              { "-"}${finance.amount}
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem>View Details</DropdownMenuItem>
+                                  <DropdownMenuItem>Edit Transaction</DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      })
+                    )}
+                  </TableBody>
+                </Table>
               </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="income" className="mt-4">
+          <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Input placeholder="Search transactions..." className="max-w-xs" />
+                <Button variant="outline" size="icon">
+                  <Filter className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+
             <Card>
-              <CardContent className="pt-6">
-                <p>Your income records will appear here.</p>
+              <CardContent className="p-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead className="text-right">Amount</TableHead>
+                      <TableHead></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {finances.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                          No transactions found
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      finances.map((finance) => {
+
+                        if (finance.transaction_type !== "income") {
+                          return null
+                        }
+
+                        return (
+                          <TableRow key={finance.id}>
+                            <TableCell>{format(new Date(finance.transaction_date), "MMM d, yyyy")}</TableCell>
+                            <TableCell className="font-medium">{finance.description}</TableCell>
+                            <TableCell>{finance.category}</TableCell>
+                            <TableCell>
+                              <Badge
+                                className={
+                                  finance.transaction_type === "income"
+                                    ? "bg-green-500"
+                                    : "text-red-500 border-red-500 bg-transparent"
+                                }
+                              >
+                                {finance.transaction_type === "income" ? "Income" : "Expense"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell
+                              className={`text-right font-medium ${finance.transaction_type === "income" ? "text-green-600" : "text-red-600"}`}
+                            >
+                              {finance.transaction_type === "income" ? "+" : "-"}${finance.amount}
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="icon">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem>View Details</DropdownMenuItem>
+                                  <DropdownMenuItem>Edit Transaction</DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      })
+                    )}
+                  </TableBody>
+                </Table>
               </CardContent>
             </Card>
           </TabsContent>
