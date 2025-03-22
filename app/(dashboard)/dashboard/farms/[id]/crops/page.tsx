@@ -89,7 +89,9 @@ export default async function CropsPage({ params }: { params: Promise<{ id: stri
                               <DropdownMenuItem>
                                 <Link className="cursor-pointer" href={`/dashboard/farms/${id}/crops/${crop.id}`}>View Details</Link>
                               </DropdownMenuItem>
-                              <DropdownMenuItem>Edit Crop</DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <Link className="cursor-pointer" href={`/dashboard/farms/${id}/crops/edit/${crop.id}`}>Edit Crop</Link>
+                              </DropdownMenuItem>
                               <DropdownMenuItem>Record Activity</DropdownMenuItem>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
