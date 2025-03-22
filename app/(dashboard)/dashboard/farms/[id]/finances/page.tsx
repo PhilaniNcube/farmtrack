@@ -111,9 +111,9 @@ export default async function FinancesPage({params}:{ params: Promise<{ id: stri
                 <FinancialSummary
                   data={( []).map(item => ({
                     month: String( ''),
-                    income: Number( 0),
-                    expenses: Number( 0),
-                    profit: Number( 0)
+                    income: Number(totalFinances.totalIncome),
+                    expenses: Number(totalFinances.totalExpenses),
+                    profit: Number(totalFinances.net_profit),
                   }))}
                 />
               </Suspense>
