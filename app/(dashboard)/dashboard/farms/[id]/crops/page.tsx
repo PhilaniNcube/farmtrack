@@ -16,6 +16,7 @@ import {
 import Link from "next/link"
 import { getCropsByFarmId } from "@/lib/queries/crops"
 import { formatDate } from "date-fns"
+import UpdateCropStatus from "./update-crop-status"
 
 export default async function CropsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -72,9 +73,7 @@ export default async function CropsPage({ params }: { params: Promise<{ id: stri
                         <TableCell>{crop.location}</TableCell>
                         <TableCell>{crop.area} {crop.area_unit}</TableCell>
                         <TableCell>
-                          <Badge className="bg-green-500 capitalize">
-                            {crop.status}
-                          </Badge>
+                         <UpdateCropStatus cropId={crop.id} status={crop.status} />
                         </TableCell>
                         <TableCell>
                           {crop.expected_harvest_date ? formatDate(crop.expected_harvest_date, "PPP") : "N/A"}

@@ -9,13 +9,12 @@ import { RecentActivities } from "@/components/recent-activities"
 import { WeatherWidget } from "@/components/weather-widget"
 import { UpcomingTasks } from "@/components/upcoming-tasks"
 
-import { getCrops } from "@/app/actions/crops"
-import { getLivestock } from "@/app/actions/livestock"
-import { getRecentActivities } from "@/app/actions/activities"
-import { getUpcomingTasks } from "@/app/actions/tasks"
+
+
+import { getCropsByFarmId } from "@/lib/queries/crops"
 
 export default async function Dashboard() {
-  const { crops = [] } = (await getCrops()) || {}
+  const crops = await getCropsByFarmId(1) // Replace with actual farm ID
   const { livestock = [] } =  {}
 
   const { activities = [] } = {}

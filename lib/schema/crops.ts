@@ -35,3 +35,23 @@ export const CropSchema = z.object({
   updated_at: z.string(),
   farm_id: z.coerce.number(),
 })
+
+export const CropUpdateSchema = z.object({
+  id: z.coerce.number(),
+  name: z.string(),
+  variety: z.string(),
+  planting_date: z.string(),
+  expected_harvest_date: z.string(),
+  location: z.string(),
+  area: z.coerce.number(),
+  area_unit: z.string(),
+  status: z.string(),
+  notes: z.string(),
+  created_at: z.string(),
+  updated_at: z.string(),
+})
+
+
+
+export type CropUpdate = z.infer<typeof CropUpdateSchema>
+export type CropInsertType = z.infer<typeof CropSchema>

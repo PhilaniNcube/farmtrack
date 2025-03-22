@@ -3,46 +3,13 @@
 import { revalidatePath } from "next/cache"
 import { db, query } from "@/lib/db"
 
-export type Crop = {
-  id: number
-  name: string
-  variety: string
-  planting_date: string
-  expected_harvest_date: string
-  location: string
-  area: number
-  area_unit: string
-  status: string
-  notes: string
-  created_at: string
-  updated_at: string
-}
+
 
 // create a zod object for the Crop type
 import { z } from "zod"
-import { crops, CropSchema } from "@/lib/schema"
+import { crops, CropSchema, CropUpdateSchema } from "@/lib/schema"
+import { eq } from "drizzle-orm"
 
-
-
-export async function getCrops() {
-  try {
-    const result = await query("SELECT * FROM crops ORDER BY created_at DESC")
-    return { crops: result.rows as Crop[] }
-  } catch (error) {
-    console.error("Failed to fetch crops:", error)
-    return { error: "Failed to fetch crops" }
-  }
-}
-
-export async function getCropById(id: number) {
-  try {
-    const result = await query("SELECT * FROM crops WHERE id = $1", [id])
-    return { crop: result.rows[0] as Crop }
-  } catch (error) {
-    console.error(`Failed to fetch crop with id ${id}:`, error)
-    return { error: "Failed to fetch crop" }
-  }
-}
 
 
 export async function createCrop(prevState:unknown, formData: FormData) {
@@ -102,7 +69,29 @@ export async function createCrop(prevState:unknown, formData: FormData) {
   }
 }
 
-export async function updateCrop(id: number, formData: FormData) {
+export async function updateCrop(prevState: unknown, formData: FormData) {
+
+  const validatedFields = CropUpdateSchema.safeParse({
+    id: formData.get("id"),
+    name: formData.get("name"),
+    variety: formData.get("variety"),
+    planting_date: formData.get("planting_date"),
+    expected_harvest_date: formData.get("expected_harvest_date"),
+    location: formData.get("location"),
+    area: Number.parseFloat(formData.get("area") as string),
+    area_unit: formData.get("area_unit"),
+    status: formData.get("status"),
+    notes: formData.get("notes"),
+    created_at: formData.get("created_at"),
+    updated_at: formData.get("updated_at"),
+  })
+
+  if (!validatedFields.success) {
+    console.error("Validation failed:", validatedFields.error.format())
+    return { error: "Validation failed" }
+  }
+
+  const id = Number.parseInt(formData.get("id") as string)
   const name = formData.get("name") as string
   const variety = formData.get("variety") as string
   const planting_date = formData.get("planting_date") as string
@@ -114,21 +103,30 @@ export async function updateCrop(id: number, formData: FormData) {
   const notes = formData.get("notes") as string
 
   try {
-    const result = await query(
-      `UPDATE crops 
-       SET name = $1, variety = $2, planting_date = $3, expected_harvest_date = $4, 
-           location = $5, area = $6, area_unit = $7, status = $8, notes = $9, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $10
-       RETURNING *`,
-      [name, variety, planting_date, expected_harvest_date, location, area, area_unit, status, notes, id],
-    )
+    const result = await db.update(crops)
+      .set({
+        name,
+        variety,
+        planting_date: new Date(planting_date),
+        expected_harvest_date: new Date(expected_harvest_date),
+        location,
+        area: area.toString(),
+        area_unit,
+        status,
+        notes,
+        updated_at: new Date()
+      }).where(eq(crops.id, id)).returning()
 
     revalidatePath("/crops")
-    return { crop: result.rows[0] as Crop }
+    return { crop: result[0] }
   } catch (error) {
     console.error(`Failed to update crop with id ${id}:`, error)
     return { error: "Failed to update crop" }
+  } finally {
+    revalidatePath(`/dashboard/farms/${formData.get("farm_id")}/crops`)
   }
+
+
 }
 
 export async function deleteCrop(id: number) {
@@ -139,6 +137,25 @@ export async function deleteCrop(id: number) {
   } catch (error) {
     console.error(`Failed to delete crop with id ${id}:`, error)
     return { error: "Failed to delete crop" }
+  }
+}
+
+
+export async function updateCropStatus(id: number, status: string) {
+  try {
+    const result = await db.update(crops)
+      .set({ status })
+      .where(eq(crops.id, id))
+      .returning()
+   
+      console.log("Updated crop status:", result[0])
+
+    return { crop: result[0] }
+  } catch (error) {
+    console.error(`Failed to update crop status for id ${id}:`, error)
+    return { error: "Failed to update crop status" }
+  } finally {
+    revalidatePath(`/dashboard/farms/${id}/crops`)
   }
 }
 
