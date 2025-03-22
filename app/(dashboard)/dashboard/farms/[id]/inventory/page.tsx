@@ -14,10 +14,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
+import { getInventoryItems } from "@/lib/queries/inventory"
 
 export default async function InventoryPage({params}:{params: Promise<{ id: string }>}) {
   const farmId = (await params).id
   const farmIdNumber = Number(farmId)
+
+  const inventoryItems = await getInventoryItems(farmIdNumber)
+
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-1 p-4 md:p-6">
@@ -65,89 +69,42 @@ export default async function InventoryPage({params}:{params: Promise<{ id: stri
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    <TableRow>
-                      <TableCell className="font-medium">Tomato Seeds</TableCell>
-                      <TableCell>Seeds</TableCell>
-                      <TableCell>5</TableCell>
-                      <TableCell>Packets</TableCell>
-                      <TableCell>Storage Room A</TableCell>
-                      <TableCell>Apr 10, 2025</TableCell>
-                      <TableCell>
-                        <Badge className="bg-green-500">In Stock</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem>Edit Item</DropdownMenuItem>
-                            <DropdownMenuItem>Update Quantity</DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="font-medium">NPK Fertilizer</TableCell>
-                      <TableCell>Fertilizers</TableCell>
-                      <TableCell>8</TableCell>
-                      <TableCell>Bags (50kg)</TableCell>
-                      <TableCell>Storage Room B</TableCell>
-                      <TableCell>Apr 12, 2025</TableCell>
-                      <TableCell>
-                        <Badge className="bg-green-500">In Stock</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem>Edit Item</DropdownMenuItem>
-                            <DropdownMenuItem>Update Quantity</DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell className="font-medium">Chicken Feed</TableCell>
-                      <TableCell>Animal Feed</TableCell>
-                      <TableCell>3</TableCell>
-                      <TableCell>Bags (25kg)</TableCell>
-                      <TableCell>Feed Storage</TableCell>
-                      <TableCell>Apr 15, 2025</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="text-amber-500 border-amber-500">
-                          Low Stock
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem>Edit Item</DropdownMenuItem>
-                            <DropdownMenuItem>Update Quantity</DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
+                    {inventoryItems.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell className="font-medium">{item.item_name}</TableCell>
+                        <TableCell className="capitalize">{item.category}</TableCell>
+                        <TableCell>{Number(item.quantity)}</TableCell>
+                        <TableCell>{item.unit}</TableCell>
+                        <TableCell>{item.storage_location}</TableCell>
+                        <TableCell>{new Date(item.updated_at).toLocaleDateString()}</TableCell>
+                        <TableCell>
+                          {Number(item.quantity) > 0 ? (
+                            <Badge className="bg-green-500">In Stock</Badge>
+                          ) : (
+                            <Badge className="bg-red-500">Out of Stock</Badge>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem>View Details</DropdownMenuItem>
+                              <DropdownMenuItem>Edit Item</DropdownMenuItem>
+                              <DropdownMenuItem>Update Quantity</DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                   
+                  
+                  
                   </TableBody>
                 </Table>
               </CardContent>
