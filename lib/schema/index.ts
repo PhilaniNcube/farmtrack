@@ -9,6 +9,7 @@ import { crops } from "./crops";
 import { activities } from "./activities";
 import { farms } from "./farms";
 import { farmMembers } from "./farm-members";
+import { fieldLocations } from "./field-location";
 
 export const schema = {
   users,
@@ -20,6 +21,7 @@ export const schema = {
   activities,
   farms,
   farmMembers,
+  fieldLocations,
 };
 
 export * from "./users";
@@ -31,3 +33,4 @@ export * from "./crops";
 export * from "./activities";
 export * from "./farms";
 export * from "./farm-members";
+export * from "./field-location";

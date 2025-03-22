@@ -19,8 +19,9 @@ import { cn } from "@/lib/utils"
 import { createCrop } from "@/app/actions/crops"
 import { createActivity } from "@/app/actions/activities"
 import { toast } from "./ui/use-toast"
+import { FieldLocation } from "@/lib/schema"
 
-export function AddCropForm() {
+export function AddCropForm({fields}: {fields: FieldLocation[]}) {
 
   const params = useParams()
 
@@ -76,10 +77,15 @@ export function AddCropForm() {
                   <SelectValue placeholder="Select location" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="field-a">Field A</SelectItem>
-                  <SelectItem value="field-b">Field B</SelectItem>
-                  <SelectItem value="greenhouse-1">Greenhouse 1</SelectItem>
-                  <SelectItem value="greenhouse-2">Greenhouse 2</SelectItem>
+                  {fields.length === 0 ? (
+                    <SelectItem value="none" disabled>
+                      No field locations available
+                    </SelectItem>
+                  ) : fields.map((field) => (
+                    <SelectItem key={field.id} value={String(field.name)}>
+                      {field.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
