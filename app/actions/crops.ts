@@ -144,7 +144,7 @@ export async function deleteCrop(id: number) {
 export async function updateCropStatus(id: number, status: string) {
   try {
     const result = await db.update(crops)
-      .set({ status })
+      .set({ status, updated_at: new Date() })
       .where(eq(crops.id, id))
       .returning()
    
