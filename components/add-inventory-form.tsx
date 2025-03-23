@@ -60,7 +60,7 @@ const AddInventoryForm = () => {
     const purchase_date = form.watch("purchase_date")
     const expiry_date = form.watch("expiry_date")
 
-    console.log({ purchase_date, expiry_date })
+
 
 
 
@@ -94,7 +94,7 @@ const AddInventoryForm = () => {
                                 name="category"
                                 render={({ field }) => (
                                     <FormItem >
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>Category</FormLabel>
                                         <Select name='category' onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>

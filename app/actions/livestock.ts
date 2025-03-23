@@ -1,107 +1,186 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { query } from "@/lib/db"
+import { db, query } from "@/lib/db"
 
-export type Livestock = {
-  id: number
-  identifier: string
-  name: string
-  type: string
-  breed: string
-  birth_date: string
-  status: string
-  location: string
-  last_health_check: string
-  notes: string
-  created_at: string
-  updated_at: string
-}
+import { livestock, LivestockSchema } from "@/lib/schema"
+import { eq } from "drizzle-orm"
+import { z } from "zod"
 
-export async function getLivestock() {
+
+export async function addLivestock(prevState:unknown, formData: FormData) {
+
   try {
-    const result = await query("SELECT * FROM livestock ORDER BY created_at DESC")
-    return { livestock: result.rows as Livestock[] }
-  } catch (error) {
-    console.error("Failed to fetch livestock:", error)
-    return { error: "Failed to fetch livestock" }
+  
+
+
+  const parsedData = await LivestockSchema.safeParse({
+    type: formData.get("type"),
+    breed: formData.get("breed"),
+    count: Number(formData.get("count")),
+    acquisition_date: formData.get("acquisition_date"),
+    source: formData.get("source"),
+    location: formData.get("location"),
+    health_status: formData.get("health_status"),
+    purpose: formData.get("purpose"),
+    notes: formData.get("notes"),
+    farm_id: Number(formData.get("farm_id"))
+  })
+
+  if (!parsedData.success) {
+    console.log("Validation error:", parsedData.error.format())
+   throw new Error("Invalid data")
   }
-}
 
-export async function getLivestockById(id: number) {
-  try {
-    const result = await query("SELECT * FROM livestock WHERE id = $1", [id])
-    return { livestock: result.rows[0] as Livestock }
-  } catch (error) {
-    console.error(`Failed to fetch livestock with id ${id}:`, error)
-    return { error: "Failed to fetch livestock" }
+  const newLivestock = await db.insert(livestock).values({
+    type: parsedData.data.type,
+    breed: parsedData.data.breed,
+    count: parsedData.data.count,
+    acquisition_date: new Date(parsedData.data.acquisition_date),
+    source: parsedData.data.source,
+    location: parsedData.data.location,
+    health_status: parsedData.data.health_status,
+    purpose: parsedData.data.purpose,
+    notes: parsedData.data.notes,
+    farm_id: Number(parsedData.data.farm_id)
+  }).returning()
+
+
+
+  return {
+    success: true,
+    livestock: newLivestock
   }
+    
+  } catch (error) {
+
+    console.error("Error adding livestock:", error)
+    return {
+      error: "An error occurred while adding livestock."
+    }
+    
+  } finally {
+    console.log("Livestock added successfully")
+    revalidatePath(`/dashboard/farms/${formData.get("farm_id")}/livestock`)  
+  }
+  
+
 }
 
-export async function createLivestock(formData: FormData) {
-  const identifier = formData.get("identifier") as string
-  const name = formData.get("name") as string
-  const type = formData.get("type") as string
-  const breed = formData.get("breed") as string
-  const birth_date = formData.get("birth_date") as string
-  const status = formData.get("status") as string
-  const location = formData.get("location") as string
-  const last_health_check = formData.get("last_health_check") as string
-  const notes = formData.get("notes") as string
 
+export async function deleteLivestock(prevState:unknown, id: number) {
   try {
-    const result = await query(
-      `INSERT INTO livestock (identifier, name, type, breed, birth_date, status, location, last_health_check, notes)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       RETURNING *`,
-      [identifier, name, type, breed, birth_date, status, location, last_health_check, notes],
-    )
-
+    const deletedLivestock = await db.delete(livestock).where(eq(livestock.id, id)).returning()
     revalidatePath("/livestock")
-    return { livestock: result.rows[0] as Livestock }
+    return deletedLivestock
   } catch (error) {
-    console.error("Failed to create livestock:", error)
-    return { error: "Failed to create livestock" }
+    console.error("Error deleting livestock:", error)
+    return {
+      error: "An error occurred while deleting livestock."
+    }
+  } finally {
+    console.log("Livestock deleted successfully")
+ 
+    revalidatePath(`/dashboard/farms/`)  
+  }
+}
+export async function updateLivestock(prevState:unknown, formData: FormData) {
+  try {
+    const data = Object.fromEntries(formData.entries())
+
+    const parsedData = await LivestockSchema.safeParse(data)
+
+    if (!parsedData.success) {
+      return {
+        error: parsedData.error.format()
+      }
+    }
+
+    const updatedLivestock = await db.update(livestock).set({
+      type: parsedData.data.type,
+      breed: parsedData.data.breed,
+      count: parsedData.data.count,
+      acquisition_date: new Date(parsedData.data.acquisition_date),
+      source: parsedData.data.source,
+      location: parsedData.data.location,
+      health_status: parsedData.data.health_status,
+      purpose: parsedData.data.purpose,
+      notes: parsedData.data.notes,
+      farm_id: parsedData.data.farm_id
+    }).where(eq(livestock.id, Number(data.id))).returning()
+
+
+
+    return {
+      success: true,
+      livestock: updatedLivestock
+    }
+
+  } catch (error) {
+    console.error("Error updating livestock:", error)
+    return {
+      error: "An error occurred while updating livestock."
+    }
+  } finally {
+    console.log("Livestock updated successfully")
+    revalidatePath(`/dashboard/farms/${formData.get("farm_id")}/livestock`)
   }
 }
 
-export async function updateLivestock(id: number, formData: FormData) {
-  const identifier = formData.get("identifier") as string
-  const name = formData.get("name") as string
-  const type = formData.get("type") as string
-  const breed = formData.get("breed") as string
-  const birth_date = formData.get("birth_date") as string
-  const status = formData.get("status") as string
-  const location = formData.get("location") as string
-  const last_health_check = formData.get("last_health_check") as string
-  const notes = formData.get("notes") as string
+
+export async function incrementLivestockCount(prevState:unknown, id: number) {
 
   try {
-    const result = await query(
-      `UPDATE livestock 
-       SET identifier = $1, name = $2, type = $3, breed = $4, birth_date = $5, 
-           status = $6, location = $7, last_health_check = $8, notes = $9, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $10
-       RETURNING *`,
-      [identifier, name, type, breed, birth_date, status, location, last_health_check, notes, id],
-    )
+   
+    const updatedLivestockCount = await db.update(livestock).set({
+      count: Number(livestock.count) + 1
+    }).where(eq(livestock.id, id)).returning()
 
-    revalidatePath("/livestock")
-    return { livestock: result.rows[0] as Livestock }
+ 
+    return updatedLivestockCount
   } catch (error) {
-    console.error(`Failed to update livestock with id ${id}:`, error)
-    return { error: "Failed to update livestock" }
+    console.error("Error incrementing livestock count:", error)
+    return {
+      error: "An error occurred while incrementing livestock count."
+    }
+  } finally {
+    console.log("Livestock count incremented successfully")
+    revalidatePath(`/dashboard/farms`)  
   }
 }
 
-export async function deleteLivestock(id: number) {
+export async function decrementLivestockCount(prevState:unknown, id: number) {
   try {
-    await query("DELETE FROM livestock WHERE id = $1", [id])
-    revalidatePath("/livestock")
-    return { success: true }
+    const updatedLivestockCount = await db.update(livestock).set({
+      count: Number(livestock.count) - 1
+    }).where(eq(livestock.id, id)).returning()
+
+    return updatedLivestockCount
   } catch (error) {
-    console.error(`Failed to delete livestock with id ${id}:`, error)
-    return { error: "Failed to delete livestock" }
+    console.error("Error decrementing livestock count:", error)
+    return {
+      error: "An error occurred while decrementing livestock count."
+    }
+  } finally {
+    console.log("Livestock count decremented successfully")
+    revalidatePath(`/dashboard/farms`)  
   }
 }
 
+export async function updateLivestockCount(prevState:unknown, id: number, count: number) {
+  try {
+    const updatedLivestockCount = await db.update(livestock).set({
+      count: Number(count)
+    }).where(eq(livestock.id, id)).returning()
+
+    return updatedLivestockCount
+  } catch (error) {
+    console.error("Error updating livestock count:", error)
+    return {
+      error: "An error occurred while updating livestock count."
+    }
+  } finally {
+    console.log("Livestock count updated successfully")
+    revalidatePath(`/dashboard/farms`)  
+  }
+}
