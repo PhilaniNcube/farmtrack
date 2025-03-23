@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { getLivestock } from '@/lib/queries/livestock'
+import { getCachedLivestock, getLivestock } from '@/lib/queries/livestock'
 import { formatDate } from 'date-fns'
 import { MoreHorizontal } from 'lucide-react'
 import Link from 'next/link'
@@ -12,7 +12,7 @@ import React from 'react'
 const LivestockTable = async ({ farmId }: { farmId: number }) => {
 
     // Fetch livestock data from the database
-    const livestock = await getLivestock(farmId) 
+    const livestock = await getCachedLivestock(farmId) 
 
     return (
         <Card>

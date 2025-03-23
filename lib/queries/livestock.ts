@@ -1,6 +1,8 @@
 import { desc, eq } from "drizzle-orm"
 import { db } from "../db"
 import { livestock } from "../schema"
+import { unstable_cache } from 'next/cache';
+import { get } from "http";
 
 export async function getLivestock(farmId: number) {
    ""
@@ -24,3 +26,12 @@ export async function getLivestockById(id: number) {
 
   return livestockItem[0]
 }
+
+
+export const getCachedLivestock = unstable_cache(
+ async (farmId: number) => getLivestock(farmId),
+  ["getLivestock"], 
+  { 
+    tags: ["getLivestock"],
+   }
+)
