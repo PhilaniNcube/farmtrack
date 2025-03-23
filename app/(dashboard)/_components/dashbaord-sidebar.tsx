@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import {
@@ -10,9 +10,7 @@ import {
     PackageIcon,
     Beef,
     BarChart3,
-    ChevronDown,
     UserCog,
-    Settings
 } from 'lucide-react'
 
 import {
@@ -26,15 +24,13 @@ import {
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
-    SidebarProvider,
-    SidebarTrigger,
     SidebarSeparator
 } from '@/components/ui/sidebar'
 import { UserButton } from '@stackframe/stack'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UserFarms } from '@/lib/queries/farm-members'
 import { useSelectedFarm } from '@/lib/stores/use-selected-farm'
-import { init } from 'next/dist/compiled/webpack/webpack'
+
 
 
 
