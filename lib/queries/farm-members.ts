@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "../db";
 import { farmMembers, users, farms } from "../schema";
 import { stackServerApp } from "@/stack";
@@ -29,6 +29,24 @@ export async function getUserFarms() {
     .where(eq(farmMembers.user_id, authUser.id));
 
   return userFarms;
+}
+
+
+export async function isFarmMember(farmId: number) {
+  const authUser = await stackServerApp.getUser();
+
+  if (!authUser?.id) {
+    return false;
+  }
+
+  // Check if the user is a member of the farm
+  const farmMember = await db
+    .select()
+    .from(farmMembers)
+    .where(and(eq(farmMembers.farm_id, farmId), eq(farmMembers.user_id, authUser.id)));
+
+
+  return farmMember.length > 0;
 }
 
 // get the return type of the getUserFarms function

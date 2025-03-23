@@ -4,9 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { CircleDashed, PencilIcon } from 'lucide-react';
+import { useParams } from 'next/navigation';
 import React, { useActionState } from 'react'
 
 const UpdateTypeDialog = ({livestockId, type}:{livestockId:number, type:string}) => {
+
+    const params = useParams()
+    const farmId = Number(params.id)
 
     const [state, formAction, isPending] = useActionState(updateLivestockType, null)
 
@@ -22,6 +26,7 @@ const UpdateTypeDialog = ({livestockId, type}:{livestockId:number, type:string})
             </DialogHeader>
             <div>
                 <form action={formAction}>
+                    <Input type="hidden" name="farm_id" value={farmId} />
                     <Input type="hidden" name="id" value={livestockId} />
                     <Input type="text" name="type" defaultValue={type} placeholder="Enter new animal name" className="mb-4" />
                     <div className="flex justify-end mt-3">
