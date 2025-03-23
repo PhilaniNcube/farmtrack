@@ -13,6 +13,7 @@ export async function getLivestock(farmId: number) {
 }
 
 export async function getLivestockById(id: number) {
+   "use cache"
   const livestockItem = await db
     .select()
     .from(livestock)

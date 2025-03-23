@@ -7,6 +7,11 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  logging: {
+    fetches: {
+      fullUrl: true, hmrRefreshes: true,
+    }
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -17,6 +22,7 @@ const nextConfig = {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
+    useCache: true,
   },
 }
 
