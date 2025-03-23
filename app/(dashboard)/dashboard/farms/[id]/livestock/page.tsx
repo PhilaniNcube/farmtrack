@@ -16,6 +16,9 @@ import {
 import Link from "next/link"
 import { getLivestock } from "@/lib/queries/livestock"
 import { formatDate } from "date-fns"
+import LivestockTable from "./livestock-table"
+import { Suspense } from "react"
+import LiveStockSkeleton from "./livestock-skeleton"
 
 export default async function LivestockPage({ params }: { params: Promise<{ id: string }> }) {
   const farmId = (await params).id
@@ -36,69 +39,10 @@ export default async function LivestockPage({ params }: { params: Promise<{ id: 
             </Button>
           </Link>
         </div>
+        <Suspense fallback={<LiveStockSkeleton />}>
+          <LivestockTable livestock={livestock} />
+        </Suspense>
 
-        <Card>
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Animal</TableHead>
-                  <TableHead>Source</TableHead>
-                  <TableHead>Breed</TableHead>
-                  <TableHead>
-                    Purcahsed/Acquired/Born
-                  </TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Count</TableHead>
-                  <TableHead>Purpose</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {livestock.map((animal) => {
-
-                  return (
-                    <TableRow key={animal.id}>
-                    <TableCell className="font-medium">{animal.type}</TableCell>
-                    <TableCell>{animal.source}</TableCell>
-                    <TableCell>{animal.breed}</TableCell>
-                    <TableCell>{formatDate(animal.acquisition_date, "PPP")}</TableCell>
-                    <TableCell>
-                      <Badge className="bg-green-500">{animal.health_status}</Badge>
-                    </TableCell>
-                    <TableCell>{animal.location}</TableCell>
-                    <TableCell>
-                    {animal.count}
-                    </TableCell>
-                    <TableCell>{animal.purpose}</TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Link href={`/dashboard/farms/${farmId}/livestock/${animal.id}`}>
-                              View
-                            </Link>
-                            </DropdownMenuItem>           
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                  )
-                })}
-               
-                
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
       </main>
     </div>
   )
