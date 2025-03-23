@@ -2,8 +2,9 @@ import "server-only";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { stackServerApp } from "@/stack";
+import { cache } from "react";
 
-const getCurrentUser = async () => {
+const getCurrentUser = cache(async () => {
     // get the current user_id from stack
     const user = await stackServerApp.getUser();
     if (!user) {
@@ -21,7 +22,7 @@ const getCurrentUser = async () => {
 
 
     return userFromDb;
-}
+})
 
 const getUserById = async (id: string) => {
     // get the user from the database

@@ -9,6 +9,7 @@ import { db, query } from "@/lib/db"
 import { z } from "zod"
 import { crops, CropSchema, CropUpdateSchema } from "@/lib/schema"
 import { eq } from "drizzle-orm"
+import { isFarmMember } from "@/lib/queries/farm-members"
 
 
 
@@ -25,6 +26,13 @@ export async function createCrop(prevState:unknown, formData: FormData) {
   const status = formData.get("status") as string
   const notes = formData.get("notes") as string
   const farm_id = Number.parseInt(formData.get("farm_id") as string)
+
+    const isMember = await isFarmMember(Number(formData.get("farm_id")))
+    if (!isMember) {
+      return {
+        error: "You are not a member of this farm."
+      }
+    }
 
   try {
     const validatedFields = CropSchema.safeParse({
@@ -85,6 +93,13 @@ export async function updateCrop(prevState: unknown, formData: FormData) {
     created_at: formData.get("created_at"),
     updated_at: formData.get("updated_at"),
   })
+
+  const isMember = await isFarmMember(Number(formData.get("farm_id")))
+  if (!isMember) {
+    return {
+      error: "You are not a member of this farm."
+    }
+  }
 
   if (!validatedFields.success) {
     console.error("Validation failed:", validatedFields.error.format())

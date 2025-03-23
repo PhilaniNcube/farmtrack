@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache"
 import { db, query } from "@/lib/db"
 
 import { FinanceInsert, finances } from "@/lib/schema"
+import { isFarmMember } from "@/lib/queries/farm-members";
 
 
 
@@ -20,6 +21,13 @@ export async function createFinance(prevState: unknown, formData: FormData) {
   const amount = (formData.get("amount") ?? "0") as string;
   const payment_method = (formData.get("payment_method") ?? "") as string;
   const farmId = (formData.get("farm_id") ?? "") as string;
+
+    const isMember = await isFarmMember(Number(formData.get("farm_id")))
+    if (!isMember) {
+      return {
+        error: "You are not a member of this farm."
+      }
+    }
 
   // convert transaction_date to into a timestap format
   const date = new Date(transaction_date);

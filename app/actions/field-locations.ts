@@ -1,10 +1,19 @@
 "use server";
 
 import { db } from "@/lib/db";
+import { isFarmMember } from "@/lib/queries/farm-members";
 import { fieldLocations, FieldLocationSchema } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
 
 export async function addFieldLocation(prevState: unknown, formData: FormData) {
+
+
+      const isMember = await isFarmMember(Number(formData.get("farm_id")))
+      if (!isMember) {
+        return {
+          error: "You are not a member of this farm."
+        }
+      }
 
     try {
 

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { db, query } from "@/lib/db"
 import { inventory, InventoryInsert, InventorySchema } from "@/lib/schema"
+import { isFarmMember } from "@/lib/queries/farm-members"
 
 
 
@@ -23,20 +24,12 @@ export async function createInventoryItem(prevState: unknown, formData: FormData
     const storage_location = formData.get("storage_location") as string
     const reorder_level = Number.parseFloat(formData.get("reorder_level") as string)
 
-    console.log({
-      item_name,
-      category,
-      quantity,
-      unit,
-      purchase_date,
-      expiry_date,
-      notes,
-      farm_id,
-      purchase_price,
-      supplier,
-      storage_location,
-      reorder_level
-    })
+  const isMember = await isFarmMember(Number(formData.get("farm_id")))
+  if (!isMember) {
+    return {
+      error: "You are not a member of this farm."
+    }
+  }
 
     const validatedFields = InventorySchema.safeParse({
       item_name,

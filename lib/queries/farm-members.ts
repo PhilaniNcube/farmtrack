@@ -2,6 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "../db";
 import { farmMembers, users, farms } from "../schema";
 import { stackServerApp } from "@/stack";
+import { cache } from "react";
 
 export async function getFarmMembers(farmId: number) {
   // Get all users associated with this farm
@@ -32,7 +33,7 @@ export async function getUserFarms() {
 }
 
 
-export async function isFarmMember(farmId: number) {
+export const isFarmMember = cache(async (farmId: number) => {
   const authUser = await stackServerApp.getUser();
 
   if (!authUser?.id) {
@@ -47,7 +48,7 @@ export async function isFarmMember(farmId: number) {
 
 
   return farmMember.length > 0;
-}
+})
 
 // get the return type of the getUserFarms function
 export type UserFarms = Awaited<ReturnType<typeof getUserFarms>>[number];

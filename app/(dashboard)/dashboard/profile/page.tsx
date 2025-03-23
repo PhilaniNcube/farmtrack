@@ -26,7 +26,7 @@ const ProfilePage = async () => {
 
     const userProfile = await getCurrentUser()
 
-    console.log("userProfile", userProfile)
+ 
 
 
 
