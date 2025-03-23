@@ -5,6 +5,7 @@ import { stackServerApp } from "@/stack";
 import { cache } from "react";
 
 export async function getFarmMembers(farmId: number) {
+  "use cache"
   // Get all users associated with this farm
   const members = await db.select().from(farmMembers).leftJoin(users, eq(users.id, farmMembers.user_id)).where(eq(farmMembers.farm_id, farmId))
 
@@ -34,6 +35,7 @@ export async function getUserFarms() {
 
 
 export const isFarmMember = cache(async (farmId: number) => {
+  "use cache"
   const authUser = await stackServerApp.getUser();
 
   if (!authUser?.id) {

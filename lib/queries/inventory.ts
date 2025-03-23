@@ -3,7 +3,7 @@ import { inventory } from "../schema"
 import { db } from "../db"
 
 export async function getInventoryItems(farmId: number) {
-  
+   "use cache"
     const inventoryItems = await db
         .select()
         .from(inventory)

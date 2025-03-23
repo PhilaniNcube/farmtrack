@@ -19,10 +19,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    webpackBuildWorker: true,
-    parallelServerBuildTraces: true,
-    parallelServerCompiles: true,
+
     useCache: true,
+   
   },
 }
 

@@ -5,6 +5,7 @@ import { stackServerApp } from "@/stack";
 import { cache } from "react";
 
 const getCurrentUser = cache(async () => {
+    "use cache"
     // get the current user_id from stack
     const user = await stackServerApp.getUser();
     if (!user) {
@@ -25,6 +26,7 @@ const getCurrentUser = cache(async () => {
 })
 
 const getUserById = async (id: string) => {
+    "use cache"
     // get the user from the database
     const userFromDb = await db.query.users.findFirst({
         where: (users, { eq }) => eq(users.id, id)         
@@ -34,6 +36,7 @@ const getUserById = async (id: string) => {
 }   
 
 const getUserByEmail = async (email: string) => {
+    "use cache"
     // get the user from the database
     const userFromDb = await db.query.users.findFirst({
         where: (users, { eq }) => eq(users.email, email)         
