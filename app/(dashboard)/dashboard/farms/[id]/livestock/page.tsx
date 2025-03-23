@@ -40,7 +40,7 @@ export default async function LivestockPage({ params }: { params: Promise<{ id: 
           </Link>
         </div>
         <Suspense fallback={<LiveStockSkeleton />}>
-          <LivestockTable livestock={livestock} />
+          <LivestockTable farmId={farmIdNumber} />
         </Suspense>
 
       </main>

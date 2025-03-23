@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import React from 'react'
 
 const LiveStockSkeleton = () => {
@@ -24,15 +24,15 @@ const LiveStockSkeleton = () => {
                     </TableHeader>
                     <TableBody>
                         <TableRow>
-                            <TableHead className="h-8 w-24 animate-pulse bg-gray-200" />
-                            <TableHead className="h-8 w-24 animate-pulse bg-gray-200" />
-                            <TableHead className="h-8 w-24 animate-pulse bg-gray-200" />
-                            <TableHead className="h-8 w-24 animate-pulse bg-gray-200" />
-                            <TableHead className="h-8 w-24 animate-pulse bg-gray-200" />
-                            <TableHead className="h-8 w-24 animate-pulse bg-gray-200" />
-                            <TableHead className="h-8 w-24 animate-pulse bg-gray-200" />
-                            <TableHead className="h-8 w-24 animate-pulse bg-gray-200" />
-                            <TableHead className="h-8 w-24 animate-pulse bg-gray-200" />
+                            <TableCell className="h-8 w-12 animate-pulse bg-gray-200" />
+                            <TableCell className="h-8 w-12 animate-pulse bg-gray-200" />
+                            <TableCell className="h-8 w-12 animate-pulse bg-gray-200" />
+                            <TableCell className="h-8 w-12 animate-pulse bg-gray-200" />
+                            <TableCell className="h-8 w-12 animate-pulse bg-gray-200" />
+                            <TableCell className="h-8 w-12 animate-pulse bg-gray-200" />
+                            <TableCell className="h-8 w-12 animate-pulse bg-gray-200" />
+                            <TableCell className="h-8 w-12 animate-pulse bg-gray-200" />
+                            <TableCell className="h-8 w-12 animate-pulse bg-gray-200" />
                         </TableRow>
                     </TableBody>
                 </Table>
