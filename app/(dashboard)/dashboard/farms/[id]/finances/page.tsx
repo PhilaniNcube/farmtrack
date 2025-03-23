@@ -32,7 +32,7 @@ export default async function FinancesPage({params}:{ params: Promise<{ id: stri
 
   const  finances = await getFinances(farmId)
   const totalFinances = await getTotalFinances(farmId)
-  console.log("finances", finances)
+
 
   return (
     <div className="flex flex-col min-h-screen">

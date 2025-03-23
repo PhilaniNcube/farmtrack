@@ -30,7 +30,7 @@ export function AddFinanceForm() {
   const type = searchParams.get("type") as "income" | "expense" || "income"
   
 
-  console.log({farmId})
+
 
   const router = useRouter()
   const [date, setDate] = useState<Date>(new Date())

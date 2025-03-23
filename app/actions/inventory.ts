@@ -51,7 +51,7 @@ export async function createInventoryItem(prevState: unknown, formData: FormData
       return { error: "Validation failed" }
     }
 
-    console.log("Validated fields:", validatedFields.data)
+
 
     const values: InventoryInsert = {
       item_name,

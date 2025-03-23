@@ -29,7 +29,7 @@ export async function addMeAsFarmMember(farmId: number) {
   });
 
   if (existingMember) {
-    console.log("User is already a member of the farm");
+
     return;
   }
 

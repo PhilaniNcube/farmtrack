@@ -28,7 +28,7 @@ export function AddCropForm({fields}: {fields: FieldLocation[]}) {
   const { id } = params
   const farmId = Number(id)
 
-  console.log("Farm ID: ", farmId)
+
 
   const router = useRouter()
   const [plantingDate, setPlantingDate] = useState<Date>()

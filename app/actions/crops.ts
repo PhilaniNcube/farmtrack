@@ -163,7 +163,7 @@ export async function updateCropStatus(id: number, status: string) {
       .where(eq(crops.id, id))
       .returning()
    
-      console.log("Updated crop status:", result[0])
+ 
 
     return { crop: result[0] }
   } catch (error) {

@@ -15,7 +15,7 @@ const UpdateCropStatus = ({ cropId, status }: { cropId: number, status: string }
 
   const [state, formAction, isPending] = useActionState(async (prev:unknown, formData:FormData) => {
     const status = formData.get("status") as string
-    console.log("Status: ", status)
+ 
     // Call your update crop status function here
     updateCropStatus(cropId, status)
   }, null)

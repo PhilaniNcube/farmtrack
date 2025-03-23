@@ -4,7 +4,7 @@ import { getFieldLocations } from "@/lib/queries/field-locations"
 
 export default async function AddCropPage({params}:{params:Promise<{id: string}>}) {
   const { id } = await params
-  console.log("Farm ID: ", id)
+
 
   // Fetch field locations for the farm
   const fieldLocations = await getFieldLocations(Number(id))

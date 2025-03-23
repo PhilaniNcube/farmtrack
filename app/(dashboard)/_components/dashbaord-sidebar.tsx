@@ -45,7 +45,7 @@ export function DashboardSidebar({farms}: { farms: UserFarms[] }) {
    
    
     const { farmId, setFarmId} = useSelectedFarm()
-    console.log("FARM ID", farmId)
+ 
     const router = useRouter()
 
 
