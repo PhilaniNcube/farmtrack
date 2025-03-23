@@ -5,7 +5,7 @@ import { stackServerApp } from "@/stack";
 import { getUserFarms } from "./farm-members";
 
 export async function getMyFarms() {
-  "use cache"
+
   const authUser = await stackServerApp.getUser();
   if (!authUser?.id) {
     return [];
@@ -19,7 +19,7 @@ export async function getMyFarms() {
 }
 
 export async function getAllMyFarms() {
-  "use cache"
+
   const authUser = await stackServerApp.getUser();
   if (!authUser?.id) {
     return [];
@@ -32,7 +32,7 @@ export async function getAllMyFarms() {
 }
 
 export async function getFarmMembers(farmId: number) {
-  "use cache"
+ 
   // Get all users associated with this farm
   const members = await db.query.users.findMany({
     where: (users, { eq }) => eq(users.farm_id, farmId),

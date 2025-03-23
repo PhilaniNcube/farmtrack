@@ -3,7 +3,7 @@ import { db } from "../db"
 import { finances } from "../schema"
 
 export async function getFinances(farmId: number) {
-  "use cache"
+  ""
   const financeData = await db.query.finances.findMany({
     where: eq(finances.farm_id, farmId),
     orderBy: desc(finances.transaction_date),
@@ -13,7 +13,7 @@ export async function getFinances(farmId: number) {
 }
 
 export async function getTotalIncome(id: number) {
-"use cache"
+""
    const totalIncome = await db.select().from(finances).where(
  and(
     eq(finances.farm_id, id),
