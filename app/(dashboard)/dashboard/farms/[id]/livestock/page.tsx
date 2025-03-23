@@ -80,9 +80,11 @@ export default async function LivestockPage({ params }: { params: Promise<{ id: 
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>View Details</DropdownMenuItem>
-                          <DropdownMenuItem>Edit Record</DropdownMenuItem>
-                          <DropdownMenuItem>Record Health Check</DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Link href={`/dashboard/farms/${farmId}/livestock/${animal.id}`}>
+                              View
+                            </Link>
+                            </DropdownMenuItem>           
                           <DropdownMenuSeparator />
                           <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
                         </DropdownMenuContent>

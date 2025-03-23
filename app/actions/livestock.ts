@@ -184,3 +184,34 @@ export async function updateLivestockCount(prevState:unknown, id: number, count:
     revalidatePath(`/dashboard/farms`)  
   }
 }
+
+export async function updateLivestockType(prevState:unknown, formData:FormData) {
+
+
+  const id = Number(formData.get("id"))
+  const type = formData.get("type") as string
+  if (!id || !type) {
+    return {
+      error: "Invalid data"
+    }
+  }
+
+  try {
+    const updatedLivestockType = await db.update(livestock).set({
+      type: type,
+      updated_at: new Date()
+    }).where(eq(livestock.id, id)).returning()
+
+    revalidatePath(`/dashboard/farms/${updatedLivestockType[0].farm_id}/livestock/${id}`)
+
+    return updatedLivestockType
+  } catch (error) {
+    console.error("Error updating livestock type:", error)
+    return {
+      error: "An error occurred while updating livestock type."
+    }
+  } finally {
+    console.log("Livestock type updated successfully")
+    revalidatePath(`/dashboard/farms`)  
+  }
+}
