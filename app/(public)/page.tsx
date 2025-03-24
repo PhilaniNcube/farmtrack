@@ -26,9 +26,7 @@ export default function Home() {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
-                <Link href="/about">
-                  <Button variant="outline">Learn More</Button>
-                </Link>
+              
               </div>
             </div>
           </div>
@@ -50,7 +48,7 @@ export default function Home() {
                   </p>
                 </CardContent>
                 <CardFooter>
-                  <Link href="/crops">
+                  <Link href="/dashboard/farms">
                     <Button variant="outline" size="sm">
                       Manage Crops
                     </Button>
@@ -71,7 +69,7 @@ export default function Home() {
                   </p>
                 </CardContent>
                 <CardFooter>
-                  <Link href="/livestock">
+                  <Link href="/dashboard/farms">
                     <Button variant="outline" size="sm">
                       Track Livestock
                     </Button>
@@ -91,7 +89,7 @@ export default function Home() {
                   </p>
                 </CardContent>
                 <CardFooter>
-                  <Link href="/finances">
+                  <Link href="/dashboard/farms">
                     <Button variant="outline" size="sm">
                       Manage Finances
                     </Button>

@@ -137,6 +137,9 @@ importers:
       '@types/sql.js':
         specifier: latest
         version: 1.4.9
+      '@vercel/functions':
+        specifier: ^2.0.0
+        version: 2.0.0(@aws-sdk/credential-provider-web-identity@3.758.0)
       '@vercel/postgres':
         specifier: latest
         version: 0.10.0
@@ -3266,6 +3269,15 @@ packages:
     resolution: {integrity: sha512-EEmtFu8JTuwsInqMakhLq+U3qN8ZMd5V3pX44q0EqD2imqTDsa8ikZqJ1schVrN8HljOdN+C08cwZ1/r5uIgLw==}
     peerDependencies:
       '@urql/core': ^5.0.0
+
+  '@vercel/functions@2.0.0':
+    resolution: {integrity: sha512-BSwIihLHoV18gerKZJyGuqd3rtaYM6rJvET1kOwKktshucyaHXTJel7Cxegs+sdX0NZqsX4LO2MFnMU2jG01Cw==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      '@aws-sdk/credential-provider-web-identity': '*'
+    peerDependenciesMeta:
+      '@aws-sdk/credential-provider-web-identity':
+        optional: true
 
   '@vercel/postgres@0.10.0':
     resolution: {integrity: sha512-fSD23DxGND40IzSkXjcFcxr53t3Tiym59Is0jSYIFpG4/0f0KO9SGtcp1sXiebvPaGe7N/tU05cH4yt2S6/IPg==}
@@ -10568,6 +10580,10 @@ snapshots:
     dependencies:
       '@urql/core': 5.1.1
       wonka: 6.3.5
+
+  '@vercel/functions@2.0.0(@aws-sdk/credential-provider-web-identity@3.758.0)':
+    optionalDependencies:
+      '@aws-sdk/credential-provider-web-identity': 3.758.0
 
   '@vercel/postgres@0.10.0':
     dependencies:

@@ -9,7 +9,8 @@ try {
 const nextConfig = {
   logging: {
     fetches: {
-      fullUrl: true, hmrRefreshes: true,
+      fullUrl: true, 
+      hmrRefreshes: true,
     }
   },
   eslint: {
@@ -19,9 +20,8 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-
-    useCache: true,
-   
+    useCache: true,  
+  
   },
 }
 
