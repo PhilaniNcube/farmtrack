@@ -1,16 +1,11 @@
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { MapPinIcon, CalendarIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
 import type { Farm } from "@/lib/schema"
 import { getMyFarms } from "@/lib/queries/farms"
 import FarmButton from "../farm-button"
 
-interface FarmsListProps {
-  farms: Farm[]
-}
 
 export async function FarmsList() {
 
