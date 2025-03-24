@@ -50,7 +50,7 @@ export default async function Dashboard() {
             </CardHeader>
             <CardContent>
               <Suspense fallback={<Skeleton className="h-[200px] w-full" />}>
-                <WeatherWidget />
+                <WeatherWidget location="Port Elizabeth" />
               </Suspense>
             </CardContent>
           </Card>
