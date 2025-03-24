@@ -3,29 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 export default function DashboardLoading() {
   return (
     <div className="flex h-screen w-full">
-      {/* Sidebar skeleton */}
-      <div className="hidden lg:flex flex-col w-64 border-r bg-gray-50/30 dark:bg-gray-900/30">
-        <div className="p-4 border-b">
-          <Skeleton className="h-10 w-40" />
-        </div>
-        <div className="p-4 flex-1 space-y-6">
-          <Skeleton className="h-6 w-24" />
-          <div className="space-y-2">
-            {Array(6).fill(null).map((_, i) => (
-              <Skeleton key={i} className="h-10 w-full" />
-            ))}
-          </div>
-          <Skeleton className="h-6 w-24 mt-8" />
-          <div className="space-y-2">
-            {Array(4).fill(null).map((_, i) => (
-              <Skeleton key={i} className="h-10 w-full" />
-            ))}
-          </div>
-        </div>
-        <div className="p-4 border-t">
-          <Skeleton className="h-10 w-full" />
-        </div>
-      </div>
+    
 
       {/* Main content skeleton */}
       <div className="flex-1 flex flex-col">

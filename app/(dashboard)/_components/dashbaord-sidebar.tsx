@@ -130,12 +130,7 @@ export function DashboardSidebar({farms}: { farms: UserFarms[] }) {
             href: `/dashboard/farms/${farmId}/livestock` ,
             active: pathname === `/dashboard/farms/${farmId}/livestock` || pathname.startsWith(`/dashboard/farms/${farmId}/livestock`)
         },
-        {
-            title: "Reports",
-            icon: <BarChart3 />,
-            href: `/dashboard/farms/${farmId}/reports` ,
-            active: pathname === `/dashboard/farms/${farmId}/reports` || pathname.startsWith(`/dashboard/farms/${farmId}/reports`)
-        }
+  
     ]
 
 
@@ -151,7 +146,7 @@ export function DashboardSidebar({farms}: { farms: UserFarms[] }) {
             <SidebarContent>
                 {/* Farm Selector Dropdown */}
                 <div className="px-2 pb-2 mt-4">
-                    <Select onValueChange={handleFarmChange}  >
+                    <Select onValueChange={handleFarmChange} defaultValue={farmId?.toString()}>
                         <SelectTrigger className="w-full bg-sidebar-accent/10 border-sidebar-border">
                             <SelectValue placeholder="Select a farm" />
                         </SelectTrigger>
