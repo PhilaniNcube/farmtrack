@@ -6,6 +6,7 @@ import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
 import type { Farm } from "@/lib/schema"
 import { getMyFarms } from "@/lib/queries/farms"
+import FarmButton from "../farm-button"
 
 interface FarmsListProps {
   farms: Farm[]
@@ -27,7 +28,7 @@ export async function FarmsList() {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {farms.map((farm) => (
-        <Card key={farm.id} className="overflow-hidden">
+        <Card key={farm.id} className="overflow-hidden flex flex-col justify-between">
           <CardHeader className="pb-3">
             <CardTitle className="text-xl">{farm.name}</CardTitle>
             {farm.location && (
@@ -44,14 +45,12 @@ export async function FarmsList() {
               <p className="text-sm text-muted-foreground italic">No description provided</p>
             )}
           </CardContent>
-          <CardFooter className="flex flex-col items-start gap-2 border-t pt-3">
+          <CardFooter className="flex flex-col items-start  justify-end gap-2 border-t pt-3">
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
               <CalendarIcon className="h-3.5 w-3.5" />
               Created {formatDistanceToNow(new Date(farm.created_at), { addSuffix: true })}
             </div>
-            <Button asChild size="sm" className="mt-2">
-              <Link href={`/dashboard/farms/${farm.id}`}>View Farm</Link>
-            </Button>
+           <FarmButton farm={farm} />
           </CardFooter>
         </Card>
       ))}
