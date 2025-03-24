@@ -6,7 +6,7 @@ import { cachedIsFarmMember, isFarmMember } from "./farm-members";
 
 export async function getInventoryItems(farmId: number) {
 
-    const isMember = await cachedIsFarmMember(farmId)
+    const isMember = await isFarmMember(farmId)
 
     if (!isMember) {
         return []

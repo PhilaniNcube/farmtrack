@@ -4,7 +4,7 @@ import { livestock } from "../schema"
 import { unstable_cache } from 'next/cache';
 
 export async function getLivestock(farmId: number) {
-   ""
+   
   const livestockItems = await db
     .select()
     .from(livestock)

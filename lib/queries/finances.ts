@@ -6,7 +6,7 @@ import { cachedIsFarmMember, isFarmMember } from "./farm-members";
 
 export async function getFinances(farmId: number) {
   
-  const isMember = await cachedIsFarmMember(farmId)
+  const isMember = await isFarmMember(farmId)
   if (!isMember) {
     return []
   }
@@ -33,7 +33,7 @@ export const getCachedFinances = unstable_cache(
 export async function getTotalIncome(id: number) {
 
   // Check if the user is a member of the farm
-  const isMember = await cachedIsFarmMember(id)
+  const isMember = await isFarmMember(id)
   if (!isMember) {
     return 0  
   }
@@ -63,7 +63,7 @@ export const getCachedTotalIncome = unstable_cache(
 
 export async function getTotalExpenses(id: number) {
 
-  const isMember = await cachedIsFarmMember(id)
+  const isMember = await isFarmMember(id)
   if (!isMember) {
     return 0
   }
@@ -92,7 +92,7 @@ export const getCachedTotalExpenses = unstable_cache(
 export async function getTotalFinances(id: number) {
 
 
-  const isMember = await cachedIsFarmMember(id)
+  const isMember = await isFarmMember(id)
   if (!isMember) {
     return {
       totalIncome: 0,
