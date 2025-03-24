@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import {
@@ -37,18 +37,35 @@ import { useSelectedFarm } from '@/lib/stores/use-selected-farm'
 export function DashboardSidebar({farms}: { farms: UserFarms[] }) {
     const pathname = usePathname()
 
+    console.log(pathname)
+
     const params = useParams()
     const farmParam = params.id as string
 
 
-
+    
    
    
     const { farmId, setFarmId} = useSelectedFarm()
  
     const router = useRouter()
 
-
+    useEffect(() => {
+        // if farmId is null, set it to the first farm id in the list
+        if (farmId === null && farms.length > 0) {
+            // Check if farm id exists before setting it
+            const firstFarmId = farms[0].farm?.id;
+            if (firstFarmId !== undefined) {
+                setFarmId(firstFarmId);
+            }
+        } else if (farmId !== null && farmParam !== undefined) {
+            const parsedFarmId = parseInt(farmParam);
+            // Check if parsing was successful
+            if (!isNaN(parsedFarmId)) {
+                setFarmId(parsedFarmId);
+            }
+        }
+    }, [farmId, farms, farmParam, setFarmId]);
 
 
 
