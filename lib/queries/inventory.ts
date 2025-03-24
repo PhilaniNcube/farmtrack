@@ -2,7 +2,7 @@ import { desc, eq, is } from "drizzle-orm"
 import { inventory } from "../schema"
 import { db } from "../db"
 import { unstable_cache } from 'next/cache';
-import { cachedIsFarmMember, isFarmMember } from "./farm-members";
+import {  isFarmMember } from "./farm-members";
 
 export async function getInventoryItems(farmId: number) {
 
