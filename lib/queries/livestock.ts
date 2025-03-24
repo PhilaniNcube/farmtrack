@@ -2,7 +2,6 @@ import { desc, eq } from "drizzle-orm"
 import { db } from "../db"
 import { livestock } from "../schema"
 import { unstable_cache } from 'next/cache';
-import { get } from "http";
 
 export async function getLivestock(farmId: number) {
    ""

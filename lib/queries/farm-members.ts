@@ -3,6 +3,7 @@ import { db } from "../db";
 import { farmMembers, users, farms } from "../schema";
 import { stackServerApp } from "@/stack";
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
 export async function getFarmMembers(farmId: number) {
 
@@ -51,6 +52,14 @@ export const isFarmMember = cache(async (farmId: number) => {
 
   return farmMember.length > 0;
 })
+
+export const cachedIsFarmMember = unstable_cache(
+  async (farmId: number) => await isFarmMember(farmId),
+  ["isFarmMember"],
+  {
+    tags: ["isFarmMember"],
+  }
+)
 
 // get the return type of the getUserFarms function
 export type UserFarms = Awaited<ReturnType<typeof getUserFarms>>[number];
