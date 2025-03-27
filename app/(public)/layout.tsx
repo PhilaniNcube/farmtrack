@@ -1,7 +1,7 @@
 import Link from "next/link"
-import React, { ReactNode } from 'react'
+import React, { ReactNode, Suspense } from 'react'
 import { Button } from "@/components/ui/button"
-import { LucideLogIn, UserPlus } from "lucide-react"
+import { CircleAlert, LucideLogIn, UserPlus } from "lucide-react"
 import UserComponent from "@/components/auth/user"
 
 const PublicLayout = ({ children }: { children: ReactNode }) => {
@@ -18,7 +18,18 @@ const PublicLayout = ({ children }: { children: ReactNode }) => {
                     </div>
 
                     <div className="flex items-center gap-x-4">
-                        <UserComponent />
+                        <Suspense fallback={
+                            <div className="flex gap-x-3 items-center pointer-events-none">
+                                <Button disabled variant="ghost" className="animate-pulse">
+                                    <LucideLogIn className="h-4 w-4" />
+                                    Dashboard
+                                </Button>
+                                <CircleAlert className="animate-pulse" />
+                            </div>
+                        }>
+                            <UserComponent />
+                        </Suspense>
+
                     </div>
                 </div>
             </header>
