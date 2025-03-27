@@ -101,25 +101,7 @@ export default async function FinancesPage({params}:{ params: Promise<{ id: stri
           </Card>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-7 mb-6">
-          <Card className="md:col-span-7">
-            <CardHeader>
-              <CardTitle>Financial Summary</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Suspense fallback={<Skeleton className="h-[350px] w-full" />}>
-                <FinancialSummary
-                  data={( []).map(item => ({
-                    month: String( ''),
-                    income: Number(totalFinances.totalIncome),
-                    expenses: Number(totalFinances.totalExpenses),
-                    profit: Number(totalFinances.net_profit),
-                  }))}
-                />
-              </Suspense>
-            </CardContent>
-          </Card>
-        </div>
+
 
         <Tabs defaultValue="transactions" className="mb-6">
           <TabsList>
