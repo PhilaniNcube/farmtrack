@@ -13,10 +13,10 @@ export default function DashboardLoading() {
         {/* Header skeleton */}
         <div className="p-4 md:p-6">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold tracking-tight">Crop Management</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
           <Button className="bg-green-600 hover:bg-green-700">
               <Plus className="mr-2 h-4 w-4" />
-              Add Crop
+              Create Farm
             </Button>
         </div></div>
 
