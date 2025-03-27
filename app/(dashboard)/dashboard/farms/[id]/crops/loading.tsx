@@ -1,4 +1,7 @@
+import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Plus } from "lucide-react"
+import Link from "next/link"
 
 export default function CropLoading() {
   return (
@@ -8,14 +11,14 @@ export default function CropLoading() {
       {/* Main content skeleton */}
       <div className="flex-1 flex flex-col">
         {/* Header skeleton */}
-        <div className="h-16 border-b flex items-center px-6">
-          <Skeleton className="h-8 w-64" />
-          <div className="flex-1"></div>
-          <div className="flex items-center space-x-4">
-            <Skeleton className="h-8 w-8 rounded-full" />
-            <Skeleton className="h-8 w-32" />
-          </div>
-        </div>
+        <div className="p-4 md:p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold tracking-tight">Crop Management</h1>
+          <Button className="bg-green-600 hover:bg-green-700">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Crop
+            </Button>
+        </div></div>
 
         {/* Content skeleton */}
         <div className="flex-1 p-6 overflow-auto">
