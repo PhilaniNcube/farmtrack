@@ -5,6 +5,7 @@ import { unstable_cache } from 'next/cache';
 import { cachedIsFarmMember, isFarmMember } from "./farm-members";
 
 export async function getFinances(farmId: number) {
+
   
   const isMember = await isFarmMember(farmId)
   if (!isMember) {

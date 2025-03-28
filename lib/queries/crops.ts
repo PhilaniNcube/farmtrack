@@ -1,9 +1,9 @@
+import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "next/cache"
 import { db } from "../db"
-import { eq } from "drizzle-orm"
-import { crops } from "../schema"
 import { isFarmMember } from "./farm-members"
 
 export async function getCropsByFarmId(farmId: number) {
+
 
   // Check if the user is a member of the farm
   const isMember = await isFarmMember(farmId)

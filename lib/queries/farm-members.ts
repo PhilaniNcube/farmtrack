@@ -7,13 +7,13 @@ import { unstable_cache } from "next/cache";
 
 export async function getFarmMembers(farmId: number) {
 
-  // Get all users associated with this farm
   const members = await db.select().from(farmMembers).leftJoin(users, eq(users.id, farmMembers.user_id)).where(eq(farmMembers.farm_id, farmId))
 
   return members;
 }
 
 export async function getUserFarms() {
+
 
   const authUser = await stackServerApp.getUser();
 
@@ -36,6 +36,8 @@ export async function getUserFarms() {
 
 
 export const isFarmMember = cache(async (farmId: number) => {
+
+
 
   const authUser = await stackServerApp.getUser();
 

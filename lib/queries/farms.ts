@@ -1,10 +1,11 @@
-import "server-only";
 
 import { db } from "@/lib/db";
 import { stackServerApp } from "@/stack";
 import { getUserFarms } from "./farm-members";
+import { unstable_cacheLife, unstable_cacheTag } from "next/cache";
 
 export async function getMyFarms() {
+
 
   const authUser = await stackServerApp.getUser();
   if (!authUser?.id) {
