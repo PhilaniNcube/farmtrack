@@ -1,7 +1,5 @@
-import { db } from "@/lib/db"
-import { farms } from "@/lib/schema"
+
 import { notFound } from "next/navigation"
-import { eq } from "drizzle-orm"
 import { FarmMembers } from "@/components/farm-members"
 import { 
   Card, 
@@ -15,7 +13,6 @@ import { formatDistanceToNow } from "date-fns"
 import { Separator } from "@/components/ui/separator"
 import { stackServerApp } from "@/stack"
 import { addMeAsFarmMember } from "@/app/actions/farm-members"
-import { Button } from "@/components/ui/button"
 import AddMe from "./add-me"
 import { getFarmMembers } from "@/lib/queries/farm-members"
 import { getFarmById } from "@/lib/queries/farm-by-id"
