@@ -2,12 +2,14 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SidebarContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarSeparator } from '@/components/ui/sidebar';
+import { fetcher } from '@/lib/fetchers';
 import { UserFarms } from '@/lib/queries/farm-members';
 import { useSelectedFarm } from '@/lib/stores/use-selected-farm';
 import { Beef, LayoutDashboard, PackageIcon, PiggyBank, UserCog, Wheat } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react'
+
 
 const SidebarSideMenuItems = ({farms}: { farms: UserFarms[] }) => {
 
@@ -21,6 +23,8 @@ const SidebarSideMenuItems = ({farms}: { farms: UserFarms[] }) => {
         const { farmId, setFarmId} = useSelectedFarm()
  
         const router = useRouter()
+
+ 
     
         useEffect(() => {
             // if farmId is null, set it to the first farm id in the list
