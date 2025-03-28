@@ -65,3 +65,5 @@ export const cachedIsFarmMember = unstable_cache(
 
 // get the return type of the getUserFarms function
 export type UserFarms = Awaited<ReturnType<typeof getUserFarms>>[number];
+
+export type FarmMember = Awaited<ReturnType<typeof getFarmMembers>>[number];

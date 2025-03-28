@@ -17,6 +17,8 @@ import { stackServerApp } from "@/stack"
 import { addMeAsFarmMember } from "@/app/actions/farm-members"
 import { Button } from "@/components/ui/button"
 import AddMe from "./add-me"
+import { getFarmMembers } from "@/lib/queries/farm-members"
+import { getFarmById } from "@/lib/queries/farm-by-id"
 
 export default async function FarmDetailsPage({
   params
@@ -33,22 +35,26 @@ export default async function FarmDetailsPage({
     return notFound()
   }
 
-  const farmData = await db.query.farms.findFirst({
-    where: eq(farms.id, farmId)
-  })
+  const farmData =  getFarmById(farmId)
+    const membersDta =  getFarmMembers(farmId)
 
-  if (!farmData) {
+    const [farm, members] = await Promise.all([
+      farmData,
+      membersDta
+    ])
+
+  if (!farm) {
     return notFound()
   }
 
   return (
     <div className="container p-6 space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">{farmData.name}</h1>
-        {farmData.location && (
+        <h1 className="text-3xl font-bold tracking-tight">{farm.name}</h1>
+        {farm.location && (
           <div className="flex items-center gap-1 text-muted-foreground mt-1">
             <MapPin className="h-4 w-4" />
-            <span>{farmData.location}</span>
+            <span>{farm.location}</span>
           </div>
         )}
       </div>
@@ -63,8 +69,8 @@ export default async function FarmDetailsPage({
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {farmData.description ? (
-                <p>{farmData.description}</p>
+              {farm.description ? (
+                <p>{farm.description}</p>
               ) : (
                 <p className="text-muted-foreground italic">No description provided</p>
               )}
@@ -74,11 +80,11 @@ export default async function FarmDetailsPage({
               <div className="flex items-center gap-1 text-sm text-muted-foreground">
                 <Calendar className="h-4 w-4" />
                 <span>
-                  Created {formatDistanceToNow(new Date(farmData.created_at), { addSuffix: true })}
+                  Created {formatDistanceToNow(new Date(farm.created_at), { addSuffix: true })}
                 </span>
                 {/* If I am the creator of the farm add a button to add me as a member */}
                 <div>
-                {farmData.created_by === currentUser?.id && (
+                {farm.created_by === currentUser?.id && (
                  <AddMe farmId={farmId} addMeAsFarmMember={addMeAsFarmMember} />
                 )}
                 </div>
@@ -91,7 +97,7 @@ export default async function FarmDetailsPage({
         </div>
         
         <div className="space-y-6 col-span-1 lg:col-span-2">
-          <FarmMembers farmId={farmId} />
+          <FarmMembers members={members} />
         </div>
       </div>
     </div>

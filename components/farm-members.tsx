@@ -1,5 +1,4 @@
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Card,
   CardContent,
@@ -15,16 +14,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { getFarmMembers } from "@/lib/queries/farm-members"
-import { formatDistanceToNow } from "date-fns"
+import { FarmMember } from "@/lib/queries/farm-members"
 import { UserPlusIcon } from "lucide-react"
+import InviteFarmMember from "./invite-farm-member"
 
 interface FarmMembersProps {
-  farmId: number
+  members: FarmMember[]
 }
 
-export async function FarmMembers({ farmId }: FarmMembersProps) {
-  const members = await getFarmMembers(farmId)
+export async function FarmMembers({ members }: FarmMembersProps) {
+
 
   return (
     <Card>
@@ -32,8 +31,7 @@ export async function FarmMembers({ farmId }: FarmMembersProps) {
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Farm Members</CardTitle>
           {/* Add button could be linked to an invite flow in the future */}
-          <UserPlusIcon className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-primary transition-colors" />
-        </div>
+          <InviteFarmMember farmId={1} />        </div>
         <CardDescription>
           People who have access to this farm
         </CardDescription>
@@ -50,7 +48,7 @@ export async function FarmMembers({ farmId }: FarmMembersProps) {
                 <TableHead className="">User</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Role</TableHead>
-          
+
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -58,13 +56,13 @@ export async function FarmMembers({ farmId }: FarmMembersProps) {
                 <TableRow key={member.farm_members.id}>
                   <TableCell className="font-medium w-fit">
                     <div className="">
-                     
+
                       <span>{member.users?.name}</span>
                     </div>
                   </TableCell>
                   <TableCell>{member.users?.email}</TableCell>
                   <TableCell className="capitalize">{member.farm_members?.role}</TableCell>
-                
+
                 </TableRow>
               ))}
             </TableBody>
