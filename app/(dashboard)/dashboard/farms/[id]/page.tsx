@@ -28,7 +28,7 @@ export default async function FarmDetailsPage({
   const farmId = resolvedParams.id
   const currentUser = await stackServerApp.getUser()
   
-  if (isNaN(farmId)) {
+  if (await isNaN(farmId)) {
     return notFound()
   }
 
@@ -41,7 +41,7 @@ export default async function FarmDetailsPage({
     ])
 
   if (!farm) {
-    return notFound()
+    return await notFound()
   }
 
   return (
