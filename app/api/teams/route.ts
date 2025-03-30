@@ -4,7 +4,6 @@ import { NextResponse, NextRequest } from 'next/server';
 import { z } from 'zod';
 import { TeamWebhookSchema } from '@/lib/schema/teams';
 import { createTeam } from '@/lib/queries/teams';
-import { verifyWebhookSignature, getHeadersFromRequest } from '@/lib/svix';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
 
@@ -28,11 +27,19 @@ export async function POST(request: NextRequest) {
 
    const headerPayload = await headers()
 
-   const svix_id = headerPayload.get('svix-id') || null;
-   const svix_timestamp = headerPayload.get('svix-timestamp') || null;
-    const svix_signature = headerPayload.get('svix-signature') || null;
+   const svix_id = headerPayload.get('svix-id')!;
+   const svix_timestamp = headerPayload.get('svix-timestamp')!;
+   const svix_signature = headerPayload.get('svix-signature')!;
 
-    const stack_signature = headerPayload.get('x-stack-signature') || null;
+   const whHeaders = {
+    "svix-id": svix_id,
+    "svix-timestamp": svix_timestamp,
+    "svix-signature": svix_signature,
+  };
+
+    console.log({whHeaders});
+    
+
 
     if(!svix_id || !svix_timestamp || !svix_signature) {
       console.error('Missing required headers for webhook verification');
@@ -45,11 +52,7 @@ export async function POST(request: NextRequest) {
     const wh = new Webhook(webhookSecret);
     // Verify the webhook signature
     const isValid = wh.verify(
-      body, {
-        'svix-id': svix_id,
-        'svix-timestamp': svix_timestamp,
-        'svix-signature': svix_signature,
-      }
+      body, whHeaders
     );
 
     console.log(`Webhook signature valid: ${isValid}`);
