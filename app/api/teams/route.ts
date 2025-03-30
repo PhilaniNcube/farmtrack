@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     const wh = new Webhook(webhookSecret);
     // Verify the webhook signature
     const isValid = wh.verify(
-      body, whHeaders
+      rawBody, whHeaders
     );
 
     console.log(`Webhook signature valid: ${isValid}`);
