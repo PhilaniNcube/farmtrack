@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     "svix-signature": svix_signature,
   };
 
-    console.log({whHeaders});
+    console.log({whHeaders, body});
     
 
 
@@ -55,14 +55,11 @@ export async function POST(request: NextRequest) {
       rawBody, whHeaders
     );
 
-    console.log(`Webhook signature valid: ${isValid}`);
 
-    // Signature is valid, proceed with validating the payload
-    const validatedData = TeamWebhookSchema.parse(body);
     
     // Check if the webhook type is "team.created"
-    if (validatedData.type !== "team.created") {
-      console.log(`Ignoring webhook of type: ${validatedData.type}`);
+    if (body.type !== "team.created") {
+      console.log(`Ignoring webhook of type: ${body.type}`);
       return NextResponse.json({ success: true, message: 'Webhook received but ignored' });
     }
     
@@ -74,7 +71,7 @@ export async function POST(request: NextRequest) {
       server_metadata,
       client_metadata,
       client_read_only_metadata
-    } = validatedData.data;
+    } = body.data;
     
     // Create team in database
     await createTeam(
