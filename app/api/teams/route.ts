@@ -1,27 +1,21 @@
 // this route is used to receive a webook from stack auth when a team is created in stack auth
 
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { z } from 'zod';
 import { TeamWebhookSchema } from '@/lib/schema/teams';
 import { createTeam } from '@/lib/queries/teams';
-import crypto from 'crypto';
+import { verifyWebhookSignature, getHeadersFromRequest } from '@/lib/svix';
 
-export async function POST(request: Request) {
-  const body = await request.json();
-  const rawBody = JSON.stringify(body);
-  
+export async function POST(request: NextRequest) {
   try {
-    // Verify the webhook signature from Stack Auth
-    const signature = request.headers.get('x-stack-signature');
-    if (!signature) {
-      console.error('Missing Stack Auth signature header');
-      return NextResponse.json(
-        { success: false, message: 'Missing webhook signature' },
-        { status: 401 }
-      );
-    }
-
-    // Verify the signature using HMAC with SHA-256
+    // Parse the request body
+    const body = await request.json();
+    const rawBody = JSON.stringify(body);
+    
+    // Get headers from the request
+    const headers = getHeadersFromRequest(request);
+    
+    // Get the webhook secret
     const webhookSecret = process.env.TEAMS_WEBHOOK_SECRET;
     if (!webhookSecret) {
       console.error('TEAMS_WEBHOOK_SECRET not configured');
@@ -31,14 +25,14 @@ export async function POST(request: Request) {
       );
     }
 
-    const hmac = crypto.createHmac('sha256', webhookSecret);
-    const computedSignature = hmac.update(rawBody).digest('hex');
+    // Verify the webhook signature (works with both Stack Auth and SVIX)
+    const isValidSignature = await verifyWebhookSignature({
+      payload: rawBody,
+      headers,
+      secret: webhookSecret
+    });
     
-    // Use constant-time comparison to prevent timing attacks
-    if (!crypto.timingSafeEqual(
-      Buffer.from(signature),
-      Buffer.from(computedSignature)
-    )) {
+    if (!isValidSignature) {
       console.error('Invalid webhook signature');
       return NextResponse.json(
         { success: false, message: 'Invalid webhook signature' },

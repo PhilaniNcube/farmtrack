@@ -10,7 +10,8 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:migrate": "tsx lib/migrate.ts"
+    "db:migrate": "tsx lib/migrate.ts",
+    "webhook:test": "node scripts/test-webhooks.js"
   },
   "dependencies": {
     "@aws-sdk/client-rds-data": "latest",
@@ -91,6 +92,7 @@
     "sonner": "^1.7.1",
     "sql.js": "latest",
     "sqlite3": "latest",
+    "svix": "^1.62.0",
     "swr": "^2.3.3",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
