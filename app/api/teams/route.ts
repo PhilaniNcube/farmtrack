@@ -5,6 +5,8 @@ import { z } from 'zod';
 import { TeamWebhookSchema } from '@/lib/schema/teams';
 import { createTeam } from '@/lib/queries/teams';
 import { verifyWebhookSignature, getHeadersFromRequest } from '@/lib/svix';
+import { headers } from 'next/headers';
+import { Webhook } from 'svix';
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,8 +14,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const rawBody = JSON.stringify(body);
     
-    // Get headers from the request
-    const headers = getHeadersFromRequest(request);
+
     
     // Get the webhook secret
     const webhookSecret = process.env.TEAMS_WEBHOOK_SECRET;
@@ -25,20 +26,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify the webhook signature (works with both Stack Auth and SVIX)
-    const isValidSignature = await verifyWebhookSignature({
-      payload: rawBody,
-      headers,
-      secret: webhookSecret
-    });
-    
-    if (!isValidSignature) {
-      console.error('Invalid webhook signature');
+   const headerPayload = await headers()
+
+   const svix_id = headerPayload.get('svix-id') || null;
+   const svix_timestamp = headerPayload.get('svix-timestamp') || null;
+    const svix_signature = headerPayload.get('svix-signature') || null;
+
+    const stack_signature = headerPayload.get('x-stack-signature') || null;
+
+    if(!svix_id || !svix_timestamp || !svix_signature) {
+      console.error('Missing required headers for webhook verification');
       return NextResponse.json(
-        { success: false, message: 'Invalid webhook signature' },
-        { status: 401 }
+        { success: false, message: 'Missing required headers for webhook verification' },
+        { status: 400 }
       );
     }
+
+    const wh = new Webhook(webhookSecret);
+    // Verify the webhook signature
+    const isValid = wh.verify(
+      body, {
+        'svix-id': svix_id,
+        'svix-timestamp': svix_timestamp,
+        'svix-signature': svix_signature,
+      }
+    );
+
+    console.log(`Webhook signature valid: ${isValid}`);
 
     // Signature is valid, proceed with validating the payload
     const validatedData = TeamWebhookSchema.parse(body);
