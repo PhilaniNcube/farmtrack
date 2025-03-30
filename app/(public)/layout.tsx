@@ -8,7 +8,7 @@ const PublicLayout = ({ children }: { children: ReactNode }) => {
     return (
         <div className="min-h-screen flex flex-col">
             <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="container mx-auto flex h-14 items-center justify-between">
+                <div className="container px-6 mx-auto flex h-14 items-center justify-between">
                     <div>
                         <Link href="/" className="flex items-center space-x-2">
                             <span className="font-bold inline-block">

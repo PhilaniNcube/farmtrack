@@ -1,6 +1,7 @@
 "use server"
 
 import { stackServerApp } from '@/stack';
+import { stat } from 'fs';
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -34,6 +35,8 @@ export async function sendInviteToUser(prevState:unknown, formData: FormData) {
         if (!emailRegex.test(email)) {
             throw new Error('Invalid email address')
         }
+
+        
 
         // send the email using Resend
         const response = await resend.emails.send({

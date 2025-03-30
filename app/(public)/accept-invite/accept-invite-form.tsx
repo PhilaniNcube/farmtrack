@@ -24,24 +24,7 @@ export default function AcceptInviteForm() {
 
   const [state, formAction, isPending] = useActionState(acceptInvitation, null)
 
-  if (state?.success === true) {
-    return (
-      <Card className="w-full max-w-md mx-auto">
-        <CardContent className="pt-6 flex flex-col items-center justify-center text-center">
-          <CheckCircle2 className="h-16 w-16 text-green-500 mb-4" />
-          <h2 className="text-2xl font-bold mb-2">Invitation Accepted!</h2>
-          <p className="text-muted-foreground mb-4">
-            You have successfully joined the team. You will receive an email with further instructions.
-          </p>
-          <Link href="/sign-in" className="mt-2">
-            <Button variant="secondary" className="w-full" disabled={isPending}>
-              Go to Sign In
-            </Button>
-          </Link>
-        </CardContent>
-      </Card>
-    )
-  }
+
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -65,10 +48,10 @@ export default function AcceptInviteForm() {
             <Input id="email" type="email" name="email" defaultValue={email || ""} placeholder="Enter your email address" required />
           </div>
 
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="password">Create Password</Label>
             <Input id="password" type="password" name="password" placeholder="Create a secure password" required />
-          </div>
+          </div> */}
 
           <div className="flex items-center space-x-2 pt-2">
             <Checkbox id="terms" required />
@@ -84,6 +67,12 @@ export default function AcceptInviteForm() {
           </Button>
         </CardFooter>
       </form>
+
+      {state?.success === true && (
+        <div className="flex items-center justify-center mt-4 text-green-500">
+          <span className="text-sm">Invitation accepted successfully!</span>
+        </div>
+      )}
     </Card>
   )
 }

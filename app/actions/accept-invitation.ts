@@ -8,23 +8,46 @@ export async function acceptInvitation(prevState:unknown, formData: FormData) {
 
    const email = formData.get('email') as string
    const farmId = formData.get('farm_id') as string
-   const password = formData.get('password') as string
+//    const password = formData.get('password') as string
     const sender = formData.get('sender') as string
     const name = formData.get('name') as string
     
    try {
 
-    if(!email || !farmId || !password || !name || !sender) {
+    if(!email || !farmId || !name || !sender) {
         throw new Error('Email and farm ID are required')
     }
+
+    // check if the user is already in the stack auth tables
+    const authUser = await stackServerApp.listUsers({
+        query: email,
+        limit: 1,
+    })
+
+    // get the first item in the list of users
+    const user = authUser[0]
+
+
+
+
 
     // check if the user already exists
     const existingUser = await db.query.users.findFirst({
         where: (users, { eq }) => eq(users.email, email),
     })
 
-    if (existingUser) {
-        throw new Error('User already exists')
+    if (existingUser && user) {
+
+         await db.insert(farmMembers).values({
+            user_id: existingUser.id || user.id,
+            farm_id: parseInt(farmId),
+        })
+
+        return {
+            success: true,
+            message: 'Invitation accepted successfully!'
+        }
+       
     }
 
   
@@ -33,19 +56,31 @@ export async function acceptInvitation(prevState:unknown, formData: FormData) {
    const new_user =  await stackServerApp.createUser({
     primaryEmail: email,
     displayName: name,
-    password: password,
-    primaryEmailVerified: true,
     serverMetadata: {
         farmId: farmId,
         sender: sender,
-    }
+    },
+    clientMetadata: {
+        farmId: farmId,
+        sender: sender,
+    },   
 })
 
-console.log(new_user)
+// generate an alphanumeric 45 character verification code
+const verifcationCode = "u3h6gn4w24pqc8ya679inrhjwh1rybth6a7thurqhnpf2"
+
+
+
+await stackServerApp.verifyEmail(verifcationCode)
+
+
+
 
 if (!new_user) {
       throw new Error('User not created')
  }
+
+
 
  console.log('User created successfully:', new_user.serverMetadata)
 
