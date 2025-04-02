@@ -9,7 +9,7 @@ import { Beef, LayoutDashboard, PackageIcon, PiggyBank, UserCog, Wheat } from 'l
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react'
-import { SelectedTeamSwitcher } from '@stackframe/stack';
+import { SelectedTeamSwitcher, useUser } from '@stackframe/stack';
 
 
 const SidebarSideMenuItems = () => {
@@ -25,6 +25,8 @@ const SidebarSideMenuItems = () => {
 
     const router = useRouter()
 
+    const user = useUser({ or: 'redirect' });
+    const allTeams = user.useTeams();
 
 
 
@@ -92,7 +94,7 @@ const SidebarSideMenuItems = () => {
 
             <div className="flex items-center justify-between px-2 py-1">
                 <SelectedTeamSwitcher
-
+                    selectedTeam={allTeams[0]}
                     noUpdateSelectedTeam={false}
                     urlMap={(team) => {
                           
