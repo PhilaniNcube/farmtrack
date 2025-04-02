@@ -46,7 +46,7 @@ const AddInventoryForm = () => {
             purchase_date: "",
             expiry_date: "",
             notes: "",
-            farm_id: farmId,
+            team_id: farmId,
             purchase_price: 0,
             supplier: "",
             storage_location: "",
@@ -298,7 +298,7 @@ const AddInventoryForm = () => {
 
                             <FormField
                                 control={form.control}
-                                name="farm_id"
+                                name="team_id"
                                 render={({ field }) => (
                                     <FormItem>
 

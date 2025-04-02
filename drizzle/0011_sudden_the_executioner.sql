@@ -1,0 +1,1 @@
+ALTER TABLE "farm_members" ALTER COLUMN "team_id" SET DATA TYPE text;

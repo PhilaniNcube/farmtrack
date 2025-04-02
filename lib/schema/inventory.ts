@@ -1,6 +1,7 @@
 import { pgTable, serial, varchar, timestamp, text, numeric, integer } from 'drizzle-orm/pg-core';
 import { farms } from './farms';
 import { z } from 'zod';
+import { teams } from './teams';
 
 export const inventory = pgTable('inventory', {
   id: serial('id').primaryKey(),
@@ -15,7 +16,7 @@ export const inventory = pgTable('inventory', {
   storage_location: varchar('storage_location'),
   reorder_level: numeric('reorder_level'),
   notes: text('notes'),
-  farm_id: integer('farm_id').references(() => farms.id).notNull(),
+  team_id: text('team_id').references(() => teams.id).notNull(),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });
@@ -35,7 +36,7 @@ export const InventorySchema = z.object({
   storage_location: z.string().optional(),
   reorder_level: z.coerce.number().optional(),
   notes: z.string().optional(),
-  farm_id: z.coerce.number()
+  team_id: z.string()
 });
 
 export const InventoryUpdateSchema = z.object({

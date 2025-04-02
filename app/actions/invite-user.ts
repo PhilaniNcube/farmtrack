@@ -9,7 +9,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function sendInviteToUser(prevState:unknown, formData: FormData) {
 
     const email = formData.get('email') as string
-    const farmId = formData.get('farm_id') as string
+    const farmId = formData.get('team_id') as string
 
     
 
@@ -46,9 +46,9 @@ export async function sendInviteToUser(prevState:unknown, formData: FormData) {
             html: `
                 <h1>Join our farm team!</h1>
                 <p>You have been invited to join our farm team. Click the link below to accept the invitation:</p>
-                <a href="${process.env.WEBSITE_URL}/accept-invite?email=${email}&farm_id=${farmId}&sender=${userEmail}">Accept Invitation</a>
+                <a href="${process.env.WEBSITE_URL}/accept-invite?email=${email}&team_id=${farmId}&sender=${userEmail}">Accept Invitation</a>
                 `,
-            text: `Join our farm team! You have been invited to join our farm team. Click the link below to accept the invitation: ${process.env.WEBSITE_URL}/accept-invite?email=${email}&farm_id=${farmId}&sender=${userEmail}`,
+            text: `Join our farm team! You have been invited to join our farm team. Click the link below to accept the invitation: ${process.env.WEBSITE_URL}/accept-invite?email=${email}&team_id=${farmId}&sender=${userEmail}`,
         }) 
 
         if(response.error) {

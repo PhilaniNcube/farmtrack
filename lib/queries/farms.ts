@@ -32,13 +32,3 @@ export async function getAllMyFarms() {
   return userFarms.map(({ farm }) => farm);
 }
 
-export async function getFarmMembers(farmId: number) {
- 
-  // Get all users associated with this farm
-  const members = await db.query.users.findMany({
-    where: (users, { eq }) => eq(users.farm_id, farmId),
-    orderBy: (users, { asc }) => [asc(users.name)],
-  });
-
-  return members;
-}

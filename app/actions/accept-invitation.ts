@@ -7,7 +7,7 @@ import { stackServerApp } from "@/stack";
 export async function acceptInvitation(prevState:unknown, formData: FormData) {
 
    const email = formData.get('email') as string
-   const farmId = formData.get('farm_id') as string
+   const farmId = formData.get('team_id') as string
 //    const password = formData.get('password') as string
     const sender = formData.get('sender') as string
     const name = formData.get('name') as string
@@ -40,7 +40,7 @@ export async function acceptInvitation(prevState:unknown, formData: FormData) {
 
          await db.insert(farmMembers).values({
             user_id: existingUser.id || user.id,
-            farm_id: parseInt(farmId),
+            team_id: parseIntteam_id,
         })
 
         return {
@@ -95,7 +95,7 @@ const new_db_user  = await db.insert(users).values({
 
     const new_farm_member = await db.insert(farmMembers).values({
         user_id: new_user.id,
-        farm_id: parseInt(farmId),
+        team_id: parseIntteam_id,
     })
 
 

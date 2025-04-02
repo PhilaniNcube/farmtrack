@@ -1,5 +1,6 @@
 import { pgTable, serial, varchar, timestamp, text, numeric, integer } from 'drizzle-orm/pg-core';
 import { farms } from './farms';
+import { teams } from './teams';
 
 export const finances = pgTable('finances', {
   id: serial('id').primaryKey(),
@@ -11,7 +12,7 @@ export const finances = pgTable('finances', {
   payment_method: varchar('payment_method'),
   associated_with: varchar('associated_with'), // e.g., crop name, livestock id
   receipt_url: varchar('receipt_url'),
-  farm_id: integer('farm_id').references(() => farms.id).notNull(),
+  team_id: text('team_id').references(() => teams.id).notNull(),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });

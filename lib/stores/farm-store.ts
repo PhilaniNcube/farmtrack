@@ -13,7 +13,7 @@ interface FarmState {
   // The currently selected farm
   selectedFarm: Farm | null;
   // The ID of the currently selected farm
-  selectedFarmId: number | null;
+  selectedteam_id: string | null;
   // Function to set the selected farm
   setSelectedFarm: (farm: Farm | null) => void;
   // Function to set the selected farm by ID

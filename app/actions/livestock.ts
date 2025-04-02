@@ -25,7 +25,7 @@ export async function addLivestock(prevState:unknown, formData: FormData) {
     health_status: formData.get("health_status"),
     purpose: formData.get("purpose"),
     notes: formData.get("notes"),
-    farm_id: Number(formData.get("farm_id"))
+    team_id: Number(formData.get("team_id"))
   })
 
   if (!parsedData.success) {
@@ -33,13 +33,7 @@ export async function addLivestock(prevState:unknown, formData: FormData) {
    throw new Error("Invalid data")
   }
 
-  const isMember = await isFarmMember(parsedData.data.farm_id)
 
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
 
   const newLivestock = await db.insert(livestock).values({
     type: parsedData.data.type,
@@ -51,7 +45,7 @@ export async function addLivestock(prevState:unknown, formData: FormData) {
     health_status: parsedData.data.health_status,
     purpose: parsedData.data.purpose,
     notes: parsedData.data.notes,
-    farm_id: Number(parsedData.data.farm_id)
+    team_id: parsedData.data.team_id,
   }).returning()
 
   revalidateTag("getLivestock")
@@ -68,41 +62,12 @@ export async function addLivestock(prevState:unknown, formData: FormData) {
       error: "An error occurred while adding livestock."
     }
     
-  } finally {
-    console.log("Livestock added successfully")
-    revalidatePath(`/dashboard/farms/${formData.get("farm_id")}/livestock`)  
-  }
-  
+  } 
 
 }
 
 
-export async function deleteLivestock(prevState:unknown, id: number, famrId: number) {
 
-  const isMember = await isFarmMember(famrId)
-
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
-
-
-  try {
-    const deletedLivestock = await db.delete(livestock).where(eq(livestock.id, id)).returning()
-    revalidatePath("/livestock")
-    return deletedLivestock
-  } catch (error) {
-    console.error("Error deleting livestock:", error)
-    return {
-      error: "An error occurred while deleting livestock."
-    }
-  } finally {
-    console.log("Livestock deleted successfully")
- 
-    revalidatePath(`/dashboard/farms/`)  
-  }
-}
 export async function updateLivestock(prevState:unknown, formData: FormData) {
   try {
     const data = Object.fromEntries(formData.entries())
@@ -115,13 +80,6 @@ export async function updateLivestock(prevState:unknown, formData: FormData) {
       }
     }
 
-    const isMember = await isFarmMember(parsedData.data.farm_id)
-
-    if (!isMember) {
-      return {
-        error: "You are not a member of this farm."
-      }
-    }
 
     const updatedLivestock = await db.update(livestock).set({
       type: parsedData.data.type,
@@ -133,7 +91,7 @@ export async function updateLivestock(prevState:unknown, formData: FormData) {
       health_status: parsedData.data.health_status,
       purpose: parsedData.data.purpose,
       notes: parsedData.data.notes,
-      farm_id: parsedData.data.farm_id
+      team_id: parsedData.data.team_id
     }).where(eq(livestock.id, Number(data.id))).returning()
 
 
@@ -148,20 +106,12 @@ export async function updateLivestock(prevState:unknown, formData: FormData) {
     return {
       error: "An error occurred while updating livestock."
     }
-  } finally {
-    console.log("Livestock updated successfully")
-    revalidatePath(`/dashboard/farms/${formData.get("farm_id")}/livestock`)
-  }
+  } 
 }
 
 
-export async function incrementLivestockCount(prevState:unknown, id: number, farmId: number) {
-  const isMember = await isFarmMember(farmId)
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
+export async function incrementLivestockCount(prevState:unknown, id: number ) {
+
 
   try {
    
@@ -176,22 +126,11 @@ export async function incrementLivestockCount(prevState:unknown, id: number, far
     return {
       error: "An error occurred while incrementing livestock count."
     }
-  } finally {
-    console.log("Livestock count incremented successfully")
-    revalidatePath(`/dashboard/farms`)  
-  }
+  } 
 }
 
-export async function decrementLivestockCount(prevState:unknown, id: number, farmId: number) {
+export async function decrementLivestockCount(prevState:unknown, id: number, ) {
   
-  const isMember = await isFarmMember(farmId)
-  
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
-
 
   try {
     const updatedLivestockCount = await db.update(livestock).set({
@@ -204,21 +143,12 @@ export async function decrementLivestockCount(prevState:unknown, id: number, far
     return {
       error: "An error occurred while decrementing livestock count."
     }
-  } finally {
-    console.log("Livestock count decremented successfully")
-    revalidatePath(`/dashboard/farms`)  
-  }
+  } 
 }
 
-export async function updateLivestockCount(prevState:unknown, id: number, count: number, farmId: number) {
+export async function updateLivestockCount(prevState:unknown, id: number, count: number, ) {
   
-  const isMember = await isFarmMember(farmId)
-  
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
+
 
 
   try {
@@ -232,10 +162,7 @@ export async function updateLivestockCount(prevState:unknown, id: number, count:
     return {
       error: "An error occurred while updating livestock count."
     }
-  } finally {
-    console.log("Livestock count updated successfully")
-    revalidatePath(`/dashboard/farms`)  
-  }
+  } 
 }
 
 export async function updateLivestockType(prevState:unknown, formData:FormData) {
@@ -244,12 +171,7 @@ export async function updateLivestockType(prevState:unknown, formData:FormData) 
   const id = Number(formData.get("id"))
   const type = formData.get("type") as string
 
-  const isMember = await isFarmMember(Number(formData.get("farm_id")))
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
+
 
   if (!id || !type) {
     return {
@@ -263,7 +185,7 @@ export async function updateLivestockType(prevState:unknown, formData:FormData) 
       updated_at: new Date()
     }).where(eq(livestock.id, id)).returning()
 
-    revalidatePath(`/dashboard/farms/${updatedLivestockType[0].farm_id}/livestock/${id}`)
+
 
     return updatedLivestockType
   } catch (error) {
@@ -271,10 +193,7 @@ export async function updateLivestockType(prevState:unknown, formData:FormData) 
     return {
       error: "An error occurred while updating livestock type."
     }
-  } finally {
-    console.log("Livestock type updated successfully")
-    revalidatePath(`/dashboard/farms`)  
-  }
+  } 
 }
 
 export async function updateLivestockHealthStatus(prevState:unknown, formData:FormData) {
@@ -287,12 +206,7 @@ export async function updateLivestockHealthStatus(prevState:unknown, formData:Fo
     }
   }
 
-  const isMember = await isFarmMember(Number(formData.get("farm_id")))
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
+
 
   try {
     const updatedLivestockHealthStatus = await db.update(livestock).set({
@@ -300,7 +214,6 @@ export async function updateLivestockHealthStatus(prevState:unknown, formData:Fo
       updated_at: new Date()
     }).where(eq(livestock.id, id)).returning()
 
-    revalidatePath(`/dashboard/farms/${updatedLivestockHealthStatus[0].farm_id}/livestock/${id}`)
 
     return updatedLivestockHealthStatus
   } catch (error) {
@@ -308,10 +221,7 @@ export async function updateLivestockHealthStatus(prevState:unknown, formData:Fo
     return {
       error: "An error occurred while updating livestock health status."
     }
-  } finally {
-    console.log("Livestock health status updated successfully")
-    revalidatePath(`/dashboard/farms`)  
-  }
+  } 
 }
 
 export async function updateLivestockLocation(prevState:unknown, formData:FormData) {
@@ -325,12 +235,6 @@ export async function updateLivestockLocation(prevState:unknown, formData:FormDa
   }
 
 
-  const isMember = await isFarmMember(Number(formData.get("farm_id")))
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
 
   try {
     const updatedLivestockLocation = await db.update(livestock).set({
@@ -338,7 +242,7 @@ export async function updateLivestockLocation(prevState:unknown, formData:FormDa
       updated_at: new Date()
     }).where(eq(livestock.id, id)).returning()
 
-    revalidatePath(`/dashboard/farms/${updatedLivestockLocation[0].farm_id}/livestock/${id}`)
+
 
     return updatedLivestockLocation
   }
@@ -348,10 +252,7 @@ export async function updateLivestockLocation(prevState:unknown, formData:FormDa
       error: "An error occurred while updating livestock location."
     }
   }
-  finally {
-    console.log("Livestock location updated successfully")
-    revalidatePath(`/dashboard/farms`)  
-  }
+
 }
 
 
@@ -365,12 +266,6 @@ export async function updateLivestockNotes(prevState:unknown, formData:FormData)
     }
   }
 
-  const isMember = await isFarmMember(Number(formData.get("farm_id")))
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
 
   try {
     const updatedLivestockNotes = await db.update(livestock).set({
@@ -378,7 +273,7 @@ export async function updateLivestockNotes(prevState:unknown, formData:FormData)
       updated_at: new Date()
     }).where(eq(livestock.id, id)).returning()
 
-    revalidatePath(`/dashboard/farms/${updatedLivestockNotes[0].farm_id}/livestock/${id}`)
+
 
     return updatedLivestockNotes
   }
@@ -388,10 +283,7 @@ export async function updateLivestockNotes(prevState:unknown, formData:FormData)
       error: "An error occurred while updating livestock notes."
     }
   }
-  finally {
-    console.log("Livestock notes updated successfully")
-    revalidatePath(`/dashboard/farms`)  
-  }
+
 }
 
 
@@ -405,12 +297,7 @@ export async function updateLivestockPurpose(prevState:unknown, formData:FormDat
     }
   }
 
-  const isMember = await isFarmMember(Number(formData.get("farm_id")))
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
+
 
   try {
     const updatedLivestockPurpose = await db.update(livestock).set({
@@ -418,7 +305,7 @@ export async function updateLivestockPurpose(prevState:unknown, formData:FormDat
       updated_at: new Date()
     }).where(eq(livestock.id, id)).returning()
 
-    revalidatePath(`/dashboard/farms/${updatedLivestockPurpose[0].farm_id}/livestock/${id}`)
+
 
     return updatedLivestockPurpose
   }
@@ -428,10 +315,7 @@ export async function updateLivestockPurpose(prevState:unknown, formData:FormDat
       error: "An error occurred while updating livestock purpose."
     }
   }
-  finally {
-    console.log("Livestock purpose updated successfully")
-    revalidatePath(`/dashboard/farms`)  
-  }
+
 }
 
 
@@ -445,7 +329,7 @@ export async function updateLivestockBreed(prevState:unknown, formData:FormData)
     }
   }
 
-  const isMember = await isFarmMember(Number(formData.get("farm_id")))
+  const isMember = await isFarmMember(Number(formData.get("team_id")))
   if (!isMember) {
     return {
       error: "You are not a member of this farm."
@@ -458,7 +342,7 @@ export async function updateLivestockBreed(prevState:unknown, formData:FormData)
       updated_at: new Date()
     }).where(eq(livestock.id, id)).returning()
 
-    revalidatePath(`/dashboard/farms/${updatedLivestockBreed[0].farm_id}/livestock/${id}`)
+
 
     return updatedLivestockBreed
   }
@@ -468,10 +352,7 @@ export async function updateLivestockBreed(prevState:unknown, formData:FormData)
       error: "An error occurred while updating livestock breed."
     }
   }
-  finally {
-    console.log("Livestock breed updated successfully")
-    revalidatePath(`/dashboard/farms`)  
-  }
+
 }
 
 
@@ -485,12 +366,7 @@ export async function updateLivestockAcquisitionDate(prevState:unknown, formData
     }
   }
 
-  const isMember = await isFarmMember(Number(formData.get("farm_id")))
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
+
 
   try {
     const updatedLivestockAcquisitionDate = await db.update(livestock).set({
@@ -498,7 +374,7 @@ export async function updateLivestockAcquisitionDate(prevState:unknown, formData
       updated_at: new Date()
     }).where(eq(livestock.id, id)).returning()
 
-    revalidatePath(`/dashboard/farms/${updatedLivestockAcquisitionDate[0].farm_id}/livestock/${id}`)
+ 
 
     return updatedLivestockAcquisitionDate
   }
@@ -508,10 +384,7 @@ export async function updateLivestockAcquisitionDate(prevState:unknown, formData
       error: "An error occurred while updating livestock acquisition date."
     }
   }
-  finally {
-    console.log("Livestock acquisition date updated successfully")
-    revalidatePath(`/dashboard/farms`)  
-  }
+
 }
 
 export async function updateLivestockSource(prevState:unknown, formData:FormData) {
@@ -524,12 +397,7 @@ export async function updateLivestockSource(prevState:unknown, formData:FormData
     }
   }
 
-  const isMember = await isFarmMember(Number(formData.get("farm_id")))
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
+
 
   try {
     const updatedLivestockSource = await db.update(livestock).set({
@@ -537,7 +405,7 @@ export async function updateLivestockSource(prevState:unknown, formData:FormData
       updated_at: new Date()
     }).where(eq(livestock.id, id)).returning()
 
-    revalidatePath(`/dashboard/farms/${updatedLivestockSource[0].farm_id}/livestock/${id}`)
+
 
     return updatedLivestockSource
   }
@@ -547,10 +415,7 @@ export async function updateLivestockSource(prevState:unknown, formData:FormData
       error: "An error occurred while updating livestock source."
     }
   }
-  finally {
-    console.log("Livestock source updated successfully")
-    revalidatePath(`/dashboard/farms`)  
-  }
+
 }
 
 

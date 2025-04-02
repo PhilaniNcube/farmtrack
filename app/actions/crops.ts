@@ -25,14 +25,10 @@ export async function createCrop(prevState:unknown, formData: FormData) {
   const area_unit = formData.get("area_unit") as string
   const status = formData.get("status") as string
   const notes = formData.get("notes") as string
-  const farm_id = Number.parseInt(formData.get("farm_id") as string)
+  const team_id = Number.parseInt(formData.get("team_id") as string)
+  const team_id = formData.get("team_id") as string
 
-    const isMember = await isFarmMember(Number(formData.get("farm_id")))
-    if (!isMember) {
-      return {
-        error: "You are not a member of this farm."
-      }
-    }
+
 
   try {
     const validatedFields = CropSchema.safeParse({
@@ -47,7 +43,7 @@ export async function createCrop(prevState:unknown, formData: FormData) {
       notes,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      farm_id
+      team_id
     })
 
     if (!validatedFields.success) {
@@ -66,10 +62,9 @@ export async function createCrop(prevState:unknown, formData: FormData) {
       area_unit,
       status,
       notes,
-      farm_id
+      team_id
     })
 
-    revalidatePath(`/dashbaord/farms/${farm_id}/crops`)
     return { success: true }
   } catch (error) {
     console.error("Failed to create crop:", error)
@@ -94,12 +89,6 @@ export async function updateCrop(prevState: unknown, formData: FormData) {
     updated_at: formData.get("updated_at"),
   })
 
-  const isMember = await isFarmMember(Number(formData.get("farm_id")))
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
 
   if (!validatedFields.success) {
     console.error("Validation failed:", validatedFields.error.format())
@@ -132,14 +121,12 @@ export async function updateCrop(prevState: unknown, formData: FormData) {
         updated_at: new Date()
       }).where(eq(crops.id, id)).returning()
 
-    revalidatePath("/crops")
+
     return { crop: result[0] }
   } catch (error) {
     console.error(`Failed to update crop with id ${id}:`, error)
     return { error: "Failed to update crop" }
-  } finally {
-    revalidatePath(`/dashboard/farms/${formData.get("farm_id")}/crops`)
-  }
+  } 
 
 
 }
@@ -147,7 +134,7 @@ export async function updateCrop(prevState: unknown, formData: FormData) {
 export async function deleteCrop(id: number) {
   try {
     await query("DELETE FROM crops WHERE id = $1", [id])
-    revalidatePath("/crops")
+
     return { success: true }
   } catch (error) {
     console.error(`Failed to delete crop with id ${id}:`, error)
@@ -169,8 +156,6 @@ export async function updateCropStatus(id: number, status: string) {
   } catch (error) {
     console.error(`Failed to update crop status for id ${id}:`, error)
     return { error: "Failed to update crop status" }
-  } finally {
-    revalidatePath(`/dashboard/farms/${id}/crops`)
-  }
+  } 
 }
 

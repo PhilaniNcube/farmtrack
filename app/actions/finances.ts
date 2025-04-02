@@ -20,14 +20,9 @@ export async function createFinance(prevState: unknown, formData: FormData) {
   const type = (formData.get("type") ?? "income") as "income" | "expense";
   const amount = (formData.get("amount") ?? "0") as string;
   const payment_method = (formData.get("payment_method") ?? "") as string;
-  const farmId = (formData.get("farm_id") ?? "") as string;
+  const team_id= (formData.get("team_id") ?? "") as string;
 
-    const isMember = await isFarmMember(Number(formData.get("farm_id")))
-    if (!isMember) {
-      return {
-        error: "You are not a member of this farm."
-      }
-    }
+
 
   // convert transaction_date to into a timestap format
   const date = new Date(transaction_date);
@@ -43,7 +38,7 @@ export async function createFinance(prevState: unknown, formData: FormData) {
       payment_method,
       associated_with: "",
       receipt_url: "",
-      farm_id: Number(farmId),
+      team_id: team_id,
       created_at: new Date(),
       updated_at: new Date(),
     };
@@ -52,7 +47,6 @@ export async function createFinance(prevState: unknown, formData: FormData) {
 
    
 
-    revalidatePath(`/dashboard/farms/${farmId}/finances`);
     return { finance: result.rows[0] };
   } catch (error) {
     console.error("Failed to create finance:", error);
@@ -80,7 +74,7 @@ export async function updateFinance(id: number, formData: FormData) {
       [transaction_date, description, category, type, amount, payment_method, reference_number, notes, id],
     )
 
-    revalidatePath(`/dashboard/farms/${id}/finances`)
+ 
     return { finance: result.rows[0]  }
   } catch (error) {
     console.error(`Failed to update finance with id ${id}:`, error)
@@ -91,7 +85,7 @@ export async function updateFinance(id: number, formData: FormData) {
 export async function deleteFinance(id: number) {
   try {
     await query("DELETE FROM finances WHERE id = $1", [id])
-    revalidatePath("/finances")
+ 
     return { success: true }
   } catch (error) {
     console.error(`Failed to delete finance with id ${id}:`, error)

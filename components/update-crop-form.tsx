@@ -41,20 +41,7 @@ export function UpdateCropForm({ crop, fields }: UpdateCropFormProps) {
     crop.expected_harvest_date ? new Date(crop.expected_harvest_date) : undefined
   )
 
-  useEffect(() => {
-    if (state) {
-      toast({
-        title: state.error ? "Error" : "Success",
-        description: state.error || "Crop updated successfully",
-        variant: "default",
-      })
-      
-      if (!state.error) {
-        // Navigate back after successful update
-        router.push(`/dashboard/farms/${crop.farm_id}/crops`)
-      }
-    }
-  }, [state, crop.farm_id, router])
+
 
   const form = useForm<z.infer<typeof CropUpdateSchema>>({
     resolver: zodResolver(CropUpdateSchema),
@@ -82,7 +69,7 @@ export function UpdateCropForm({ crop, fields }: UpdateCropFormProps) {
       </CardHeader>
       <form action={formAction}>
         <Input type="hidden" name="id" value={crop.id} />
-        <Input type="hidden" name="farm_id" value={crop.farm_id} />
+        <Input type="hidden" name="team_id" value={crop.team_id} />
         <Input type="hidden" name="created_at" value={crop.created_at ? new Date(crop.created_at).toISOString() : new Date().toISOString()} />
         <Input type="hidden" name="updated_at" value={new Date().toISOString()} />
         

@@ -32,7 +32,7 @@ import { Textarea } from './ui/textarea';
 const AddLivestockForm = ({ locations }: { locations: FieldLocation[] }) => {
 
     const params = useParams()
-    const farmId = Number(params.id)
+    const team_id = params.id as string
 
     const [state, formAction, isPending] = useActionState(addLivestock, null)
 
@@ -50,7 +50,7 @@ const AddLivestockForm = ({ locations }: { locations: FieldLocation[] }) => {
             health_status: "",
             purpose: "",
             notes: "",
-            farm_id: farmId
+            team_id: team_id,
         }
     })
 
@@ -64,7 +64,7 @@ const AddLivestockForm = ({ locations }: { locations: FieldLocation[] }) => {
                     <CardTitle>Add Livestock</CardTitle>
                     <CardDescription>Enter the details for your livestock.</CardDescription>
                 </div>
-                <AddFieldLocation farmId={farmId} />
+                <AddFieldLocation />
             </CardHeader>
             <CardContent>
                 <Form {...form}>
@@ -265,7 +265,7 @@ const AddLivestockForm = ({ locations }: { locations: FieldLocation[] }) => {
 
                             <FormField
                                 control={form.control}
-                                name="farm_id"
+                                name="team_id"
                                 render={({ field }) => (
                                     <FormItem>
 

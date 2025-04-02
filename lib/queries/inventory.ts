@@ -4,25 +4,21 @@ import { db } from "../db"
 import { unstable_cache } from 'next/cache';
 import {  isFarmMember } from "./farm-members";
 
-export async function getInventoryItems(farmId: number) {
+export async function getInventoryItems(team_id: string) {
 
-    const isMember = await isFarmMember(farmId)
 
-    if (!isMember) {
-        return []
-    }
    
     const inventoryItems = await db
         .select()
         .from(inventory)
-        .where(eq(inventory.farm_id, farmId))
+        .where(eq(inventory.team_id, team_id))
         .orderBy(desc(inventory.created_at))
     
     return inventoryItems
 }
 
 export const getCachedInventoryItems = unstable_cache(
-    async (farmId: number) => await getInventoryItems(farmId),
+    async (team_id: string) => await getInventoryItems(team_id),
     ["getInventoryItems"], 
     { 
         tags: ["getInventoryItems"],

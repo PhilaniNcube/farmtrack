@@ -7,7 +7,7 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { sendInviteToUser } from '@/app/actions/invite-user'
 
-const InviteFarmMember = ({ farmId }: { farmId: number }) => {
+const InviteFarmMember = ({ farmId }: { team_id: string }) => {
 
     const [state, formAction, isPending] = useActionState(sendInviteToUser, null)
 
@@ -30,7 +30,7 @@ const InviteFarmMember = ({ farmId }: { farmId: number }) => {
                     </DialogDescription>
                 </DialogHeader>
                 <form action={formAction} className="grid gap-4 py-2">
-                    <Input type="hidden" name="farm_id" value={farmId} />
+                    <Input type="hidden" name="team_id" value={farmId} />
                     <Input type="email" placeholder="Email" name="email" className="border p-2 rounded" />
                     <Button className="bg-blue-500 text-white p-2 rounded w-full" disabled={isPending}>
                         {isPending ? <CircleDashed className='animate-spin' /> : 'Send Invite'}

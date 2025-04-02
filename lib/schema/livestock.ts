@@ -1,6 +1,7 @@
 import { pgTable, serial, varchar, timestamp, text, numeric, integer } from 'drizzle-orm/pg-core';
 import { farms } from './farms';
 import { z } from 'zod';
+import { teams } from './teams';
 
 export const livestock = pgTable('livestock', {
   id: serial('id').primaryKey(),
@@ -13,7 +14,7 @@ export const livestock = pgTable('livestock', {
   health_status: varchar('health_status', { length: 50 }).notNull(),
   purpose: varchar('purpose', { length: 100 }), // e.g., dairy, meat, breeding
   notes: text('notes'),
-  farm_id: integer('farm_id').references(() => farms.id).notNull(),
+  team_id: text('team_id').references(() => teams.id).notNull(),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });
@@ -31,5 +32,5 @@ export const LivestockSchema = z.object({
   health_status: z.string().min(1, 'Health status is required'),
   purpose: z.string().optional(),
   notes: z.string().optional(),
-  farm_id: z.number()
+  team_id: z.string()
 })

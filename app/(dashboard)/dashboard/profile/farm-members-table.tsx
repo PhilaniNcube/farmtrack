@@ -11,11 +11,11 @@ import {
 import { formatDistanceToNow } from "date-fns"
 
 interface FarmMembersTableProps {
-  farmId: number
+  team_id: string
 }
 
 export async function FarmMembersTable({ farmId }: FarmMembersTableProps) {
-  const members = await getFarmMembers(farmId)
+  const members = await getFarmMembersteam_id
 
   if (members.length === 0) {
     return (

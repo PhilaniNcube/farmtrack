@@ -5,9 +5,9 @@ import { stackServerApp } from "@/stack";
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
 
-export async function getFarmMembers(farmId: number) {
+export async function getFarmMembers(team_id: string) {
 
-  const members = await db.select().from(farmMembers).leftJoin(users, eq(users.id, farmMembers.user_id)).where(eq(farmMembers.farm_id, farmId))
+  const members = await db.select().from(farmMembers).leftJoin(users, eq(users.id, farmMembers.user_id)).where(eq(farmMembers.team_id, team_id))
 
   return members;
 }
@@ -28,14 +28,14 @@ export async function getUserFarms() {
       membership: farmMembers
     })
     .from(farmMembers)
-    .leftJoin(farms, eq(farms.id, farmMembers.farm_id))
+    .leftJoin(farms, eq(farms.id, farmMembers.team_id))
     .where(eq(farmMembers.user_id, authUser.id));
 
   return userFarms;
 }
 
 
-export const isFarmMember = cache(async (farmId: number) => {
+export const isFarmMember = cache(async (team_id: string) => {
 
 
 
@@ -49,14 +49,14 @@ export const isFarmMember = cache(async (farmId: number) => {
   const farmMember = await db
     .select()
     .from(farmMembers)
-    .where(and(eq(farmMembers.farm_id, farmId), eq(farmMembers.user_id, authUser.id)));
+    .where(and(eq(farmMembers.team_id, team_id), eq(farmMembers.user_id, authUser.id)));
 
 
   return farmMember.length > 0;
 })
 
 export const cachedIsFarmMember = unstable_cache(
-  async (farmId: number) => await isFarmMember(farmId),
+  async (team_id: string) => await isFarmMember(team_id),
   ["isFarmMember"],
   {
     tags: ["isFarmMember"],

@@ -8,17 +8,12 @@ import { revalidatePath } from "next/cache";
 export async function addFieldLocation(prevState: unknown, formData: FormData) {
 
 
-      const isMember = await isFarmMember(Number(formData.get("farm_id")))
-      if (!isMember) {
-        return {
-          error: "You are not a member of this farm."
-        }
-      }
+
 
     try {
 
         const validatedFields = FieldLocationSchema.safeParse({
-            farm_id: formData.get("farm_id"),
+            team_id: formData.get("team_id"),
             name: formData.get("name"),
             description: formData.get("description"),
         })
@@ -33,7 +28,7 @@ export async function addFieldLocation(prevState: unknown, formData: FormData) {
 
 
         const result = await db.insert(fieldLocations).values({
-            farm_id: fieldLocation.farm_id,
+            team_id: fieldLocation.team_id,
             name: fieldLocation.name,
             description: fieldLocation.description,
         }).returning();
@@ -58,9 +53,6 @@ export async function addFieldLocation(prevState: unknown, formData: FormData) {
             error: "Failed to add field location",
         }
 
-    } finally {
-        revalidatePath(`/dashboard/farms/${formData.get("farm_id")}/crops`);
-    }
-
+    } 
 
 }

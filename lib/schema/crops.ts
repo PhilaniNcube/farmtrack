@@ -1,6 +1,7 @@
 import { pgTable, serial, varchar, timestamp, text, numeric, integer } from 'drizzle-orm/pg-core';
 import { farms } from './farms';
 import { z } from 'zod';
+import { teams } from './teams';
 
 export const crops = pgTable('crops', {
   id: serial('id').primaryKey(),
@@ -12,7 +13,7 @@ export const crops = pgTable('crops', {
   area: numeric('area').notNull(),
   area_unit: varchar('area_unit', { length: 50 }).notNull(),
   status: varchar('status', { length: 50 }).notNull(),
-  farm_id: integer('farm_id').references(() => farms.id).notNull(),
+  team_id: text('team_id').references(() => teams.id).notNull(),
   notes: text('notes'),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
@@ -33,7 +34,7 @@ export const CropSchema = z.object({
   notes: z.string(),
   created_at: z.string(),
   updated_at: z.string(),
-  farm_id: z.coerce.number(),
+  team_id: z.coerce.number(),
 })
 
 export const CropUpdateSchema = z.object({

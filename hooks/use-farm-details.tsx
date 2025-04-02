@@ -14,7 +14,7 @@ export function useFarms() {
 }
 
 // Similar hooks for other resources like fields, tasks, etc.
-export function useFarmDetails(farmId: number | null) {
+export function useFarmDetails(team_id: string | null) {
   const { data, error, isLoading } = useSWR(
     farmId ? `/api/farms/${farmId}` : null,
     fetcher

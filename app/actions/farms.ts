@@ -32,7 +32,7 @@ export async function createFarm(prevState:unknown, formData: FormData) {
 
         // Add the creator as a member of the farm with the role of 'creator'
         await db.insert(farmMembers).values({
-            farm_id: newFarm.id,
+            team_id: newFarm.id,
             user_id: authUser.id,
             role: "creator",
             joined_at: new Date(),
@@ -41,14 +41,7 @@ export async function createFarm(prevState:unknown, formData: FormData) {
             updated_at: new Date(),
         });
 
-        // Update the user's farm_id if they don't have one yet
-        if (authUser && !authUser.farm_id) {
-            await db.update(users).set({ farm_id: newFarm.id }).where(
-                eq(users.id, authUser.id)
-            )
-        }
 
-        revalidatePath("/dashboard/farms")
         return { success: "Farm created successfully", farmId: newFarm.id }
 
     }

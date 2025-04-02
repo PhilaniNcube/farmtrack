@@ -56,8 +56,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "farm_id": {
-          "name": "farm_id",
+        "team_id": {
+          "name": "team_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -79,12 +79,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "activities_farm_id_farms_id_fk": {
-          "name": "activities_farm_id_farms_id_fk",
+        "activities_team_id_farms_id_fk": {
+          "name": "activities_team_id_farms_id_fk",
           "tableFrom": "activities",
           "tableTo": "farms",
           "columnsFrom": [
-            "farm_id"
+            "team_id"
           ],
           "columnsTo": [
             "id"
@@ -157,8 +157,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "farm_id": {
-          "name": "farm_id",
+        "team_id": {
+          "name": "team_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -186,12 +186,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "crops_farm_id_farms_id_fk": {
-          "name": "crops_farm_id_farms_id_fk",
+        "crops_team_id_farms_id_fk": {
+          "name": "crops_team_id_farms_id_fk",
           "tableFrom": "crops",
           "tableTo": "farms",
           "columnsFrom": [
-            "farm_id"
+            "team_id"
           ],
           "columnsTo": [
             "id"
@@ -309,8 +309,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "farm_id": {
-          "name": "farm_id",
+        "team_id": {
+          "name": "team_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -332,12 +332,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "finances_farm_id_farms_id_fk": {
-          "name": "finances_farm_id_farms_id_fk",
+        "finances_team_id_farms_id_fk": {
+          "name": "finances_team_id_farms_id_fk",
           "tableFrom": "finances",
           "tableTo": "farms",
           "columnsFrom": [
-            "farm_id"
+            "team_id"
           ],
           "columnsTo": [
             "id"
@@ -381,8 +381,8 @@
           "notNull": true,
           "default": "'user'"
         },
-        "farm_id": {
-          "name": "farm_id",
+        "team_id": {
+          "name": "team_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -423,12 +423,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "users_farm_id_farms_id_fk": {
-          "name": "users_farm_id_farms_id_fk",
+        "users_team_id_farms_id_fk": {
+          "name": "users_team_id_farms_id_fk",
           "tableFrom": "users",
           "tableTo": "farms",
           "columnsFrom": [
-            "farm_id"
+            "team_id"
           ],
           "columnsTo": [
             "id"
@@ -509,8 +509,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "farm_id": {
-          "name": "farm_id",
+        "team_id": {
+          "name": "team_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -538,12 +538,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "tasks_farm_id_farms_id_fk": {
-          "name": "tasks_farm_id_farms_id_fk",
+        "tasks_team_id_farms_id_fk": {
+          "name": "tasks_team_id_farms_id_fk",
           "tableFrom": "tasks",
           "tableTo": "farms",
           "columnsFrom": [
-            "farm_id"
+            "team_id"
           ],
           "columnsTo": [
             "id"
@@ -622,8 +622,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "farm_id": {
-          "name": "farm_id",
+        "team_id": {
+          "name": "team_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -645,12 +645,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "livestock_farm_id_farms_id_fk": {
-          "name": "livestock_farm_id_farms_id_fk",
+        "livestock_team_id_farms_id_fk": {
+          "name": "livestock_team_id_farms_id_fk",
           "tableFrom": "livestock",
           "tableTo": "farms",
           "columnsFrom": [
-            "farm_id"
+            "team_id"
           ],
           "columnsTo": [
             "id"
@@ -741,8 +741,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "farm_id": {
-          "name": "farm_id",
+        "team_id": {
+          "name": "team_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -764,12 +764,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "inventory_farm_id_farms_id_fk": {
-          "name": "inventory_farm_id_farms_id_fk",
+        "inventory_team_id_farms_id_fk": {
+          "name": "inventory_team_id_farms_id_fk",
           "tableFrom": "inventory",
           "tableTo": "farms",
           "columnsFrom": [
-            "farm_id"
+            "team_id"
           ],
           "columnsTo": [
             "id"

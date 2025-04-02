@@ -1,5 +1,6 @@
 import { pgTable, serial, varchar, timestamp, text, boolean, integer } from 'drizzle-orm/pg-core';
 import { farms } from './farms';
+import { teams } from './teams';
 
 export const tasks = pgTable('tasks', {
   id: serial('id').primaryKey(),
@@ -11,7 +12,7 @@ export const tasks = pgTable('tasks', {
   category: varchar('category', { length: 100 }).notNull(), // farm area: crops, livestock, etc.
   assigned_to: varchar('assigned_to', { length: 255 }),
   related_to: varchar('related_to', { length: 255 }), // specific crop, livestock, etc.
-  farm_id: integer('farm_id').references(() => farms.id).notNull(),
+  team_id: text('team_id').references(() => teams.id).notNull(),
   completed_at: timestamp('completed_at'),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()

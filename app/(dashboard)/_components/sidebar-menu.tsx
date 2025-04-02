@@ -47,7 +47,7 @@ const SidebarSideMenuItems = ({farms}: { farms: UserFarms[] }) => {
     
         // Handle farm change
         const handleFarmChange = (farmId: string) => {
-            setFarmId(parseInt(farmId))
+            setFarmId(parseIntteam_id)
             if (farmId === "manage") {
                 router.push("/dashboard/profile")
             } else {

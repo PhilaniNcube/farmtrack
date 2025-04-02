@@ -5,7 +5,7 @@ import type React from "react"
 import { useActionState, useState } from "react"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -28,6 +28,9 @@ export function AddFinanceForm() {
   const searchParams = useSearchParams()
 
   const type = searchParams.get("type") as "income" | "expense" || "income"
+
+  const params = useParams()
+  const {team_id} = params
   
 
 
@@ -46,7 +49,7 @@ export function AddFinanceForm() {
         <CardDescription>Record a new financial transaction.</CardDescription>
       </CardHeader>
       <form action={formAction}>
-        <Input type="hidden" name="farm_id" value={farmId?.toString()} />
+        <Input type="hidden" name="team_id" value={team_id}  />
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="type">Transaction Type</Label>

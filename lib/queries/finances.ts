@@ -4,17 +4,17 @@ import { finances } from "../schema"
 import { unstable_cache } from 'next/cache';
 import { cachedIsFarmMember, isFarmMember } from "./farm-members";
 
-export async function getFinances(farmId: number) {
+export async function getFinances(team_id: string) {
 
   
-  const isMember = await isFarmMember(farmId)
+  const isMember = await isFarmMember(team_id)
   if (!isMember) {
     return []
   }
 
 
   const financeData = await db.query.finances.findMany({
-    where: eq(finances.farm_id, farmId),
+    where: eq(finances.team_id, team_id),
     orderBy: desc(finances.transaction_date),
     })
 
@@ -23,7 +23,7 @@ export async function getFinances(farmId: number) {
 
 
 export const getCachedFinances = unstable_cache(
-  async (farmId: number) => await getFinances(farmId),
+  async (team_id: string) => await getFinances(team_id),
   ["finances"], 
   { 
     tags: ["finances"],
@@ -31,17 +31,13 @@ export const getCachedFinances = unstable_cache(
 )
 
 
-export async function getTotalIncome(id: number) {
+export async function getTotalIncome(id: string) {
 
-  // Check if the user is a member of the farm
-  const isMember = await isFarmMember(id)
-  if (!isMember) {
-    return 0  
-  }
+
 
    const totalIncome = await db.select().from(finances).where(
  and(
-    eq(finances.farm_id, id),
+    eq(finances.team_id, id),
     eq(finances.transaction_type, "income")
   )
   ).then((res) => res.reduce((acc, curr) => acc + Number(curr.amount), 0))
@@ -52,7 +48,7 @@ export async function getTotalIncome(id: number) {
 
 
 export const getCachedTotalIncome = unstable_cache(
-  async (id: number) => await getTotalIncome(id),
+  async (id: string) => await getTotalIncome(id),
   ["getTotalIncome"], 
   { 
     tags: ["getTotalIncome"],
@@ -62,7 +58,7 @@ export const getCachedTotalIncome = unstable_cache(
 
 
 
-export async function getTotalExpenses(id: number) {
+export async function getTotalExpenses(id: string) {
 
   const isMember = await isFarmMember(id)
   if (!isMember) {
@@ -71,7 +67,7 @@ export async function getTotalExpenses(id: number) {
 
   const totalExpenses = await db.select().from(finances).where(
     and(
-      eq(finances.farm_id, id),
+      eq(finances.team_id, id),
       eq(finances.transaction_type, "expense")
     )
   ).then((res) => res.reduce((acc, curr) => acc + Number(curr.amount), 0))
@@ -81,7 +77,7 @@ export async function getTotalExpenses(id: number) {
 
 
 export const getCachedTotalExpenses = unstable_cache(
-  async (id: number) => await getTotalExpenses(id),
+  async (id: string) => await getTotalExpenses(id),
   ["getTotalExpenses"], 
   { 
     tags: ["getTotalExpenses"],
@@ -90,7 +86,7 @@ export const getCachedTotalExpenses = unstable_cache(
 
 
 
-export async function getTotalFinances(id: number) {
+export async function getTotalFinances(id: string) {
 
 
   const isMember = await isFarmMember(id)
@@ -105,14 +101,14 @@ export async function getTotalFinances(id: number) {
 
     const totalExpenses = await db.select().from(finances).where(
         and(
-          eq(finances.farm_id, id),
+          eq(finances.team_id, id),
           eq(finances.transaction_type, "expense")
         )
       ).then((res) => res.reduce((acc, curr) => acc + Number(curr.amount), 0))
 
       const totalIncome = await db.select().from(finances).where(
         and(
-           eq(finances.farm_id, id),
+           eq(finances.team_id, id),
            eq(finances.transaction_type, "income")
          )
          ).then((res) => res.reduce((acc, curr) => acc + Number(curr.amount), 0))
@@ -136,7 +132,7 @@ export async function getTotalFinances(id: number) {
 
 
 export const getCachedTotalFinances = unstable_cache(
-  async (id: number) => await getTotalFinances(id),
+  async (id: string) => await getTotalFinances(id),
   ["getTotalFinances"], 
   { 
     tags: ["getTotalFinances"],

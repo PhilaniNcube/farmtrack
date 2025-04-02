@@ -18,13 +18,13 @@ export async function createInventoryItem(prevState: unknown, formData: FormData
     const purchase_date = formData.get("purchase_date") as string
     const expiry_date = formData.get("expiry_date") as string
     const notes = formData.get("notes") as string
-    const farm_id = Number.parseInt(formData.get("farm_id") as string)
+    const team_id = formData.get("team_id") as string
     const purchase_price = Number.parseFloat(formData.get("purchase_price") as string)
     const supplier = formData.get("supplier") as string
     const storage_location = formData.get("storage_location") as string
     const reorder_level = Number.parseFloat(formData.get("reorder_level") as string)
 
-  const isMember = await isFarmMember(Number(formData.get("farm_id")))
+  const isMember = await isFarmMember(Number(formData.get("team_id")))
   if (!isMember) {
     return {
       error: "You are not a member of this farm."
@@ -39,7 +39,7 @@ export async function createInventoryItem(prevState: unknown, formData: FormData
       purchase_date,
       expiry_date,
       notes,
-      farm_id,
+      team_id,
       purchase_price,
       supplier,
       storage_location,
@@ -61,7 +61,7 @@ export async function createInventoryItem(prevState: unknown, formData: FormData
       purchase_date: purchase_date ? new Date(purchase_date) : null,
       expiry_date: expiry_date ? new Date(expiry_date) : null,
       notes,
-      farm_id,
+      team_id,
       purchase_price:String(purchase_price),
       supplier,
       storage_location,
@@ -73,14 +73,11 @@ export async function createInventoryItem(prevState: unknown, formData: FormData
     const result = await db.insert(inventory).values(values).returning()
 
 
-    revalidatePath(`/dashboard/farms/${farm_id}/inventory`)
     return { success: true, data: result[0] }
 
 
   } catch (error) {
     console.error("Failed to create inventory item:", error)
     return { error: "Failed to create inventory item" }
-  } finally {
-    revalidatePath(`/dashboard/farms/${formData.get("farm_id")}/inventory`)
-  }
+  } 
 }

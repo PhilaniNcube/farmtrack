@@ -17,7 +17,7 @@ export default function AcceptInviteForm() {
 
   const searchParams = useSearchParams()
   const email = searchParams.get("email")
-  const farm_id = searchParams.get("farm_id")
+  const team_id = searchParams.get("team_id")
   const sender = searchParams.get("sender")
 
 
@@ -36,7 +36,7 @@ export default function AcceptInviteForm() {
       </CardHeader>
       <form action={formAction}>
         <Input type="hidden" name="sender" value={sender!} />  
-        <Input type="hidden" name="farm_id" value={farm_id!} />
+        <Input type="hidden" name="team_id" value={team_id!} />
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>

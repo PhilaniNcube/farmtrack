@@ -25,7 +25,7 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL DEFAULT 'user',
-    farm_id INTEGER REFERENCES farms(id),
+    team_id INTEGER REFERENCES farms(id),
     profile_image_url VARCHAR(512),
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     last_login TIMESTAMP,
@@ -43,7 +43,7 @@ CREATE TABLE activities (
     category VARCHAR(100) NOT NULL,
     related_to VARCHAR(255),
     notes TEXT,
-    farm_id INTEGER REFERENCES farms(id) NOT NULL,
+    team_id INTEGER REFERENCES farms(id) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
@@ -59,7 +59,7 @@ CREATE TABLE crops (
     area NUMERIC NOT NULL,
     area_unit VARCHAR(50) NOT NULL,
     status VARCHAR(50) NOT NULL,
-    farm_id INTEGER REFERENCES farms(id) NOT NULL,
+    team_id INTEGER REFERENCES farms(id) NOT NULL,
     notes TEXT,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP DEFAULT NOW() NOT NULL
@@ -76,7 +76,7 @@ CREATE TABLE finances (
     payment_method VARCHAR(100),
     associated_with VARCHAR(255),
     receipt_url VARCHAR(512),
-    farm_id INTEGER REFERENCES farms(id) NOT NULL,
+    team_id INTEGER REFERENCES farms(id) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
@@ -95,7 +95,7 @@ CREATE TABLE inventory (
     storage_location VARCHAR(255),
     reorder_level NUMERIC,
     notes TEXT,
-    farm_id INTEGER REFERENCES farms(id) NOT NULL,
+    team_id INTEGER REFERENCES farms(id) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
@@ -112,7 +112,7 @@ CREATE TABLE livestock (
     health_status VARCHAR(50) NOT NULL,
     purpose VARCHAR(100),
     notes TEXT,
-    farm_id INTEGER REFERENCES farms(id) NOT NULL,
+    team_id INTEGER REFERENCES farms(id) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP DEFAULT NOW() NOT NULL
 );
@@ -128,7 +128,7 @@ CREATE TABLE tasks (
     category VARCHAR(100) NOT NULL,
     assigned_to VARCHAR(255),
     related_to VARCHAR(255),
-    farm_id INTEGER REFERENCES farms(id) NOT NULL,
+    team_id INTEGER REFERENCES farms(id) NOT NULL,
     completed_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL,
     updated_at TIMESTAMP DEFAULT NOW() NOT NULL

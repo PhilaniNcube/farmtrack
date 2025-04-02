@@ -2,18 +2,10 @@ import { unstable_cacheLife as cacheLife, unstable_cacheTag as cacheTag } from "
 import { db } from "../db"
 import { isFarmMember } from "./farm-members"
 
-export async function getCropsByFarmId(farmId: number) {
-
-
-  // Check if the user is a member of the farm
-  const isMember = await isFarmMember(farmId)
-
-  if (!isMember) {
-    return []
-  }
+export async function getCropsByTeamId(team_id: string) {
 
   const crops = await db.query.crops.findMany({
-    where: (crops, { eq }) => eq(crops.farm_id, farmId),
+    where: (crops, { eq }) => eq(crops.team_id, team_id),
     orderBy: (crops, { desc }) => [desc(crops.planting_date)]
     })
   return crops

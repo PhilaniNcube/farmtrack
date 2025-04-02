@@ -26,14 +26,13 @@ export function AddCropForm({fields}: {fields: FieldLocation[]}) {
   const params = useParams()
 
   const { id } = params
-  const farmId = Number(id)
+ const team_id = id
 
 
 
   const router = useRouter()
   const [plantingDate, setPlantingDate] = useState<Date>()
   const [harvestDate, setHarvestDate] = useState<Date>()
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [state, formAction, isPending] = useActionState(createCrop, null)
 
@@ -56,7 +55,7 @@ export function AddCropForm({fields}: {fields: FieldLocation[]}) {
         <CardDescription>Enter the details for your new crop.</CardDescription>
       </CardHeader>
       <form  action={formAction} >
-        <Input type="hidden" name="farm_id" value={farmId} />
+        <Input type="hidden" name="team_id" value={team_id}/>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">

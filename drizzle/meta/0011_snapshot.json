@@ -1,6 +1,6 @@
 {
-  "id": "7ca4b04b-4dc9-4396-96eb-2dd81cd81aa0",
-  "prevId": "e24d4095-2bfb-4fa2-9d85-bc4fbf5cea41",
+  "id": "61e0c572-f677-4ffb-a796-56f85c0d3a6e",
+  "prevId": "23fe6d7f-ef08-43ed-8f9a-d45bb18f325f",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -58,7 +58,7 @@
         },
         "team_id": {
           "name": "team_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -79,10 +79,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "activities_team_id_farms_id_fk": {
-          "name": "activities_team_id_farms_id_fk",
+        "activities_team_id_teams_id_fk": {
+          "name": "activities_team_id_teams_id_fk",
           "tableFrom": "activities",
-          "tableTo": "farms",
+          "tableTo": "teams",
           "columnsFrom": [
             "team_id"
           ],
@@ -159,7 +159,7 @@
         },
         "team_id": {
           "name": "team_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -186,12 +186,105 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "crops_team_id_farms_id_fk": {
-          "name": "crops_team_id_farms_id_fk",
+        "crops_team_id_teams_id_fk": {
+          "name": "crops_team_id_teams_id_fk",
           "tableFrom": "crops",
+          "tableTo": "teams",
+          "columnsFrom": [
+            "team_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.farm_members": {
+      "name": "farm_members",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "team_id": {
+          "name": "team_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'member'"
+        },
+        "joined_at": {
+          "name": "joined_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "farm_members_team_id_farms_id_fk": {
+          "name": "farm_members_team_id_farms_id_fk",
+          "tableFrom": "farm_members",
           "tableTo": "farms",
           "columnsFrom": [
             "team_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "farm_members_user_id_users_id_fk": {
+          "name": "farm_members_user_id_users_id_fk",
+          "tableFrom": "farm_members",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -228,6 +321,18 @@
           "primaryKey": false,
           "notNull": false
         },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -245,6 +350,57 @@
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.field_locations": {
+      "name": "field_locations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "team_id": {
+          "name": "team_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "field_locations_team_id_teams_id_fk": {
+          "name": "field_locations_team_id_teams_id_fk",
+          "tableFrom": "field_locations",
+          "tableTo": "teams",
+          "columnsFrom": [
+            "team_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -269,7 +425,7 @@
         },
         "category": {
           "name": "category",
-          "type": "varchar(100)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -281,7 +437,7 @@
         },
         "transaction_type": {
           "name": "transaction_type",
-          "type": "varchar(50)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -293,25 +449,25 @@
         },
         "payment_method": {
           "name": "payment_method",
-          "type": "varchar(100)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
         "associated_with": {
           "name": "associated_with",
-          "type": "varchar(255)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
         "receipt_url": {
           "name": "receipt_url",
-          "type": "varchar(512)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
         "team_id": {
           "name": "team_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -332,10 +488,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "finances_team_id_farms_id_fk": {
-          "name": "finances_team_id_farms_id_fk",
+        "finances_team_id_teams_id_fk": {
+          "name": "finances_team_id_teams_id_fk",
           "tableFrom": "finances",
-          "tableTo": "farms",
+          "tableTo": "teams",
           "columnsFrom": [
             "team_id"
           ],
@@ -358,7 +514,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "varchar(255)",
           "primaryKey": true,
           "notNull": true
         },
@@ -380,12 +536,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'user'"
-        },
-        "team_id": {
-          "name": "team_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
         },
         "profile_image_url": {
           "name": "profile_image_url",
@@ -422,21 +572,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "users_team_id_farms_id_fk": {
-          "name": "users_team_id_farms_id_fk",
-          "tableFrom": "users",
-          "tableTo": "farms",
-          "columnsFrom": [
-            "team_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "users_email_unique": {
@@ -511,7 +647,7 @@
         },
         "team_id": {
           "name": "team_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -538,10 +674,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "tasks_team_id_farms_id_fk": {
-          "name": "tasks_team_id_farms_id_fk",
+        "tasks_team_id_teams_id_fk": {
+          "name": "tasks_team_id_teams_id_fk",
           "tableFrom": "tasks",
-          "tableTo": "farms",
+          "tableTo": "teams",
           "columnsFrom": [
             "team_id"
           ],
@@ -624,7 +760,7 @@
         },
         "team_id": {
           "name": "team_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -645,10 +781,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "livestock_team_id_farms_id_fk": {
-          "name": "livestock_team_id_farms_id_fk",
+        "livestock_team_id_teams_id_fk": {
+          "name": "livestock_team_id_teams_id_fk",
           "tableFrom": "livestock",
-          "tableTo": "farms",
+          "tableTo": "teams",
           "columnsFrom": [
             "team_id"
           ],
@@ -677,13 +813,13 @@
         },
         "item_name": {
           "name": "item_name",
-          "type": "varchar(255)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
         "category": {
           "name": "category",
-          "type": "varchar(100)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -695,7 +831,7 @@
         },
         "unit": {
           "name": "unit",
-          "type": "varchar(50)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -719,13 +855,13 @@
         },
         "supplier": {
           "name": "supplier",
-          "type": "varchar(255)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
         "storage_location": {
           "name": "storage_location",
-          "type": "varchar(255)",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": false
         },
@@ -743,7 +879,7 @@
         },
         "team_id": {
           "name": "team_id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -764,10 +900,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "inventory_team_id_farms_id_fk": {
-          "name": "inventory_team_id_farms_id_fk",
+        "inventory_team_id_teams_id_fk": {
+          "name": "inventory_team_id_teams_id_fk",
           "tableFrom": "inventory",
-          "tableTo": "farms",
+          "tableTo": "teams",
           "columnsFrom": [
             "team_id"
           ],
@@ -778,6 +914,69 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teams": {
+      "name": "teams",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "profile_image_url": {
+          "name": "profile_image_url",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "server_metadata": {
+          "name": "server_metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "client_metadata": {
+          "name": "client_metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "client_read_only_metadata": {
+          "name": "client_read_only_metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

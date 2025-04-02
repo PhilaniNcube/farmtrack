@@ -6,7 +6,7 @@ import { farmMembers, users } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import { stackServerApp } from "@/stack";
 
-export async function addMeAsFarmMember(farmId: number) {
+export async function addMeAsFarmMember(team_id: string) {
 
     // Check if the user is authenticated
     const currentUser = await stackServerApp.getUser();
@@ -39,7 +39,7 @@ export async function addMeAsFarmMember(farmId: number) {
     const [newFarmMember] = await db
       .insert(farmMembers)
       .values({
-        farm_id: farmId,
+        team_id: farmId,
         user_id: currentUser.id,
         role: "member",
         joined_at: new Date(),
