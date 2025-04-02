@@ -26,7 +26,6 @@ import { cn } from '@/lib/utils'
 import { Calendar } from './ui/calendar'
 import { Separator } from './ui/separator'
 import { addLivestock } from '@/app/actions/livestock';
-import AddFieldLocation from '@/app/(dashboard)/dashboard/farms/[id]/crops/add-field-location';
 import { Textarea } from './ui/textarea';
 
 const AddLivestockForm = ({ locations }: { locations: FieldLocation[] }) => {
@@ -64,7 +63,7 @@ const AddLivestockForm = ({ locations }: { locations: FieldLocation[] }) => {
                     <CardTitle>Add Livestock</CardTitle>
                     <CardDescription>Enter the details for your livestock.</CardDescription>
                 </div>
-                <AddFieldLocation />
+                {/* <AddFieldLocation /> */}
             </CardHeader>
             <CardContent>
                 <Form {...form}>

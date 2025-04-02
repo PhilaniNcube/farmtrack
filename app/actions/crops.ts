@@ -25,7 +25,6 @@ export async function createCrop(prevState:unknown, formData: FormData) {
   const area_unit = formData.get("area_unit") as string
   const status = formData.get("status") as string
   const notes = formData.get("notes") as string
-  const team_id = Number.parseInt(formData.get("team_id") as string)
   const team_id = formData.get("team_id") as string
 
 

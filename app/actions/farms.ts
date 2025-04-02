@@ -3,6 +3,7 @@
 import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/queries/users"
 import { farms, users, farmMembers } from "@/lib/schema"
+import { stackServerApp } from "@/stack"
 import { eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
@@ -16,39 +17,17 @@ export async function createFarm(prevState:unknown, formData: FormData) {
     const name = formData.get("name") as string
     const location = formData.get("location") as string
     const description = formData.get("description") as string
+    const team_id = formData.get("team_id") as string
 
-    try {
-        const [newFarm] = await db
-            .insert(farms)
-            .values({
-                name,
-                location,
-                description,
-                created_by: authUser.id,
-                created_at: new Date(),
-                updated_at: new Date(),
-            })
-            .returning({ id: farms.id })
+    const team = await stackServerApp.createTeam({
+        displayName: name,
+        creatorUserId: authUser.id,        
+    })
 
-        // Add the creator as a member of the farm with the role of 'creator'
-        await db.insert(farmMembers).values({
-            team_id: newFarm.id,
-            user_id: authUser.id,
-            role: "creator",
-            joined_at: new Date(),
-            is_active: true,
-            created_at: new Date(),
-            updated_at: new Date(),
-        });
-
-
-        return { success: "Farm created successfully", farmId: newFarm.id }
-
+    return {
+        success: true,
+        message: "Farm created successfully",
     }
 
-
-    catch (error) {
-        console.error("Error creating farm:", error)
-        return { error: "Failed to create farm" }
-    }
+    
 }

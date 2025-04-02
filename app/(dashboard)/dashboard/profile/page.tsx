@@ -7,7 +7,6 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 import ProfileForm from './profile-form'
 import { getCurrentUser } from '@/lib/queries/users'
-import { FarmsList } from './farm-list'
 import { CreateFarmForm } from './create-farm-form'
 import { FarmMembersTable } from './farm-members-table'
 
@@ -67,7 +66,7 @@ const ProfilePage = async () => {
                                 <CardDescription>Farms you have created or are a member of.</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <FarmsList />
+                                {/* <FarmsList /> */}
                             </CardContent>
                         </Card>
 

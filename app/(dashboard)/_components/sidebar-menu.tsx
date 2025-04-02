@@ -9,176 +9,134 @@ import { Beef, LayoutDashboard, PackageIcon, PiggyBank, UserCog, Wheat } from 'l
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react'
+import { SelectedTeamSwitcher } from '@stackframe/stack';
 
 
-const SidebarSideMenuItems = ({farms}: { farms: UserFarms[] }) => {
+const SidebarSideMenuItems = () => {
 
-        const pathname = usePathname()
-    
-        console.log(pathname)
-    
-        const params = useParams()
-        const farmParam = params.id as string
+    const pathname = usePathname()
 
-        const { farmId, setFarmId} = useSelectedFarm()
- 
-        const router = useRouter()
+    console.log(pathname)
 
- 
-    
-        useEffect(() => {
-            // if farmId is null, set it to the first farm id in the list
-            if (farmId === null && farms.length > 0) {
-                // Check if farm id exists before setting it
-                const firstFarmId = farms[0].farm?.id;
-                if (firstFarmId !== undefined) {
-                    setFarmId(firstFarmId);
+    const params = useParams()
+    const team_id = params.team_id as string
+
+
+
+    const router = useRouter()
+
+
+
+
+
+    const routes = [
+        {
+            title: "Dashboard",
+            icon: <LayoutDashboard />,
+            href: "/dashboard",
+            active: pathname === "/dashboard"
+        },
+        {
+            title: "Profile",
+            icon: <UserCog />,
+            href: "/dashboard/profile",
+            active: pathname === "/dashboard/profile"
+        },
+        {
+            title: "Crops",
+            icon: <Wheat />,
+            href: `/dashboard/team/${team_id}/crops`,
+            active: pathname === `/dashboard/team/${team_id}/crops` || pathname.startsWith(`/dashboard/team/${team_id}/crops`),
+            subItems: [
+                {
+                    title: "Add Crop",
+                    href: `/dashboard/team/${team_id}/crops/add`,
+                    active: pathname === `/dashboard/team/${team_id}/crops/add`
                 }
-            } else if (farmId !== null && farmParam !== undefined) {
-                const parsedFarmId = parseInt(farmParam);
-                // Check if parsing was successful
-                if (!isNaN(parsedFarmId)) {
-                    setFarmId(parsedFarmId);
+            ]
+        },
+        {
+            title: "Finances",
+            icon: <PiggyBank />,
+            href: `/dashboard/team/${team_id}/finances`,
+            active: pathname === `/dashboard/team/${team_id}/finances` || pathname.startsWith(`/dashboard/team/${team_id}/finances`),
+            subItems: [
+                {
+                    title: "Add Transaction",
+                    href: `/dashboard/team/${team_id}/finances/add`,
+                    active: pathname === `/dashboard/team/${team_id}/finances/add`
                 }
-            }
-        }, [farmId, farms, farmParam, setFarmId]);
-    
-    
-    
-        // Handle farm change
-        const handleFarmChange = (farmId: string) => {
-            setFarmId(parseIntteam_id)
-            if (farmId === "manage") {
-                router.push("/dashboard/profile")
-            } else {
-                router.push(`/dashboard/farms/${farmId}`)
-            }
-        }
-    
-        const routes = [
-            {
-                title: "Dashboard",
-                icon: <LayoutDashboard />,
-                href: "/dashboard",
-                active: pathname === "/dashboard"
-            },
-            {
-                title: "Profile",
-                icon: <UserCog />,
-                href: "/dashboard/profile",
-                active: pathname === "/dashboard/profile"
-            },
-            {
-                title: "Crops",
-                icon: <Wheat />,
-                href:  `/dashboard/farms/${farmId}/crops` ,
-                active: pathname === `/dashboard/farms/${farmId}/crops` || pathname.startsWith(`/dashboard/farms/${farmId}/crops`),
-                subItems: [
-                    {
-                        title: "Add Crop",
-                        href:  `/dashboard/farms/${farmId}/crops/add` ,
-                        active: pathname === `/dashboard/farms/${farmId}/crops/add`
-                    }
-                ]
-            },
-            {
-                title: "Finances",
-                icon: <PiggyBank />,
-                href: `/dashboard/farms/${farmId}/finances` ,
-                active: pathname === `/dashboard/farms/${farmId}/finances` || pathname.startsWith(`/dashboard/farms/${farmId}/finances`),
-                subItems: [
-                    {
-                        title: "Add Transaction",
-                        href: `/dashboard/farms/${farmId}/finances/add` ,
-                        active: pathname === `/dashboard/farms/${farmId}/finances/add`
-                    }
-                ]
-            },
-            {
-                title: "Inventory",
-                icon: <PackageIcon />,
-                href: `/dashboard/farms/${farmId}/inventory` ,
-                active: pathname === `/dashboard/farms/${farmId}/inventory` || pathname.startsWith(`/dashboard/farms/${farmId}/inventory`)
-            },
-            {
-                title: "Livestock",
-                icon: <Beef />,
-                href: `/dashboard/farms/${farmId}/livestock` ,
-                active: pathname === `/dashboard/farms/${farmId}/livestock` || pathname.startsWith(`/dashboard/farms/${farmId}/livestock`)
-            },
-      
-        ]
+            ]
+        },
+        {
+            title: "Inventory",
+            icon: <PackageIcon />,
+            href: `/dashboard/team/${team_id}/inventory`,
+            active: pathname === `/dashboard/team/${team_id}/inventory` || pathname.startsWith(`/dashboard/team/${team_id}/inventory`)
+        },
+        {
+            title: "Livestock",
+            icon: <Beef />,
+            href: `/dashboard/team/${team_id}/livestock`,
+            active: pathname === `/dashboard/team/${team_id}/livestock` || pathname.startsWith(`/dashboard/team/${team_id}/livestock`)
+        },
+
+    ]
+
+    const { farmId, setFarmId } = useSelectedFarm()
 
 
-  return (
-    <SidebarContent>
-    {/* Farm Selector Dropdown */}
-    <div className="px-2 pb-2 mt-4">
-        <Select onValueChange={handleFarmChange} defaultValue={farmId?.toString()}>
-            <SelectTrigger className="w-full bg-sidebar-accent/10 border-sidebar-border">
-                <SelectValue placeholder="Select a farm" />
-            </SelectTrigger>
-            <SelectContent>
-                {farms.length > 0 && farms.map((farm) => (
-                    <SelectItem key={farm.farm?.id} value={farm.farm?.id.toString()!}>
-                        {farm.farm?.name}
-                    </SelectItem>
-                ))}
-                <SidebarSeparator />
-                <SelectItem value="manage">
-                    <Link prefetch={true} href="/dashboard/profile" className="flex w-full">Manage Farms</Link>
-                </SelectItem>
-            </SelectContent>
-        </Select>
-    </div>
-    
-    <SidebarMenu>
+    return (
+        <SidebarContent>
+            {/* Farm Selector Dropdown */}
 
-        {farmId === null ? (
-            <SidebarMenuItem>
-                <SidebarMenuButton
-                    asChild
-                    tooltip="Select a farm"
-                >
-                    <Link href="/dashboard/profile">
-                        <span>Select a farm</span>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-        ) : routes.map((route) => (
-            <SidebarMenuItem key={route.title}>
-                <SidebarMenuButton
-                    asChild
-                    isActive={route.active}
-                    tooltip={route.title}
-                >
-                    <Link href={route.href}>
-                        {route.icon}
-                        <span>{route.title}</span>
-                    </Link>
-                </SidebarMenuButton>
+            <div className="flex items-center justify-between px-2 py-1">
+                <SelectedTeamSwitcher
 
-                {route.subItems && route.subItems.length > 0 && (
-                    <SidebarMenuSub>
-                        {route.subItems.map((subItem) => (
-                            <SidebarMenuSubItem key={subItem.title}>
-                                <SidebarMenuSubButton
-                                    asChild
-                                    isActive={subItem.active}
-                                >
-                                    <Link href={subItem.href}>
-                                        <span>{subItem.title}</span>
-                                    </Link>
-                                </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
-                        ))}
-                    </SidebarMenuSub>
-                )}
-            </SidebarMenuItem>
-        ))}
-    </SidebarMenu>
-</SidebarContent>
-  )
+                    noUpdateSelectedTeam={false}
+                    urlMap={(team) => {
+                          
+                        return `/dashboard/team/${team.id}`
+                    }}
+                />
+            </div>
+
+            <SidebarMenu>
+                {team_id !== undefined && (routes.map((route) => (
+                    <SidebarMenuItem key={route.title}>
+                        <SidebarMenuButton
+                            asChild
+                            isActive={route.active}
+                            tooltip={route.title}
+                        >
+                            <Link href={route.href}>
+                                {route.icon}
+                                <span>{route.title}</span>
+                            </Link>
+                        </SidebarMenuButton>
+
+                        {route.subItems && route.subItems.length > 0 && (
+                            <SidebarMenuSub>
+                                {route.subItems.map((subItem) => (
+                                    <SidebarMenuSubItem key={subItem.title}>
+                                        <SidebarMenuSubButton
+                                            asChild
+                                            isActive={subItem.active}
+                                        >
+                                            <Link href={subItem.href}>
+                                                <span>{subItem.title}</span>
+                                            </Link>
+                                        </SidebarMenuSubButton>
+                                    </SidebarMenuSubItem>
+                                ))}
+                            </SidebarMenuSub>
+                        )}
+                    </SidebarMenuItem>
+                )))}
+
+            </SidebarMenu>
+        </SidebarContent>
+    )
 }
 
 export default SidebarSideMenuItems

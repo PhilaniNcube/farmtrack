@@ -2,7 +2,6 @@
 
 import { NextResponse, NextRequest } from 'next/server';
 import { z } from 'zod';
-import { TeamWebhookSchema } from '@/lib/schema/teams';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
 import { createTeam, deleteTeam } from '@/app/actions/teams';
@@ -44,7 +43,7 @@ export async function POST(request: NextRequest) {
     if (!svix_id || !svix_timestamp || !svix_signature) {
       console.error('Missing required headers for webhook verification');
       return NextResponse.json(
-        { success: false, message: 'Missing required headers for webhook verification' },
+       
         { status: 400 }
       );
     }
@@ -55,15 +54,15 @@ export async function POST(request: NextRequest) {
       rawBody, whHeaders
     );
 
-    console.log({ isValid });
-
-
-
-    // Check if the webhook type is "team.created"
-    if (body.type !== "team.created") {
-      console.log(`Ignoring webhook of type: ${body.type}`);
-      return NextResponse.json({ success: true, message: 'Webhook received but ignored' });
+   if (!isValid) {
+      console.error('Invalid webhook signature');
+      return NextResponse.json(
+        { status: 401 }
+      );
     }
+
+
+
 
     // Extract team data
     const {
@@ -90,7 +89,7 @@ export async function POST(request: NextRequest) {
       console.log(`Successfully created team: ${display_name} (${id})`);
 
       // Return 200 status to confirm receipt
-      return NextResponse.json({ success: true, message: 'Team created successfully' });
+      return NextResponse.json({ success: true}, { status: 200 });
 
     }
 
@@ -100,7 +99,19 @@ export async function POST(request: NextRequest) {
 
       await deleteTeam(id);
 
+      // Return 200 status to confirm receipt
+      return NextResponse.json({ success: true}, { status: 200 });
+
     }
+
+    // If the event type is not recognized, return 400
+    console.error(`Unhandled event type: ${body.type}`);
+    return NextResponse.json(
+      { success: false, message: 'Unhandled event type' },
+      { status: 200 }
+    );
+
+
 
 
   } catch (error) {
@@ -115,13 +126,13 @@ export async function POST(request: NextRequest) {
 
     if (error instanceof TypeError && error.message.includes('timingSafeEqual')) {
       return NextResponse.json(
-        { success: false, message: 'Error validating webhook signature' },
+
         { status: 401 }
       );
     }
 
     return NextResponse.json(
-      { success: false, message: 'Failed to process webhook' },
+
       { status: 500 }
     );
   }
