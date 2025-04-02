@@ -5,11 +5,9 @@ import { stackServerApp } from "@/stack";
 
 
 
-export async function getTeamById(id: string) {
+export async function getTeam(team_id: string) {
 
-  const team = await db.query.teams.findFirst({
-    where: eq(teams.id, id),  
-  });
+  const team = await stackServerApp.getTeam(team_id);
 
   return team;
 }

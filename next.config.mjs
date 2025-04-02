@@ -7,6 +7,7 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  allowedDevOrigins: ['https://outgoing-muskox-truly.ngrok-free.app/'],
   logging: {
     fetches: {
       fullUrl: true, 
@@ -21,7 +22,6 @@ const nextConfig = {
   },
   experimental: {
     useCache: true,  
-    dynamicIO: true,
   },
 }
 

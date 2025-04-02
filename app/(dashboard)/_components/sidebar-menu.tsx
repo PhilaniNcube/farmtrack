@@ -1,35 +1,20 @@
 "use client";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SidebarContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarSeparator } from '@/components/ui/sidebar';
-import { fetcher } from '@/lib/fetchers';
-import { UserFarms } from '@/lib/queries/farm-members';
 import { useSelectedFarm } from '@/lib/stores/use-selected-farm';
 import { Beef, LayoutDashboard, PackageIcon, PiggyBank, UserCog, Wheat } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import React, { useEffect } from 'react'
-import { SelectedTeamSwitcher, useUser } from '@stackframe/stack';
-
+import React from 'react'
+import { useUser } from '@stackframe/stack';
+import TeamsSwitcher from './teams-switcher';
 
 const SidebarSideMenuItems = () => {
-
     const pathname = usePathname()
-
-    console.log(pathname)
-
     const params = useParams()
     const team_id = params.team_id as string
-
-
-
     const router = useRouter()
-
     const user = useUser({ or: 'redirect' });
-    const allTeams = user.useTeams();
-
-
-
 
     const routes = [
         {
@@ -82,26 +67,18 @@ const SidebarSideMenuItems = () => {
             href: `/dashboard/team/${team_id}/livestock`,
             active: pathname === `/dashboard/team/${team_id}/livestock` || pathname.startsWith(`/dashboard/team/${team_id}/livestock`)
         },
-
     ]
 
     const { farmId, setFarmId } = useSelectedFarm()
 
-
     return (
         <SidebarContent>
-            {/* Farm Selector Dropdown */}
-
-            <div className="flex items-center justify-between px-2 py-1">
-                <SelectedTeamSwitcher
-                    selectedTeam={allTeams[0]}
-                    noUpdateSelectedTeam={false}
-                    urlMap={(team) => {
-                          
-                        return `/dashboard/team/${team.id}`
-                    }}
-                />
+            {/* Team Selector */}
+            <div className="px-2 py-4">
+               <TeamsSwitcher />
             </div>
+            
+            <SidebarSeparator />
 
             <SidebarMenu>
                 {team_id !== undefined && (routes.map((route) => (
@@ -135,7 +112,6 @@ const SidebarSideMenuItems = () => {
                         )}
                     </SidebarMenuItem>
                 )))}
-
             </SidebarMenu>
         </SidebarContent>
     )
