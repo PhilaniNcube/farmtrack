@@ -17,7 +17,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { createCrop } from "@/app/actions/crops"
-import { createActivity } from "@/app/actions/activities"
 import { toast } from "./ui/use-toast"
 import { FieldLocation } from "@/lib/schema"
 import AddFieldDialog from "./add-field-dialog"

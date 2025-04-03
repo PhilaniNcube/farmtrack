@@ -34,7 +34,7 @@ export const CropSchema = z.object({
   notes: z.string(),
   created_at: z.string(),
   updated_at: z.string(),
-  team_id: z.coerce.number(),
+  team_id: z.string(),
 })
 
 export const CropUpdateSchema = z.object({
