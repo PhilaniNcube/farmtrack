@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { teams } from "@/lib/schema";
+import { stackServerApp } from "@/stack";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -49,3 +50,4 @@ export async function createTeam(
     }
 
   }
+
