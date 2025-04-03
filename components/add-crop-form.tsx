@@ -20,13 +20,17 @@ import { createCrop } from "@/app/actions/crops"
 import { createActivity } from "@/app/actions/activities"
 import { toast } from "./ui/use-toast"
 import { FieldLocation } from "@/lib/schema"
+import AddFieldDialog from "./add-field-dialog"
 
 export function AddCropForm({fields}: {fields: FieldLocation[]}) {
 
   const params = useParams()
 
-  const { id } = params
- const team_id = id
+  const { team_id } = params
+  
+  console.log("team_id", team_id)
+
+
 
 
 
@@ -49,10 +53,11 @@ export function AddCropForm({fields}: {fields: FieldLocation[]}) {
   
 
   return (
-    <Card>
+    <Card className="w-full max-w-4xl mt-10">
       <CardHeader>
         <CardTitle>Add New Crop</CardTitle>
         <CardDescription>Enter the details for your new crop.</CardDescription>
+        <AddFieldDialog />
       </CardHeader>
       <form  action={formAction} >
         <Input type="hidden" name="team_id" value={team_id}/>

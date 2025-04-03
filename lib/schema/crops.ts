@@ -13,7 +13,7 @@ export const crops = pgTable('crops', {
   area: numeric('area').notNull(),
   area_unit: varchar('area_unit', { length: 50 }).notNull(),
   status: varchar('status', { length: 50 }).notNull(),
-  team_id: text('team_id').references(() => teams.id).notNull(),
+  team_id: varchar('team_id').references(() => teams.id).notNull(),
   notes: text('notes'),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()

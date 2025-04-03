@@ -16,7 +16,7 @@ export const inventory = pgTable('inventory', {
   storage_location: varchar('storage_location'),
   reorder_level: numeric('reorder_level'),
   notes: text('notes'),
-  team_id: text('team_id').references(() => teams.id).notNull(),
+  team_id: varchar('team_id').references(() => teams.id).notNull(),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });

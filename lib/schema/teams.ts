@@ -1,4 +1,4 @@
-import { pgTable, serial, varchar, timestamp, jsonb } from 'drizzle-orm/pg-core';
+import { pgTable, serial, varchar, timestamp, jsonb, index } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 
 export const teams = pgTable('teams', {
@@ -10,7 +10,12 @@ export const teams = pgTable('teams', {
   client_read_only_metadata: jsonb('client_read_only_metadata'),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
-});
+}, 
+(table) => [
+  // Add any indexes here if needed
+  index('idx_teams_display_name').on(table.display_name)
+]
+);
 
 export type Team = typeof teams.$inferSelect;
 export type TeamInsert = typeof teams.$inferInsert;

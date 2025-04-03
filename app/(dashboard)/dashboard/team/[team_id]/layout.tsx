@@ -23,8 +23,11 @@ const layout = async ({ children, params }: { children: ReactNode, params: Promi
                 </div>
             </section>
             <Separator />
-            {children}
-        </div>)
+            <main className="">
+                {children}
+            </main>
+        </div>
+    )
 }
 
 export default layout

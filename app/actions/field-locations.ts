@@ -19,6 +19,7 @@ export async function addFieldLocation(prevState: unknown, formData: FormData) {
         })
 
         if (!validatedFields.success) {
+            console.error("Validation failed:", validatedFields.error.format())
             return {
                 error: "Invalid field location data",
             }

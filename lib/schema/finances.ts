@@ -12,7 +12,7 @@ export const finances = pgTable('finances', {
   payment_method: varchar('payment_method'),
   associated_with: varchar('associated_with'), // e.g., crop name, livestock id
   receipt_url: varchar('receipt_url'),
-  team_id: text('team_id').references(() => teams.id).notNull(),
+  team_id: varchar('team_id').references(() => teams.id).notNull(),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
 });

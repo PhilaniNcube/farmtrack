@@ -1,0 +1,1 @@
+ALTER TABLE "field_locations" ALTER COLUMN "team_id" SET DATA TYPE varchar;
