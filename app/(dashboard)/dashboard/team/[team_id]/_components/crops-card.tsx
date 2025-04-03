@@ -18,7 +18,7 @@ const CropsCard = ({ crops }: { crops: Crop[] }) => {
             <CardContent>
             <div className="space-y-4">
                 {crops.map((crop) => (
-                     <div className="flex items-center justify-between border-l-4 border-amber-500 bg-amber-50 p-3 rounded-r-md">
+                     <div key={crop.id} className="flex items-center justify-between border-l-4 border-amber-500 bg-amber-50 p-3 rounded-r-md">
                      <div className="flex items-center gap-3">
                        <Leaf className="h-5 w-5 text-amber-600" />
                        <div>
