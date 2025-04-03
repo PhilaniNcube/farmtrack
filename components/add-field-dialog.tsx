@@ -13,7 +13,7 @@ import { useParams } from 'next/navigation'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FieldLocationSchema } from '@/lib/schema'
+import { fieldLocations, FieldLocationSchema } from '@/lib/schema'
 import { z } from 'zod'
 
 const AddFieldDialog = () => {
@@ -48,7 +48,7 @@ const AddFieldDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex gap-1 items-center">
+        <Button variant="outline" className="flex gap-1 items-center bg-green-600 text-white">
           <PlusIcon className="h-4 w-4" />
           Add Field
         </Button>
@@ -97,7 +97,7 @@ const AddFieldDialog = () => {
               <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button type="submit" disabled={isPending} className="bg-green-600 text-white">
                 {isPending ? (
                   <>
                     <CircleDashed className="mr-2 h-4 w-4 animate-spin" />

@@ -1,7 +1,6 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { isFarmMember } from "@/lib/queries/farm-members";
 import { fieldLocations, FieldLocationSchema } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
 
@@ -54,6 +53,8 @@ export async function addFieldLocation(prevState: unknown, formData: FormData) {
             error: "Failed to add field location",
         }
 
-    } 
+    }  finally {
+        revalidatePath(`/dashboard/team/${formData.get("team_id")}/crops/add`)
+    }
 
 }

@@ -211,7 +211,7 @@ export function AddCropForm({fields}: {fields: FieldLocation[]}) {
           <Button variant="outline" type="button" onClick={() => router.back()}>
             Cancel
           </Button>
-          <Button className="bg-green-600 hover:bg-green-700" type="submit" disabled={isPending}>
+          <Button className="bg-green-600 hover:bg-green-700" type="submit" disabled={isPending || fields.length === 0}>
             {isPending ? "Saving..." : "Add Crop"}
           </Button>
         </CardFooter>
