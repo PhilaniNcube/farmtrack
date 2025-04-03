@@ -18,13 +18,13 @@ const CropsCard = ({ crops }: { crops: Crop[] }) => {
  
 
     return (
-        <Card>
+        <Card className="flex flex-col justify-between">
             <CardHeader>
                 <CardTitle>Upcoming Harvest</CardTitle>
                 <CardDescription>Expected harvest dates</CardDescription>
             </CardHeader>
-            <CardContent>
-            <div className="space-y-4">
+            <CardContent className='flex-1 shrink'>
+            <div className="space-y-4 h-full">
                 {crops.map((crop) => (
                      <div key={crop.id} className="flex items-center justify-between border-l-4 border-amber-500 bg-amber-50 p-3 rounded-r-md">
                      <div className="flex items-center gap-3">
@@ -42,7 +42,7 @@ const CropsCard = ({ crops }: { crops: Crop[] }) => {
             </div>
             </CardContent>
             <Separator className="" />
-            <CardFooter className='py-3'>
+            <CardFooter className='py-3 flex flex-col'>
                 <Link href={`/dashboard/team/${crops[0]?.team_id}/crops`} className='w-full'>
                 <Button variant="outline" className="w-full bg-slate-100 mt-2">
                     View All Crops

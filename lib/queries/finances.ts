@@ -6,13 +6,6 @@ import { cachedIsFarmMember, isFarmMember } from "./farm-members";
 
 export async function getFinances(team_id: string) {
 
-  
-  const isMember = await isFarmMember(team_id)
-  if (!isMember) {
-    return []
-  }
-
-
   const financeData = await db.query.finances.findMany({
     where: eq(finances.team_id, team_id),
     orderBy: desc(finances.transaction_date),
