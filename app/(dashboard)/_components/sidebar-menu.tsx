@@ -59,13 +59,27 @@ const SidebarSideMenuItems = () => {
             title: "Inventory",
             icon: <PackageIcon />,
             href: `/dashboard/team/${team_id}/inventory`,
-            active: pathname === `/dashboard/team/${team_id}/inventory` || pathname.startsWith(`/dashboard/team/${team_id}/inventory`)
+            active: pathname === `/dashboard/team/${team_id}/inventory` || pathname.startsWith(`/dashboard/team/${team_id}/inventory`),
+            subItems: [
+                {
+                    title: "Add Inventory",
+                    href: `/dashboard/team/${team_id}/inventory/add`,
+                    active: pathname === `/dashboard/team/${team_id}/inventory/add`
+                }
+            ]
         },
         {
             title: "Livestock",
             icon: <Beef />,
             href: `/dashboard/team/${team_id}/livestock`,
-            active: pathname === `/dashboard/team/${team_id}/livestock` || pathname.startsWith(`/dashboard/team/${team_id}/livestock`)
+            active: pathname === `/dashboard/team/${team_id}/livestock` || pathname.startsWith(`/dashboard/team/${team_id}/livestock`),
+            subItems: [
+                {
+                    title: "Add Livestock",
+                    href: `/dashboard/team/${team_id}/livestock/add`,
+                    active: pathname === `/dashboard/team/${team_id}/livestock/add`
+                }
+            ]
         },
     ]
 
