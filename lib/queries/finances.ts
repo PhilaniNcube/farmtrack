@@ -36,7 +36,7 @@ export async function getQuarterlyFinances(team_id:string) {
         gte(finances.transaction_date, startOfQuarter),
         lte(finances.transaction_date, endOfQuarter)
       ),
-    orderBy: (crops, { desc }) => [desc(finances.transaction_date)],
+    orderBy: (finances, { desc }) => [desc(finances.transaction_date)],
   })
 
   return quarterlyFinances
