@@ -24,12 +24,6 @@ export async function createInventoryItem(prevState: unknown, formData: FormData
     const storage_location = formData.get("storage_location") as string
     const reorder_level = Number.parseFloat(formData.get("reorder_level") as string)
 
-  const isMember = await isFarmMember(Number(formData.get("team_id")))
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
 
     const validatedFields = InventorySchema.safeParse({
       item_name,
@@ -61,7 +55,7 @@ export async function createInventoryItem(prevState: unknown, formData: FormData
       purchase_date: purchase_date ? new Date(purchase_date) : null,
       expiry_date: expiry_date ? new Date(expiry_date) : null,
       notes,
-      team_id,
+      team_id: String(team_id),
       purchase_price:String(purchase_price),
       supplier,
       storage_location,

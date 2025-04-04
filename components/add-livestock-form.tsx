@@ -27,11 +27,12 @@ import { Calendar } from './ui/calendar'
 import { Separator } from './ui/separator'
 import { addLivestock } from '@/app/actions/livestock';
 import { Textarea } from './ui/textarea';
+import AddFieldDialog from './add-field-dialog';
 
 const AddLivestockForm = ({ locations }: { locations: FieldLocation[] }) => {
 
     const params = useParams()
-    const team_id = params.id as string
+    const team_id = params.team_id as string
 
     const [state, formAction, isPending] = useActionState(addLivestock, null)
 
@@ -63,7 +64,7 @@ const AddLivestockForm = ({ locations }: { locations: FieldLocation[] }) => {
                     <CardTitle>Add Livestock</CardTitle>
                     <CardDescription>Enter the details for your livestock.</CardDescription>
                 </div>
-                {/* <AddFieldLocation /> */}
+                <AddFieldDialog />
             </CardHeader>
             <CardContent>
                 <Form {...form}>

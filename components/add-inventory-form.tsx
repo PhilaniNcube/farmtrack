@@ -29,10 +29,8 @@ import { Separator } from './ui/separator'
 
 const AddInventoryForm = () => {
 
-    const params = useParams()
-
-    const { id } = params
-    const farmId = Number(id)
+    const params = useParams();
+    const team_id = params.team_id as string;
 
     const [state, formAction, isPending] = useActionState(createInventoryItem, null)
 
@@ -46,7 +44,7 @@ const AddInventoryForm = () => {
             purchase_date: "",
             expiry_date: "",
             notes: "",
-            team_id: farmId,
+            team_id: team_id,
             purchase_price: 0,
             supplier: "",
             storage_location: "",
@@ -59,10 +57,6 @@ const AddInventoryForm = () => {
 
     const purchase_date = form.watch("purchase_date")
     const expiry_date = form.watch("expiry_date")
-
-
-
-
 
 
     return (
@@ -179,14 +173,14 @@ const AddInventoryForm = () => {
 
                                 <FormField
                                     control={form.control}
-                                
+
                                     defaultValue={purchase_date}
                                     name="purchase_date"
                                     render={({ field }) => (
                                         <FormItem>
 
                                             <FormControl>
-                                                <Input  type="hidden" placeholder="" {...field} />
+                                                <Input type="hidden" placeholder="" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -225,7 +219,7 @@ const AddInventoryForm = () => {
 
                                 <FormField
                                     control={form.control}
-                                     
+
                                     defaultValue={expiry_date}
                                     name="expiry_date"
                                     render={({ field }) => (

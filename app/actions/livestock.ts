@@ -5,8 +5,7 @@ import { db, query } from "@/lib/db"
 
 import { livestock, LivestockSchema } from "@/lib/schema"
 import { eq, is } from "drizzle-orm"
-import { z } from "zod"
-import { isFarmMember } from "@/lib/queries/farm-members"
+
 
 
 export async function addLivestock(prevState:unknown, formData: FormData) {
@@ -25,7 +24,7 @@ export async function addLivestock(prevState:unknown, formData: FormData) {
     health_status: formData.get("health_status"),
     purpose: formData.get("purpose"),
     notes: formData.get("notes"),
-    team_id: Number(formData.get("team_id"))
+    team_id: formData.get("team_id")
   })
 
   if (!parsedData.success) {
@@ -329,12 +328,7 @@ export async function updateLivestockBreed(prevState:unknown, formData:FormData)
     }
   }
 
-  const isMember = await isFarmMember(Number(formData.get("team_id")))
-  if (!isMember) {
-    return {
-      error: "You are not a member of this farm."
-    }
-  }
+
 
   try {
     const updatedLivestockBreed = await db.update(livestock).set({
@@ -416,6 +410,26 @@ export async function updateLivestockSource(prevState:unknown, formData:FormData
     }
   }
 
+}
+
+export async function deleteLivestock(id: number) {
+  try {
+    const deletedLivestock = await db.delete(livestock)
+      .where(eq(livestock.id, id))
+      .returning();
+    
+    revalidateTag("getLivestock")
+    
+    return {
+      success: true,
+      livestock: deletedLivestock
+    }
+  } catch (error) {
+    console.error("Error deleting livestock:", error)
+    return {
+      error: "An error occurred while deleting livestock."
+    }
+  }
 }
 
 

@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import { fieldLocations, FieldLocationSchema } from "@/lib/schema";
+import { revalidateTag } from "next/cache";
 import { revalidatePath } from "next/cache";
 
 export async function addFieldLocation(prevState: unknown, formData: FormData) {
@@ -54,6 +55,7 @@ export async function addFieldLocation(prevState: unknown, formData: FormData) {
         }
 
     }  finally {
+        revalidateTag("locations")
         revalidatePath(`/dashboard/team/${formData.get("team_id")}/crops/add`)
     }
 
