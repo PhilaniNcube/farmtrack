@@ -87,7 +87,7 @@ const FinancesSummaryCard = ({finances}:{finances:Finance[]}) => {
   }
 
   return (
-    <Card>
+    <Card className='flex flex-col justify-between'>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <DollarSign className="h-5 w-5 text-green-600" />
@@ -95,7 +95,7 @@ const FinancesSummaryCard = ({finances}:{finances:Finance[]}) => {
         </CardTitle>
         <CardDescription>Overview of your financial performance for this quarter</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className='flex-1 shrink'>
         {/* Income and Expenses */}
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-1">
@@ -160,7 +160,7 @@ const FinancesSummaryCard = ({finances}:{finances:Finance[]}) => {
       
       <Separator />
       
-      <CardFooter className="pt-4">
+      <CardFooter className="py-3">
         <Link href={`/dashboard/team/${finances[0]?.team_id}/finances`} className="w-full">
           <Button variant="outline" className="w-full bg-slate-100">
             View All Finances

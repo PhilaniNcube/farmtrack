@@ -34,7 +34,7 @@ interface FinanceFormData {
 }
 
 export function AddFinanceForm() {
-  const {farmId} = useSelectedFarm()
+  
   const searchParams = useSearchParams()
   const type = searchParams.get("type") as "income" | "expense" || "income"
   const params = useParams()
