@@ -15,6 +15,35 @@ export async function getFinances(team_id: string) {
 }
 
 
+export async function getQuarterlyFinances(team_id:string) {
+  // Get the current date
+  const currentDate = new Date()
+
+  // Calculate the start of the current quarter
+  const startOfQuarter = new Date(currentDate.getFullYear(), Math.floor(currentDate.getMonth() / 3) * 3, 1)
+  // Calculate the end of the current quarter
+  const endOfQuarter = new Date(currentDate.getFullYear(), Math.floor(currentDate.getMonth() / 3) * 3 + 3, 0)
+
+  console.log("Start of Quarter: ", startOfQuarter)
+  console.log("End of Quarter: ", endOfQuarter)
+
+
+  // Fetch the finances within the current quarter
+  const quarterlyFinances = await db.query.finances.findMany({
+    where : (finances, {eq, and, gte, lte}) => 
+      and(
+        eq(finances.team_id, team_id),
+        gte(finances.transaction_date, startOfQuarter),
+        lte(finances.transaction_date, endOfQuarter)
+      ),
+    orderBy: (crops, { desc }) => [desc(finances.transaction_date)],
+  })
+
+  return quarterlyFinances
+
+}
+
+
 export const getCachedFinances = unstable_cache(
   async (team_id: string) => await getFinances(team_id),
   ["finances"], 
