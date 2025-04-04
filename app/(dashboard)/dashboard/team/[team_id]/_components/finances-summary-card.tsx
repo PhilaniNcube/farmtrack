@@ -93,7 +93,7 @@ const FinancesSummaryCard = ({finances}:{finances:Finance[]}) => {
           <DollarSign className="h-5 w-5 text-green-600" />
           Financial Summary
         </CardTitle>
-        <CardDescription>Overview of your financial performance</CardDescription>
+        <CardDescription>Overview of your financial performance for this quarter</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Income and Expenses */}
