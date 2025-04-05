@@ -68,6 +68,9 @@ export async function createCrop(prevState:unknown, formData: FormData) {
   } catch (error) {
     console.error("Failed to create crop:", error)
     return { error: "Failed to create crop" }
+  } finally {
+    revalidatePath(`/dashboard/team/${team_id}/crops`)
+    revalidatePath(`/dashboard/team/${team_id}`)
   }
 }
 

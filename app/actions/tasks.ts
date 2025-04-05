@@ -42,7 +42,7 @@ export async function createTask(formData: FormData) {
   const createdTask = await db.insert(tasks).values(task_input).returning()
 
   revalidatePath(`/dashboard/team/${task_input.team_id}/tasks`)
-  revalidatePath(`/dashboard/team/${task_input.team_id}/tasks/${createdTask[0].id}`)
+ 
   return createdTask[0]
 
 }

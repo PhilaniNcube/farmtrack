@@ -61,7 +61,11 @@ export async function addLivestock(prevState:unknown, formData: FormData) {
       error: "An error occurred while adding livestock."
     }
     
-  } 
+  }  finally {
+    revalidateTag("getLivestock")
+    revalidatePath(`/dashboard/team/${formData.get("team_id")}/livestock`)
+    revalidatePath(`/dashboard/team/${formData.get("team_id")}`)
+  }
 
 }
 
