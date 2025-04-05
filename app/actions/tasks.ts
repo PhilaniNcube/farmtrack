@@ -1,86 +1,51 @@
 "use server"
 
+import { db } from "@/lib/db"
+import { TaskInsert, tasks } from "@/lib/schema"
 import { revalidatePath } from "next/cache"
-import { query } from "@/lib/db"
 
-export type Task = {
-  id: number
-  title: string
-  description: string
-  due_date: string
-  priority: string
-  status: string
-  related_to: string
-  related_id: number
-  created_at: string
-  updated_at: string
-}
 
-export async function getTasks() {
-  try {
-    const result = await query("SELECT * FROM tasks ORDER BY due_date ASC")
-    return { tasks: result.rows as Task[] }
-  } catch (error) {
-    console.error("Failed to fetch tasks:", error)
-    return { error: "Failed to fetch tasks" }
-  }
-}
 
-export async function getUpcomingTasks() {
-  try {
-    const result = await query(
-      `SELECT * FROM tasks 
-       WHERE status = 'pending' AND due_date >= CURRENT_DATE 
-       ORDER BY due_date ASC 
-       LIMIT 5`,
-    )
-    return { tasks: result.rows as Task[] }
-  } catch (error) {
-    console.error("Failed to fetch upcoming tasks:", error)
-    return { error: "Failed to fetch upcoming tasks" }
-  }
-}
+
+
+type Priority = "high" | "medium" | "low"
+type Status = "pending" | "in-progress" | "completed"
+
 
 export async function createTask(formData: FormData) {
-  const title = formData.get("title") as string
-  const description = formData.get("description") as string
-  const due_date = formData.get("due_date") as string
-  const priority = formData.get("priority") as string
-  const status = (formData.get("status") as string) || "pending"
-  const related_to = formData.get("related_to") as string
-  const related_id = Number.parseInt(formData.get("related_id") as string) || null
 
-  try {
-    const result = await query(
-      `INSERT INTO tasks (title, description, due_date, priority, status, related_to, related_id)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       RETURNING *`,
-      [title, description, due_date, priority, status, related_to, related_id],
-    )
-
-    revalidatePath("/dashboard")
-    return { task: result.rows[0] as Task }
-  } catch (error) {
-    console.error("Failed to create task:", error)
-    return { error: "Failed to create task" }
+  const task_input : TaskInsert = {
+    title: formData.get("title") as string,
+    description: formData.get("description") as string,
+    due_date: new Date(formData.get("due_date") as string),
+    priority: formData.get("priority") as Priority,
+    status: formData.get("status") as Status,
+    category: formData.get("category") as string,
+    assigned_to: formData.get("assigned_to") as string,
+    related_to: formData.get("related_to") as string,
+    team_id: formData.get("team_id") as string,
   }
+
+  // Validate the input data
+  if (!task_input.title || !task_input.due_date || !task_input.category) {
+    throw new Error("Title, due date, and category are required fields.")
+  }
+  if (task_input.priority && !["high", "medium", "low"].includes(task_input.priority)) {
+    throw new Error("Invalid priority value. Must be 'high', 'medium', or 'low'.")
+  }
+  if (task_input.status && !["pending", "in-progress", "completed"].includes(task_input.status)) {
+    throw new Error("Invalid status value. Must be 'pending', 'in-progress', or 'completed'.")
+  }
+
+
+
+  const createdTask = await db.insert(tasks).values(task_input).returning()
+
+  revalidatePath(`/dashboard/team/${task_input.team_id}/tasks`)
+  revalidatePath(`/dashboard/team/${task_input.team_id}/tasks/${createdTask[0].id}`)
+  return createdTask[0]
+
 }
 
-export async function updateTaskStatus(id: number, status: string) {
-  try {
-    const result = await query(
-      `UPDATE tasks 
-       SET status = $1, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $2
-       RETURNING *`,
-      [status, id],
-    )
 
-    revalidatePath("/dashboard")
-    return { task: result.rows[0] as Task }
-  } catch (error) {
-    console.error(`Failed to update task status with id ${id}:`, error)
-    return { error: "Failed to update task status" }
-  }
-}
 

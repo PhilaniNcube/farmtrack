@@ -1,7 +1,7 @@
 // filepath: c:\Users\User\Documents\Development\farmtrack\lib\schema\index.ts
 
 import { users } from "./users";
-import { tasks } from "./tasks";
+import { priorityEnum, statusEnum, tasks } from "./tasks";
 import { livestock } from "./livestock";
 import { inventory } from "./inventory";
 import { finances } from "./finances";
@@ -24,6 +24,8 @@ export const schema = {
   farmMembers,
   fieldLocations,
   teams,
+  statusEnum: statusEnum,
+  priorityEnum: priorityEnum,
 };
 
 export * from "./users";
