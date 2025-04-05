@@ -122,11 +122,16 @@ export async function RecentTasks({ tasks }: { tasks: Task[] }) {
                 </div>
             </CardContent>
             <CardFooter>
-                <Link href="/dashboard/team/tasks" passHref className="w-full">
-                    <Button variant="outline" className="w-full">
-                        View All Tasks
-                    </Button>
-                </Link>
+                {tasks.length > 0 &&
+                    (
+                        <Link href={`/dashboard/team/${tasks[0].team_id}/tasks`} passHref className="w-full">
+                            <Button variant="outline" className="w-full">
+                                View All Tasks
+                            </Button>
+                        </Link>
+                    )
+                }
+
             </CardFooter>
         </Card>
     )
