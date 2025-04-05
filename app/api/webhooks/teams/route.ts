@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
       console.log("teamExists", teamExists)
       // If the team does not exist, create it
 
-      if (teamExists === null) {
+      if (!teamExists) {
         
      const created =  await createTeam(
           id,
