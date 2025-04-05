@@ -180,7 +180,7 @@ export const columns: ColumnDef<Inventory>[] = [
             const inventory = row.original
             return (
                 <div className="flex items-center space-x-2">
-                    <div className="font-medium">{inventory.purchase_date && formatDate(inventory.purchase_date, "PPp")}</div>
+                    <div className="font-medium">{inventory.purchase_date && formatDate(inventory.purchase_date, "PP")}</div>
                 </div>
             )
         }
