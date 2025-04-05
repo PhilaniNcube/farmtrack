@@ -101,9 +101,9 @@ export async function POST(request: NextRequest) {
       // check if the team exists in the database
       const teamExists = await getTeam(id);
 
-      if (!teamExists) {
+      if (teamExists === null) {
         
-        await createTeam(
+     const created =  await createTeam(
           id,
           display_name,
           profile_image_url,
@@ -111,6 +111,8 @@ export async function POST(request: NextRequest) {
           client_metadata,
           client_read_only_metadata
         );
+
+        console.log("created", JSON.stringify(created, null, 2))
 
         return NextResponse.json(
           { success: false, message: 'Team updated' },
