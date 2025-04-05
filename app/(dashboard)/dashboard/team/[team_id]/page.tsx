@@ -16,6 +16,8 @@ import InventoryCard from '@/app/(dashboard)/_components/inventory-card'
 import { getInventoryItems } from '@/lib/queries/inventory'
 import { CropStatus } from './_components/crop-status'
 import { getFieldLocations } from '@/lib/queries/field-locations'
+import { LivestockSummary } from './_components/livestock-summary'
+import { InventoryLevels } from './_components/inventory-levels'
 
 const TeamPage = async ({ params }: { params: Promise<{ team_id: string }> }) => {
   const { team_id } = await params
@@ -52,6 +54,14 @@ const TeamPage = async ({ params }: { params: Promise<{ team_id: string }> }) =>
           <CropStatus crops={crops} locations={fields} />
         </div>
         </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
+        <div className="col-span-3">
+          <LivestockSummary livestock={livestock} fields={fields} />
+        </div>
+        <div className="col-span-4">
+          <InventoryLevels inventory={inventory} fields={fields} />
+        </div>
+      </div>
     </div>
   )
 }
