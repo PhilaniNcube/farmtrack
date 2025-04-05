@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
 import { createTeam, deleteTeam } from '@/app/actions/teams';
-import { getTeam } from '@/lib/queries/teams';
+import { getDBTeamById, getTeam } from '@/lib/queries/teams';
 
 export async function POST(request: NextRequest) {
   try {
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
       console.log(`Team updated: ${display_name} (${id})`);
 
       // check if the team exists in the database
-      const teamExists = await getTeam(id);
+      const teamExists = await getDBTeamById(id);
 
       console.log("teamExists", teamExists)
       // If the team does not exist, create it

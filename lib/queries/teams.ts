@@ -12,6 +12,18 @@ export async function getTeam(team_id: string) {
   return team;
 }
 
+export async function getDBTeamById(team_id: string) {
+  const team = await db.query.teams.findFirst({
+    where: eq(teams.id, team_id),
+  });
+
+  if (!team) {
+    null
+  }
+
+  return team;
+}
+
 
 
 
