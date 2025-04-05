@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
 import { createTeam, deleteTeam } from '@/app/actions/teams';
+import { getTeam } from '@/lib/queries/teams';
 
 export async function POST(request: NextRequest) {
   try {
@@ -87,6 +88,35 @@ export async function POST(request: NextRequest) {
       );
 
       console.log(`Successfully created team: ${display_name} (${id})`);
+
+      // Return 200 status to confirm receipt
+      return NextResponse.json({ success: true}, { status: 200 });
+
+    }
+
+    if (body.type === "team.updated") {
+      // Handle team updated event if needed
+      console.log(`Team updated: ${display_name} (${id})`);
+
+      // check if the team exists in the database
+      const teamExists = await getTeam(id);
+
+      if (!teamExists) {
+        
+        await createTeam(
+          id,
+          display_name,
+          profile_image_url,
+          server_metadata,
+          client_metadata,
+          client_read_only_metadata
+        );
+
+        return NextResponse.json(
+          { success: false, message: 'Team updated' },
+          { status: 200 }
+        );
+      }
 
       // Return 200 status to confirm receipt
       return NextResponse.json({ success: true}, { status: 200 });

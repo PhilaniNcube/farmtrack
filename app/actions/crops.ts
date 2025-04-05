@@ -6,10 +6,10 @@ import { db, query } from "@/lib/db"
 
 
 // create a zod object for the Crop type
-import { z } from "zod"
+
 import { crops, CropSchema, CropUpdateSchema } from "@/lib/schema"
 import { eq } from "drizzle-orm"
-import { isFarmMember } from "@/lib/queries/farm-members"
+
 
 
 
