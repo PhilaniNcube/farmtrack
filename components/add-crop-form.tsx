@@ -52,7 +52,7 @@ export function AddCropForm({fields}: {fields: FieldLocation[]}) {
   
 
   return (
-    <Card className="w-full max-w-4xl mt-10">
+    <Card className="w-full max-w-4xl mt-4">
       <CardHeader>
         <CardTitle>Add New Crop</CardTitle>
         <CardDescription>Enter the details for your new crop.</CardDescription>

@@ -11,6 +11,11 @@ import { getLivestock } from '@/lib/queries/livestock'
 import LivestockCard from '@/app/(dashboard)/_components/livestock-card'
 import RecentTasks from '@/app/(dashboard)/_components/recent-tasks'
 import { getRecentTasks } from '@/lib/queries/tasks'
+import PendingTasks from '@/app/(dashboard)/_components/pending-tasks'
+import InventoryCard from '@/app/(dashboard)/_components/inventory-card'
+import { getInventoryItems } from '@/lib/queries/inventory'
+import { CropStatus } from './_components/crop-status'
+import { getFieldLocations } from '@/lib/queries/field-locations'
 
 const TeamPage = async ({ params }: { params: Promise<{ team_id: string }> }) => {
   const { team_id } = await params
@@ -19,12 +24,16 @@ const TeamPage = async ({ params }: { params: Promise<{ team_id: string }> }) =>
   const financesData = getQuarterlyFinances(team_id)
   const livestockData = getLivestock(team_id)
   const tasksData = getRecentTasks(team_id)
+  const inventoryData = getInventoryItems(team_id)
+  const fieldsData = getFieldLocations(team_id)
 
-  const [crops, finances, livestock, tasks] = await Promise.all([
+  const [crops, finances, livestock, tasks, inventory, fields] = await Promise.all([
     cropsData,
     financesData,
     livestockData,
     tasksData,
+    inventoryData,
+    fieldsData,
   ])
 
   return (
@@ -32,10 +41,15 @@ const TeamPage = async ({ params }: { params: Promise<{ team_id: string }> }) =>
        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <ActiveCropsCard crops={crops} />
         <LivestockCard livestock={livestock} />
+        <PendingTasks tasks={tasks} />
+        <InventoryCard inventory={inventory} />
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 *:mt-4">
       <div className="col-span-4">
           <RecentTasks tasks={tasks} />
+        </div>
+        <div className="col-span-3">
+          <CropStatus crops={crops} locations={fields} />
         </div>
         </div>
     </div>
