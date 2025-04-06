@@ -53,6 +53,7 @@ export async function createFinance(prevState: unknown, formData: FormData) {
     return { error: "Failed to create finance" };
   } finally {
     revalidatePath(`/dashboard/team/${team_id}/finances`);
+    revalidatePath(`/dashboard/team/${team_id}`);
   }
 }
 

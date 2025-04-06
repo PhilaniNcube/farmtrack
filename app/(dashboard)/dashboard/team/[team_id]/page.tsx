@@ -18,6 +18,8 @@ import { CropStatus } from './_components/crop-status'
 import { getFieldLocations } from '@/lib/queries/field-locations'
 import { LivestockSummary } from './_components/livestock-summary'
 import { InventoryLevels } from './_components/inventory-levels'
+import { FinancialSummary } from './_components/financial-summary'
+
 
 const TeamPage = async ({ params }: { params: Promise<{ team_id: string }> }) => {
   const { team_id } = await params
@@ -61,6 +63,10 @@ const TeamPage = async ({ params }: { params: Promise<{ team_id: string }> }) =>
         <div className="col-span-4">
           <InventoryLevels inventory={inventory} fields={fields} />
         </div>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 mt-4">
+        <FinancialSummary finances={finances} />
+        {/* <FieldLocations /> */}
       </div>
     </div>
   )

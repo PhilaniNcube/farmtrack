@@ -75,7 +75,7 @@ export function AddFinanceForm() {
         console.error(result.error)
       } else {
         // toast.success("Finance record added successfully")
-        router.push(`/dashboard/team/${team_id}/finances`)
+        router.refresh()
       }
     } catch (error) {
       console.error("Failed to submit form:", error)
