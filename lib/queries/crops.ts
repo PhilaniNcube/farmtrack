@@ -51,3 +51,13 @@ export async function getNextCropsToBeHarvested(team_id: string) {
 
   return crops
 }
+
+export async function getCrops(team_id:string) {
+
+  const crops = await db.query.crops.findMany({
+    where: (crops, { eq }) => eq(crops.team_id, team_id),
+    orderBy: (crops, { desc }) => [desc(crops.planting_date)]
+  })
+  return crops
+
+}
