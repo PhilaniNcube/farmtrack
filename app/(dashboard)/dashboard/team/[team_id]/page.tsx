@@ -19,6 +19,7 @@ import { getFieldLocations } from '@/lib/queries/field-locations'
 import { LivestockSummary } from './_components/livestock-summary'
 import { InventoryLevels } from './_components/inventory-levels'
 import { FinancialSummary } from './_components/financial-summary'
+import { FieldLocations } from './_components/field-locations'
 
 
 const TeamPage = async ({ params }: { params: Promise<{ team_id: string }> }) => {
@@ -66,7 +67,7 @@ const TeamPage = async ({ params }: { params: Promise<{ team_id: string }> }) =>
       </div>
       <div className="grid gap-4 md:grid-cols-2 mt-4">
         <FinancialSummary finances={finances} />
-        {/* <FieldLocations /> */}
+        <FieldLocations field_locations={fields} />
       </div>
     </div>
   )

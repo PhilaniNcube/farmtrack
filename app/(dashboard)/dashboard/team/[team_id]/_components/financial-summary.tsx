@@ -4,35 +4,36 @@ import { Finance } from "@/lib/schema"
 import { DollarSign, TrendingUp, TrendingDown, Plus } from "lucide-react"
 import AddFinancialTransactionDialog from "./add-finanncial-transaction"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 
-export function FinancialSummary({finances}:{finances:Finance[]}) {
+export function FinancialSummary({ finances }: { finances: Finance[] }) {
   // In a real app, these would be fetched from your database
 
-// calculate the dates for the current quarter
+  // calculate the dates for the current quarter
   const currentDate = new Date()
-    const currentYear = currentDate.getFullYear()
-    const currentMonth = currentDate.getMonth()
-    const currentQuarter = Math.floor(currentMonth / 3) + 1
-    const startMonth = (currentQuarter - 1) * 3
-    const endMonth = currentQuarter * 3 - 1
-    const startDate = new Date(currentYear, startMonth, 1)
-    const endDate = new Date(currentYear, endMonth + 1, 0) // Last day of the quarter
-    const startDateString = startDate.toISOString().split("T")[0]
-    const endDateString = endDate.toISOString().split("T")[0]  
+  const currentYear = currentDate.getFullYear()
+  const currentMonth = currentDate.getMonth()
+  const currentQuarter = Math.floor(currentMonth / 3) + 1
+  const startMonth = (currentQuarter - 1) * 3
+  const endMonth = currentQuarter * 3 - 1
+  const startDate = new Date(currentYear, startMonth, 1)
+  const endDate = new Date(currentYear, endMonth + 1, 0) // Last day of the quarter
+  const startDateString = startDate.toISOString().split("T")[0]
+  const endDateString = endDate.toISOString().split("T")[0]
 
   const quartelyIncome = finances.reduce((acc, finance) => {
     if (finance.transaction_type === "income") {
-        return acc + Number(finance.amount)
-        }
+      return acc + Number(finance.amount)
+    }
     return acc
   }, 0)
 
-    const quartelyExpenses = finances.reduce((acc, finance) => {
-        if (finance.transaction_type === "expense") {
-            return acc + Number(finance.amount)
-            }
-        return acc
-    }, 0)
+  const quartelyExpenses = finances.reduce((acc, finance) => {
+    if (finance.transaction_type === "expense") {
+      return acc + Number(finance.amount)
+    }
+    return acc
+  }, 0)
 
 
   const financialData = {
@@ -76,17 +77,17 @@ export function FinancialSummary({finances}:{finances:Finance[]}) {
   }
 
   return (
-    <Card>
+    <Card className="flex flex-col justify-between h-full">
       <CardHeader className="flex flex-row items-center">
         <div className="grid gap-2">
           <CardTitle>Financial Summary</CardTitle>
-          <CardDescription>Track your farm's financial health this quarter <br/>
-          <Badge className="bg-cyan-500 ">{startDateString} - {endDateString}</Badge>
+          <CardDescription>Track your farm's financial health this quarter <br />
+            <Badge className="bg-cyan-500 ">{startDateString} - {endDateString}</Badge>
           </CardDescription>
         </div>
-       <AddFinancialTransactionDialog />
+        <AddFinancialTransactionDialog />
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <p className="text-sm font-medium text-muted-foreground">Quartely Income</p>
@@ -131,9 +132,16 @@ export function FinancialSummary({finances}:{finances:Finance[]}) {
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="outline" className="w-full">
-          View All Transactions
-        </Button>
+        {
+          finances.length > 0 ? (
+            <Link href={`/dashboard/team/${finances[0].team_id}/finances`} className="w-full"><Button variant="outline" className="w-full">
+              View All Transactions
+            </Button></Link>
+          ) : (
+            <p className="text-sm text-muted-foreground">No transactions available</p>
+          )
+        }
+      
       </CardFooter>
     </Card>
   )
