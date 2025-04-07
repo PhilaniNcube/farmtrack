@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Calendar, MapPin, MoveLeft, PlusCircle, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+import { CropsFilters } from './_components/crops-filter'
 
 const loading = () => {
 
@@ -72,6 +73,7 @@ const loading = () => {
                     </TabsTrigger>
                 </TabsList>
                 <TabsContent value='list'>
+                     <CropsFilters />
                     <Table className="mt-4">
                         <TableHeader>
                             <TableHead>Crop</TableHead>
