@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Leaf } from 'lucide-react'
 import React from 'react'
 
@@ -48,7 +49,14 @@ const loading = () => {
                             <CardTitle className="text-sm font-medium">Recent Tasks</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-xs text-muted-foreground">Loading...</div>
+                           <div className="text-xs text-muted-foreground">
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -59,7 +67,14 @@ const loading = () => {
                             <CardTitle className="text-sm font-medium">Crop Status</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-xs text-muted-foreground">Loading...</div>
+                           <div className="text-xs text-muted-foreground">
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -72,7 +87,14 @@ const loading = () => {
                             <CardTitle className="text-sm font-medium">Recent Tasks</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-xs text-muted-foreground">Loading...</div>
+                           <div className="text-xs text-muted-foreground">
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -83,7 +105,14 @@ const loading = () => {
                             <CardTitle className="text-sm font-medium">Crop Status</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-xs text-muted-foreground">Loading...</div>
+                           <div className="text-xs text-muted-foreground">
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -97,7 +126,14 @@ const loading = () => {
                             <CardTitle className="text-sm font-medium">Recent Tasks</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-xs text-muted-foreground">Loading...</div>
+                            <div className="text-xs text-muted-foreground">
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -108,7 +144,14 @@ const loading = () => {
                             <CardTitle className="text-sm font-medium">Crop Status</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-xs text-muted-foreground">Loading...</div>
+                        <div className="text-xs text-muted-foreground">
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                                <Skeleton className="h-8 w-full animate-pulse" />
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
