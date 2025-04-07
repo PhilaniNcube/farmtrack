@@ -64,6 +64,55 @@ const loading = () => {
                     </Card>
                 </div>
                 </div>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
+                <div className="col-span-4 animate-pulse">
+                    {/* Placeholder for Recent Tasks */}
+                    <Card className="h-full">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Recent Tasks</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-xs text-muted-foreground">Loading...</div>
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="col-span-3 animate-pulse">
+                    {/* Placeholder for Crop Status */}
+                    <Card className="h-full">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Crop Status</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-xs text-muted-foreground">Loading...</div>
+                        </CardContent>
+                    </Card>
+                </div>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-4">
+                <div className="col-span-4 animate-pulse">
+                    {/* Placeholder for Recent Tasks */}
+                    <Card className="h-full">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Recent Tasks</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-xs text-muted-foreground">Loading...</div>
+                        </CardContent>
+                    </Card>
+                </div>
+                <div className="col-span-3 animate-pulse">
+                    {/* Placeholder for Crop Status */}
+                    <Card className="h-full">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-sm font-medium">Crop Status</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="text-xs text-muted-foreground">Loading...</div>
+                        </CardContent>
+                    </Card>
+                </div>
+                </div>
         </div>
     )
 }
