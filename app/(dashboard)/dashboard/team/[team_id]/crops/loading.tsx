@@ -87,7 +87,7 @@ const loading = () => {
                         </TableHeader>
                         <TableBody>
                             {/* Placeholder for Crop Rows */}
-                            {Array.from({ length: 5 }).map((_, index) => (
+                            {Array.from({ length: 14 }).map((_, index) => (
                                 <TableRow key={index}>
                                    <TableCell>
                                      <Skeleton className='bg-slate-300 h-4 animate-pulse' />
