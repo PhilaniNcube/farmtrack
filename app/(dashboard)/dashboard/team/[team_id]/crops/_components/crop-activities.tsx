@@ -1,10 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Plus, Droplets, Sprout, CloudRain, Tractor } from "lucide-react"
+import { Plus, Droplets, Sprout, CloudRain, Tractor, CloudDrizzle, Crop, TreePalm, LeafyGreen, LucideLeaf } from "lucide-react"
 import AddCropActivityDialog from "@/components/add-crop-activity-dialog"
 import { ActivityType, CropActivity } from "@/lib/schema"
 import { format } from "date-fns"
+import { act } from "react"
 
 interface CropActivitiesProps {
   activities: CropActivity[]
@@ -58,7 +59,7 @@ export function CropActivities({ activities }: CropActivitiesProps) {
           <CardTitle>Crop Activities</CardTitle>
           <CardDescription>Record of all activities for this crop</CardDescription>
         </div>
-       <AddCropActivityDialog />
+        <AddCropActivityDialog />
       </CardHeader>
       <CardContent>
         <div className="relative space-y-4">
@@ -66,7 +67,21 @@ export function CropActivities({ activities }: CropActivitiesProps) {
             <div key={activity.id} className="flex gap-4">
               <div className="relative flex h-6 w-6 flex-none items-center justify-center">
                 <div className="absolute h-full w-px bg-border" />
-               
+                {activity.type === "irrigating" ? (
+                  <CloudDrizzle className="absolute -left-2 h-4 w-4 text-blue-500" />
+                ) :
+                  activity.type === "fertilizing" ? (
+                    <Crop className="absolute -left-2 h-4 w-4 text-green-500" />
+                  ) :
+                    activity.type === "planting" ? (
+                      <Tractor className="absolute -left-2 h-4 w-4 text-amber-500" />) : 
+                      activity.type === "harvesting" ? (
+                        <LeafyGreen className="absolute -left-2 h-4 w-4 text-green-500" />) :
+                        activity.type === "weeding" ? (
+                          <LucideLeaf className="absolute -left-2 h-4 w-4 text-green-500" />) :
+                          
+                      (<Droplets className="absolute -left-2 h-4 w-4 text-muted-foreground" />)}
+
               </div>
               <div className="flex-1 rounded-md border p-2">
                 <div className="flex items-center justify-between">
