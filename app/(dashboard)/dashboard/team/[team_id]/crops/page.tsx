@@ -6,6 +6,7 @@ import { getCrops } from '@/lib/queries/crops'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { CropsFilters } from './_components/crops-filter'
 import { CropsTable } from './_components/crops-table'
+import { CropsCalendar } from './_components/crops-calendar'
 
 
 const CropsPage = async ({ params }: { params: Promise<{ team_id: string }> }) => {
@@ -32,6 +33,7 @@ const CropsPage = async ({ params }: { params: Promise<{ team_id: string }> }) =
           <CropsTable crops={crops} />
         </TabsContent>
         <TabsContent value="calendar">
+          <CropsCalendar crops={crops} />
         </TabsContent>
       </Tabs>
     </div>
