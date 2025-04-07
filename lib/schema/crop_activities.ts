@@ -4,6 +4,7 @@ import { pgTable, serial, varchar, timestamp, text, integer, pgEnum } from 'driz
 
 import { teams } from './teams';
 import { statusEnum } from './tasks';
+import { z } from 'zod';
 
 // Define the activity type enum properly using pgEnum
 export const activityTypeEnum = pgEnum('activity_type', [
@@ -34,3 +35,16 @@ export const crop_activities = pgTable('crop_activities', {
 
 export type CropActivity = typeof crop_activities.$inferSelect;
 export type CropActivityInsert = typeof crop_activities.$inferInsert;
+
+
+// Schema for validation
+export const CropActivitySchema = z.object({
+    name: z.string().min(1, { message: "Name is required" }),
+    type: z.enum(['planting', 'harvesting', 'fertilizing', 'irrigating', 'weeding', 'pesticide_application', 'other']),
+    status: z.enum(['pending', 'in-progress', 'completed']),
+    description: z.string().min(1, { message: "Description is required" }),
+    scheduled_date: z.string(),
+    completed_date: z.string().optional().nullable(),
+    crop_id: z.coerce.number({ message: "Crop ID is required" }),
+    team_id: z.string({ message: "Team ID is required" }),
+  })

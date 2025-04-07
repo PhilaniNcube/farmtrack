@@ -5,15 +5,19 @@ import { ChevronLeft, Edit, Trash } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 import { CropDetails } from '../_components/crop-details'
+import { CropActivities } from '../_components/crop-activities'
+import { getCropActivities } from '@/lib/queries/crop_activities'
 
 const CropPage = async ({params}:{params:Promise<{crop_id:number}>}) => {
 
     const { crop_id } = await params
 
     const cropData = getCropById(crop_id)
+    const activitiesData = getCropActivities(crop_id)
 
-    const [crop] = await Promise.all([
+    const [crop, activities] = await Promise.all([
         cropData,
+        activitiesData,
     ])
 
     if (!crop) {
@@ -57,7 +61,7 @@ const CropPage = async ({params}:{params:Promise<{crop_id:number}>}) => {
           {/* <CropNotes id={params.id} /> */}
         </div>
         <div className="md:col-span-3 space-y-6">
-          {/* <CropActivities id={params.id} /> */}
+          <CropActivities activities={activities}  />
         </div>
       </div>
     </div>

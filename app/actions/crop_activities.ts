@@ -2,22 +2,11 @@
 
 import { revalidatePath } from "next/cache"
 import { db } from "@/lib/db"
-import { crop_activities, CropActivityInsert } from "@/lib/schema/crop_activities"
+import { crop_activities,  CropActivitySchema } from "@/lib/schema/crop_activities"
 import { z } from "zod"
 
-// Schema for validation
-export const CropActivitySchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
-  type: z.enum(['planting', 'harvesting', 'fertilizing', 'irrigating', 'weeding', 'pesticide_application', 'other']),
-  status: z.enum(['pending', 'in-progress', 'completed']),
-  description: z.string().min(1, { message: "Description is required" }),
-  scheduled_date: z.string(),
-  completed_date: z.string().optional().nullable(),
-  crop_id: z.coerce.number({ message: "Crop ID is required" }),
-  team_id: z.string({ message: "Team ID is required" }),
-})
 
-export type CropActivityFormValues = z.infer<typeof CropActivitySchema>
+
 
 export async function addCropActivity(prevState: unknown, formData: FormData) {
   try {

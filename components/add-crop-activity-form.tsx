@@ -1,6 +1,6 @@
 "use client"
 
-import { startTransition, useActionState, useState } from "react"
+import {  useActionState, useState } from "react"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 import { useForm } from "react-hook-form"
@@ -8,23 +8,42 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { cn } from "@/lib/utils"
-import { toast } from "./ui/use-toast"
-import { addCropActivity, CropActivityFormValues, CropActivitySchema } from "@/app/actions/crop_activities"
-import { ActivityType } from "@/lib/schema/crop_activities"
+import { addCropActivity } from "@/app/actions/crop_activities"
+import { z } from "zod"
 
 interface AddCropActivityFormProps {
     cropId: number;
     teamId: string;
     onSuccess?: () => void;
 }
+
+const CropActivitySchema = z.object({
+    name: z.string().min(1, "Activity name is required"),
+    type: z.enum([
+        "planting",
+        "harvesting",
+        "fertilizing",
+        "irrigating",
+        "weeding",
+        "pesticide_application",
+        "other",
+    ]),
+    status: z.enum(["pending", "in-progress", "completed"]),
+    description: z.string().min(1, "Description is required"),
+    scheduled_date: z.string(),
+    completed_date: z.string().optional().nullable(),
+    crop_id: z.coerce.number({ message: "Crop ID is required" }),
+    team_id: z.string({ message: "Team ID is required" }),
+})
+
+ type CropActivityFormValues = z.infer<typeof CropActivitySchema>
 
 export function AddCropActivityForm({ cropId, teamId, onSuccess }: AddCropActivityFormProps) {
     const [state, formAction, isPending] = useActionState(addCropActivity, null)
@@ -45,26 +64,7 @@ export function AddCropActivityForm({ cropId, teamId, onSuccess }: AddCropActivi
         }
     })
 
-    const onSubmit = async (data: FormData) => {
-        startTransition(async () => {
-            await formAction(data)
-        })
 
-        if (state?.success) {
-            toast({
-                title: "Activity added",
-                description: "The crop activity has been added successfully.",
-            })
-            form.reset()
-            if (onSuccess) onSuccess()
-        } else if (state?.error) {
-            toast({
-                title: "Error",
-                description: state.message || "Failed to add crop activity",
-                variant: "destructive",
-            })
-        }
-    }
 
     return (
         <Form {...form}>
