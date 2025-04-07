@@ -1,0 +1,1 @@
+ALTER TABLE "crop_notes" RENAME COLUMN "created_at" TO "created_date";

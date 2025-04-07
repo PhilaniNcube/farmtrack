@@ -12,6 +12,7 @@ import { farmMembers } from "./farm-members";
 import { fieldLocations } from "./field-location";
 import { teams } from "./teams";
 import { activityTypeEnum, crop_activities } from "./crop_activities";
+import { crop_notes } from "./crop_notes";
 
 export const schema = {
   users,
@@ -26,6 +27,7 @@ export const schema = {
   fieldLocations,
   teams,
   crop_activities,
+  crop_notes,
   activityTypeEnum: activityTypeEnum,
   statusEnum: statusEnum,
   priorityEnum: priorityEnum,
@@ -43,3 +45,4 @@ export * from "./farms";
 export * from "./farm-members";
 export * from "./field-location";
 export * from "./teams";
+export * from "./crop_notes";

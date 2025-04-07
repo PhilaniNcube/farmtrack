@@ -155,6 +155,34 @@
       "when": 1744048329875,
       "tag": "0021_handy_shotgun",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1744060731970,
+      "tag": "0022_square_human_fly",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1744061073378,
+      "tag": "0023_eminent_colossus",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1744061182988,
+      "tag": "0024_flimsy_lila_cheney",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1744061335942,
+      "tag": "0025_blushing_wolf_cub",
+      "breakpoints": true
     }
   ]
 }

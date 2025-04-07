@@ -7,6 +7,8 @@ import React from 'react'
 import { CropDetails } from '../_components/crop-details'
 import { CropActivities } from '../_components/crop-activities'
 import { getCropActivities } from '@/lib/queries/crop_activities'
+import { CropNotes } from '../_components/crop-notes'
+import { getCropNotesByCropId } from '@/lib/queries/crop_notes'
 
 const CropPage = async ({params}:{params:Promise<{crop_id:number}>}) => {
 
@@ -14,10 +16,12 @@ const CropPage = async ({params}:{params:Promise<{crop_id:number}>}) => {
 
     const cropData = getCropById(crop_id)
     const activitiesData = getCropActivities(crop_id)
+    const notesData = getCropNotesByCropId(crop_id)
 
-    const [crop, activities] = await Promise.all([
+    const [crop, activities, notes] = await Promise.all([
         cropData,
         activitiesData,
+        notesData,
     ])
 
     if (!crop) {
@@ -58,7 +62,7 @@ const CropPage = async ({params}:{params:Promise<{crop_id:number}>}) => {
       <div className="grid gap-6 mt-6 md:grid-cols-7">
         <div className="md:col-span-4 space-y-6">
           <CropDetails crop={crop} />
-          {/* <CropNotes id={params.id} /> */}
+          <CropNotes notes={notes} />
         </div>
         <div className="md:col-span-3 space-y-6">
           <CropActivities activities={activities}  />

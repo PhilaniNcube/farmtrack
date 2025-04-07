@@ -1,0 +1,1 @@
+ALTER TABLE "crop_notes" ALTER COLUMN "created_at" SET DATA TYPE timestamp;

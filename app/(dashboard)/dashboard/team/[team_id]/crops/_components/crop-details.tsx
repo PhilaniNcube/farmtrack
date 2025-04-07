@@ -91,7 +91,7 @@ const daysRemaining = formatDistance(new Date(crop.expected_harvest_date), new D
               <CalendarDays className="mr-2 h-4 w-4 text-purple-500" />
               <span className="font-medium">Status</span>
             </div>
-            <p className="text-sm pl-6">{getStatusBadge(crop.status)}</p>
+            <div className="text-sm pl-6">{getStatusBadge(crop.status)}</div>
           </div>
         </div>
 
