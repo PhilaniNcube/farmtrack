@@ -15,6 +15,8 @@ import {
 import { MoreHorizontal, Eye, Edit, Trash, FileText } from "lucide-react"
 import Link from "next/link"
 import { Crop } from "@/lib/schema"
+import { differenceInCalendarDays, format } from "date-fns"
+import { cn } from "@/lib/utils"
 
 export function CropsTable({crops}:{crops:Crop[]}) {
   // In a real app, these would be fetched from your database
@@ -34,11 +36,17 @@ export function CropsTable({crops}:{crops:Crop[]}) {
   }
 
   const calculateDaysRemaining = (harvestDate: string) => {
-    const today = new Date()
-    const harvest = new Date(harvestDate)
-    const diffTime = harvest.getTime() - today.getTime()
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    return diffDays
+   
+   return differenceInCalendarDays(new Date(harvestDate), new Date())
+
+  }
+
+
+  // Function to calculate progress percentage based on todays date, planting date and harvest date
+  const calculateProgress = (plantingDate: Date, harvestDate: Date) => {
+    const totalDays = differenceInCalendarDays(harvestDate, plantingDate)
+    const daysPassed = differenceInCalendarDays(new Date(), plantingDate)
+    return Math.min(Math.max((daysPassed / totalDays) * 100, 0), 100)
   }
 
   return (
@@ -69,10 +77,10 @@ export function CropsTable({crops}:{crops:Crop[]}) {
               <TableCell>
                 {crop.area} {crop.area_unit}
               </TableCell>
-              <TableCell>{new Date(crop.planting_date).toLocaleDateString()}</TableCell>
+              <TableCell>{format(crop.planting_date, "PPP")}</TableCell>
               <TableCell>
                 <div>
-                  {new Date(crop.expected_harvest_date).toLocaleDateString()}
+                  {format(crop.expected_harvest_date, "PPP")}
                   <div className="text-xs text-muted-foreground">
                     {calculateDaysRemaining(crop.expected_harvest_date.toDateString())} days remaining
                   </div>
@@ -81,6 +89,14 @@ export function CropsTable({crops}:{crops:Crop[]}) {
               <TableCell>{getStatusBadge(crop.status)}</TableCell>
               <TableCell>
                 <div className="w-[100px]">
+                  <Progress
+                    value={calculateProgress(crop.planting_date, crop.expected_harvest_date)}
+                    className={cn("h-2",
+                      calculateProgress(crop.planting_date, crop.expected_harvest_date) < 50 ? "bg-red-500" : "bg-green-500"
+                     )}
+                    aria-label="Crop progress"
+                    aria-valuenow={calculateProgress(crop.planting_date, crop.expected_harvest_date)}                    
+                  />
                    </div>
               </TableCell>
               <TableCell className="text-right">

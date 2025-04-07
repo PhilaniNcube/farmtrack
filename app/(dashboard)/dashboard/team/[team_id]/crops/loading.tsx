@@ -73,46 +73,48 @@ const loading = () => {
                     </TabsTrigger>
                 </TabsList>
                 <TabsContent value='list'>
-                     <CropsFilters />
+                    <CropsFilters />
                     <Table className="mt-4">
                         <TableHeader>
-                            <TableHead>Crop</TableHead>
-                            <TableHead>Location</TableHead>
-                            <TableHead>Area</TableHead>
-                            <TableHead>Planting Date</TableHead>
-                            <TableHead>Harvest Date</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Progress</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableRow>
+                                <TableHead>Crop</TableHead>
+                                <TableHead>Location</TableHead>
+                                <TableHead>Area</TableHead>
+                                <TableHead>Planting Date</TableHead>
+                                <TableHead>Harvest Date</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Progress</TableHead>
+                                <TableHead className="text-right">Actions</TableHead>
+                            </TableRow>
                         </TableHeader>
                         <TableBody>
                             {/* Placeholder for Crop Rows */}
                             {Array.from({ length: 14 }).map((_, index) => (
                                 <TableRow key={index}>
-                                   <TableCell>
-                                     <Skeleton className='bg-slate-300 h-4 animate-pulse' />
-                                   </TableCell>
-                                   <TableCell>
-                                     <Skeleton className='bg-slate-300 h-4 animate-pulse' />
-                                   </TableCell>
-                                   <TableCell>
-                                     <Skeleton className='bg-slate-300 h-4 animate-pulse' />
-                                   </TableCell>
-                                   <TableCell>
-                                     <Skeleton className='bg-slate-300 h-4 animate-pulse' />
-                                   </TableCell>
-                                   <TableCell>
-                                     <Skeleton className='bg-slate-300 h-4 animate-pulse' />
-                                   </TableCell>
-                                   <TableCell>
-                                     <Skeleton className='bg-slate-300 h-4 animate-pulse' />
-                                   </TableCell>
-                                   <TableCell>
-                                     <Skeleton className='bg-slate-300 h-4 animate-pulse' />
-                                   </TableCell>
-                                   <TableCell>
-                                     <Skeleton className='bg-slate-300 h-4 animate-pulse' />
-                                   </TableCell>
+                                    <TableCell>
+                                        <Skeleton className='bg-slate-300 h-4 animate-pulse' />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Skeleton className='bg-slate-300 h-4 animate-pulse' />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Skeleton className='bg-slate-300 h-4 animate-pulse' />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Skeleton className='bg-slate-300 h-4 animate-pulse' />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Skeleton className='bg-slate-300 h-4 animate-pulse' />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Skeleton className='bg-slate-300 h-4 animate-pulse' />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Skeleton className='bg-slate-300 h-4 animate-pulse' />
+                                    </TableCell>
+                                    <TableCell>
+                                        <Skeleton className='bg-slate-300 h-4 animate-pulse' />
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
