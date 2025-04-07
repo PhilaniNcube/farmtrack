@@ -110,19 +110,19 @@ export function CropsTable({crops}:{crops:Crop[]}) {
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuItem asChild>
-                      <Link href={`/dashboard/crops/${crop.id}`}>
+                      <Link href={`/dashboard/team/${crop.team_id}/crops/${crop.id}`}>
                         <Eye className="mr-2 h-4 w-4" />
                         View Details
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href={`/dashboard/crops/${crop.id}/edit`}>
+                      <Link href={`/dashboard/team/${crop.team_id}/crops/${crop.id}/edit`}>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit Crop
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href={`/dashboard/crops/${crop.id}/activities`}>
+                      <Link href={`/dashboard/team/${crop.team_id}/crops/${crop.id}/activities`}>
                         <FileText className="mr-2 h-4 w-4" />
                         View Activities
                       </Link>
