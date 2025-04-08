@@ -1,23 +1,52 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, SlidersHorizontal } from "lucide-react"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { Search, SlidersHorizontal, CalendarIcon } from "lucide-react"
 import { useState } from "react"
 import { useQueryState } from 'nuqs'
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
+import { DateRange } from "react-day-picker"
 
 
 export function FinancesFilters() {
     const [showFilters, setShowFilters] = useState(false)
+    const [date, setDate] = useState<DateRange | undefined>()
 
     const [transaction_type, setTransactionType] = useQueryState("transaction_type")
-
     const [category, setCategory] = useQueryState("category")
     const [payment_method, setPaymentMethod] = useQueryState("payment_method")
-
     const [search, setSearch] = useQueryState("search")
+    const [startDate, setStartDate] = useQueryState("start_date")
+    const [endDate, setEndDate] = useQueryState("end_date")
+
+    const handleDateChange = (range: DateRange | undefined) => {
+        setDate(range)
+        if (range?.from) {
+            setStartDate(format(range.from, "yyyy-MM-dd"))
+        } else {
+            setStartDate(null)
+        }
+        if (range?.to) {
+            setEndDate(format(range.to, "yyyy-MM-dd"))
+        } else {
+            setEndDate(null)
+        }
+    }
+
+    const clearAllFilters = () => {
+        setTransactionType(null)
+        setCategory(null)
+        setPaymentMethod(null)
+        setSearch(null)
+        setStartDate(null)
+        setEndDate(null)
+        setDate(undefined)
+    }
 
     return (
         <div className="space-y-4">
@@ -48,7 +77,6 @@ export function FinancesFilters() {
 
             {showFilters && (
                 <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-
                     <Select defaultValue="all" onValueChange={(value) => setCategory(value)}>
                         <SelectTrigger>
                             <SelectValue placeholder="Category" />
@@ -78,7 +106,45 @@ export function FinancesFilters() {
                             <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                     </Select>
-                   
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                id="date"
+                                variant={"outline"}
+                                className={cn(
+                                    "w-[300px] justify-start text-left font-normal",
+                                    !date && "text-muted-foreground"
+                                )}
+                            >
+                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                {date?.from ? (
+                                    date.to ? (
+                                        <>
+                                            {format(date.from, "LLL dd, y")} -{" "}
+                                            {format(date.to, "LLL dd, y")}
+                                        </>
+                                    ) : (
+                                        format(date.from, "LLL dd, y")
+                                    )
+                                ) : (
+                                    <span>Pick a date</span>
+                                )}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                            <Calendar
+                                initialFocus
+                                mode="range"
+                                defaultMonth={date?.from}
+                                selected={date}
+                                onSelect={handleDateChange}
+                                numberOfMonths={2}
+                            />
+                        </PopoverContent>
+                    </Popover>
+                    <Button variant="outline" onClick={clearAllFilters}>
+                        Clear Filters
+                    </Button>
                 </div>
             )}
         </div>

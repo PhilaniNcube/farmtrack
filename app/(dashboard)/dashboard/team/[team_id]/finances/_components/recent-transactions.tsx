@@ -23,6 +23,8 @@ export function RecentTransactions({transactions}:{transactions:Finance[]}) {
     const [category, setCategory] = useQueryState("category")
     const [payment_method, setPaymentMethod] = useQueryState("payment_method")
     const [search, setSearch] = useQueryState("search")
+    const [startDate, setStartDate] = useQueryState("start_date")
+    const [endDate, setEndDate] = useQueryState("end_date")
 
 
   const formatCurrency = (amount: number) => {
@@ -37,7 +39,8 @@ export function RecentTransactions({transactions}:{transactions:Finance[]}) {
     // if category is "all" or not selected, show all transactions
     // if payment_method is "all" or not selected, show all transactions
     // if transaction_type is "income" or "expense", show only those transactions
-    //  also filter by description if search is used
+    //  also filter by description if search is used    
+    
     const filteredTransactions = transactions.filter((transaction) => {
 
     if (search && !transaction?.description?.toLowerCase().includes(search.toLowerCase())) {
@@ -53,6 +56,22 @@ export function RecentTransactions({transactions}:{transactions:Finance[]}) {
     if (payment_method && payment_method !== "all" && transaction.payment_method !== payment_method) {
         return false
         }
+    // Filter by start date if provided
+    if (startDate) {
+        const startDateObj = new Date(startDate);
+        if (transaction.transaction_date < startDateObj) {
+            return false;
+        }
+    }
+    // Filter by end date if provided
+    if (endDate) {
+        const endDateObj = new Date(endDate);
+        // Set to end of day to include the entire end date
+        endDateObj.setHours(23, 59, 59, 999);
+        if (transaction.transaction_date > endDateObj) {
+            return false;
+        }
+    }
     return true
     })
 
