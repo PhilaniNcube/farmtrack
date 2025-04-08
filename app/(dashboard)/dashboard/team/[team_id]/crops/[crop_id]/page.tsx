@@ -40,9 +40,9 @@ const CropPage = async ({ params }: { params: Promise<{ crop_id: number }> }) =>
           </Button>
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
-              <span> {crop.name} ({crop.status})</span>
+              <span> {`${crop.name} (${crop.status})`}</span>
             </h1>
-            <p className="text-muted-foreground"><span>{crop.location} • {crop.area} {crop.area_unit} • Planted on {format(crop.planting_date, "PPP")}</span></p>
+            <p className="text-muted-foreground">{`${crop.location} • ${crop.area} ${crop.area_unit} • Planted on ${format(crop.planting_date, "PPP")}`}</p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -55,7 +55,8 @@ const CropPage = async ({ params }: { params: Promise<{ crop_id: number }> }) =>
           <Button variant="destructive">
             <>
               <Trash className="mr-2 h-4 w-4" />
-              Delete</>
+              Delete
+            </>
           </Button>
         </div>
       </div>
