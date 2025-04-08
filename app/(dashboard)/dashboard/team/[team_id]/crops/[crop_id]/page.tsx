@@ -10,27 +10,27 @@ import { getCropActivities } from '@/lib/queries/crop_activities'
 import { CropNotes } from '../_components/crop-notes'
 import { getCropNotesByCropId } from '@/lib/queries/crop_notes'
 
-const CropPage = async ({params}:{params:Promise<{crop_id:number}>}) => {
+const CropPage = async ({ params }: { params: Promise<{ crop_id: number }> }) => {
 
-    const { crop_id } = await params
+  const { crop_id } = await params
 
-    const cropData = getCropById(crop_id)
-    const activitiesData = getCropActivities(crop_id)
-    const notesData = getCropNotesByCropId(crop_id)
+  const cropData = getCropById(crop_id)
+  const activitiesData = getCropActivities(crop_id)
+  const notesData = getCropNotesByCropId(crop_id)
 
-    const [crop, activities, notes] = await Promise.all([
-        cropData,
-        activitiesData,
-        notesData,
-    ])
+  const [crop, activities, notes] = await Promise.all([
+    cropData,
+    activitiesData,
+    notesData,
+  ])
 
-    if (!crop) {
-        return <div>Crop not found</div>
-    }
+  if (!crop) {
+    return <div>Crop not found</div>
+  }
 
   return (
     <div className="p-6">
-          <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Button variant="outline" size="icon" asChild>
             <Link href={`/dashboard/team/${crop.team_id}/crops`} className="flex items-center gap-2">
@@ -40,9 +40,9 @@ const CropPage = async ({params}:{params:Promise<{crop_id:number}>}) => {
           </Button>
           <div>
             <h1 className="text-3xl font-bold tracking-tight">
-                {crop.name} ({crop.status})
+              <span> {crop.name} ({crop.status})</span>
             </h1>
-            <p className="text-muted-foreground">{crop.location} • {crop.area} {crop.area_unit} • Planted on {format(crop.planting_date, "PPP")}</p>
+            <p className="text-muted-foreground"><span>{crop.location} • {crop.area} {crop.area_unit} • Planted on {format(crop.planting_date, "PPP")}</span></p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -53,8 +53,9 @@ const CropPage = async ({params}:{params:Promise<{crop_id:number}>}) => {
             </Link>
           </Button>
           <Button variant="destructive">
-            <Trash className="mr-2 h-4 w-4" />
-            Delete
+            <>
+              <Trash className="mr-2 h-4 w-4" />
+              Delete</>
           </Button>
         </div>
       </div>
@@ -65,7 +66,7 @@ const CropPage = async ({params}:{params:Promise<{crop_id:number}>}) => {
           <CropNotes notes={notes} />
         </div>
         <div className="md:col-span-3 space-y-6">
-          <CropActivities activities={activities}  />
+          <CropActivities activities={activities} />
         </div>
       </div>
     </div>
