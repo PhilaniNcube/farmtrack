@@ -34,7 +34,7 @@ const CropPage = async ({ params }: { params: Promise<{ crop_id: number }> }) =>
         <div className="flex items-center space-x-4">
           <Link href={`/dashboard/team/${crop.team_id}/crops`} className="flex items-center gap-2">
             <Button variant="outline" size="icon" asChild>
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="font-light" />
             </Button>
           </Link>
           <div className='flex flex-col'>
