@@ -2,7 +2,7 @@ import type React from "react"
 import { StackProvider, StackTheme } from "@stackframe/stack";
 import { stackServerApp } from "../stack";
 import { Inter } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 
 import "./globals.css"
@@ -26,7 +26,7 @@ export default function RootLayout({
         <StackProvider app={stackServerApp}>
           <StackTheme>
             <div className="flex min-h-screen flex-col">
-              {children}
+            <NuqsAdapter>{children}</NuqsAdapter>
             </div>
           </StackTheme></StackProvider></body>
     </html>
