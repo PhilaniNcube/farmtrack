@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm"
+import { and, desc, eq, gte, lte } from "drizzle-orm"
 import { db } from "../db"
 import { finances } from "../schema"
 import { unstable_cache } from 'next/cache';
@@ -160,3 +160,45 @@ export const getCachedTotalFinances = unstable_cache(
     tags: ["getTotalFinances"],
   }
 )
+
+
+
+// Function that queries the finances table and returns the total income, total expenses, net profit and profit margin for a specific date range
+export async function getTotalFinancesLastXDays(id: string, start_date: Date, end_date: Date) {
+
+  console.log("Start Date: ", start_date)
+  console.log("End Date: ", end_date)
+
+  const totalIncome = await db.select().from(finances).where(
+    and(
+      eq(finances.team_id, id),
+      eq(finances.transaction_type, "income"),
+      gte(finances.transaction_date, start_date),
+      lte(finances.transaction_date, end_date)
+    )
+  ).then((res) => res.reduce((acc, curr) => acc + Number(curr.amount), 0))
+
+  const totalExpenses = await db.select().from(finances).where(
+    and(
+      eq(finances.team_id, id),
+      eq(finances.transaction_type, "expense"),
+      gte(finances.transaction_date, start_date),
+      lte(finances.transaction_date, end_date)
+    )
+  ).then((res) => res.reduce((acc, curr) => acc + Number(curr.amount), 0))
+
+  const profit_margin = (totalIncome - totalExpenses) / totalIncome * 100 
+
+  const formattedProfitMargin = new Intl.NumberFormat('en-US', {
+    style: 'percent',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(profit_margin / 100);
+
+  return {
+    totalIncome,
+    totalExpenses,
+    net_profit: totalIncome - totalExpenses,
+    profit_margin: formattedProfitMargin,  
+  }
+}
