@@ -28,9 +28,7 @@ export function CropNotes({ notes }: CropNotesProps) {
                 {notes.length > 0 ? (
                     <div className="space-y-4">
                         {notes.map((note) => (
-                            <div key={note.id} className={cn("flex flex-col space-y-1")} >                               
-                                <p className="text-sm text-muted-foreground text-balance">- {note.text}</p>
-                            </div>
+                            <p key={note.id} className="text-sm text-muted-foreground text-balance">{`- ${note.text}`}</p>
                         ))}
                     </div>
                 ) : (

@@ -32,27 +32,35 @@ const CropPage = async ({ params }: { params: Promise<{ crop_id: number }> }) =>
     <div className="p-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Button variant="outline" size="icon" asChild>
-            <Link href={`/dashboard/team/${crop.team_id}/crops`} className="flex items-center gap-2">
+          <Link href={`/dashboard/team/${crop.team_id}/crops`} className="flex items-center gap-2">
+            <Button variant="outline" size="icon" asChild>
               <ChevronLeft className="h-4 w-4" />
-              <span className="sr-only">Back</span>
-            </Link>
-          </Button>
-          <div>
+            </Button>
+          </Link>
+          <div className='flex flex-col'>
             <h1 className="text-3xl font-bold tracking-tight">
-              <span> {`${crop.name} (${crop.status})`}</span>
+            {`${crop.name} (${crop.status})`}
             </h1>
-            <p className="text-muted-foreground">{`${crop.location} • ${crop.area} ${crop.area_unit} • Planted on ${format(crop.planting_date, "PPP")}`}</p>
+            <div className="flex space-x-2text-muted-foreground">{`${crop.location} • ${crop.area} ${crop.area_unit} • Planted on ${format(crop.planting_date, "PPP")}`}</div>
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" asChild>
-            <Link href={`/dashboard/team/${crop.team_id}/crops/${crop.id}/edit`}>
+          {/* <Link href={`/dashboard/team/${crop.team_id}/crops/${crop.id}/edit`}>
+            <Button variant="outline" asChild>
+
+              <Edit className="mr-2 h-4 w-4" />
+              Edit Crop
+
+            </Button>
+          </Link>
+         */}
+           <Button variant="outline">
+            <Link href={`/dashboard/team/${crop.team_id}/crops/${crop.id}/edit`} className='flex items-center gap-2'>
               <Edit className="mr-2 h-4 w-4" />
               Edit Crop
             </Link>
           </Button>
-          <Button variant="destructive">
+           <Button variant="destructive">
             <>
               <Trash className="mr-2 h-4 w-4" />
               Delete

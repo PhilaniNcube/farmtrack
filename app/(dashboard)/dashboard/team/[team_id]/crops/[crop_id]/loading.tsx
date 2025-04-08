@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ChevronLeft, Edit, Trash } from 'lucide-react'
-import Link from 'next/link'
 import React from 'react'
 
 
@@ -10,12 +9,12 @@ const loading = () => {
         <div className='p-6'>
             <div className="flex items justify-between w-full">
                 <div className="flex items-center space-x-4">
-                    <Button variant="outline" size="icon" asChild>
+                    <div >
                         <>
                             <ChevronLeft className="h-4 w-4" />
                             <span className="sr-only">Back</span>
                         </>
-                    </Button>
+                    </div>
                     <div>
                         <h1 className="text-3xl font-bold tracking-tight">
                             Loading (Crop Status)
@@ -26,12 +25,16 @@ const loading = () => {
                 <div className="rounded animate-pulse">
                     <div className="flex items-center space-x-2">
                         <Button variant="outline" asChild>
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit Crop
+                            <span>
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit Crop
+                            </span>
                         </Button>
                         <Button variant="destructive">
-                            <Trash className="mr-2 h-4 w-4" />
-                            Delete
+                            <span>
+                                <Trash className="mr-2 h-4 w-4" />
+                                Delete
+                            </span>
                         </Button>
                     </div>
                 </div>

@@ -64,7 +64,7 @@ const daysRemaining = formatDistance(new Date(crop.expected_harvest_date), new D
               <span className="font-medium">Crop Type</span>
             </div>
             <p className="text-sm pl-6">
-              {crop.name} ({crop.variety})
+              {`${crop.name} (${crop.variety})`}
             </p>
           </div>
 
@@ -82,7 +82,7 @@ const daysRemaining = formatDistance(new Date(crop.expected_harvest_date), new D
               <span className="font-medium">Area</span>
             </div>
             <p className="text-sm pl-6">
-              {crop.area} {crop.area_unit}
+              {`${crop.area} ${crop.area_unit}`} 
             </p>
           </div>
 
@@ -91,7 +91,11 @@ const daysRemaining = formatDistance(new Date(crop.expected_harvest_date), new D
               <CalendarDays className="mr-2 h-4 w-4 text-purple-500" />
               <span className="font-medium">Status</span>
             </div>
-            <div className="text-sm pl-6">{getStatusBadge(crop.status)}</div>
+            <div className="text-sm pl-6">
+              <Badge variant="outline" className="text-xs">
+                {crop.status}
+              </Badge>
+            </div>
           </div>
         </div>
 
