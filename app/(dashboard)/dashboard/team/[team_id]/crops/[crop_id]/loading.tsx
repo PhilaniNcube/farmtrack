@@ -15,9 +15,11 @@ const loading = () => {
                             <span className="sr-only">Back</span>
                         </>
                     </Button>
-                    <div className="flex flex-col space-y-2 animate-pulse">
-                        <div className="h-16 w-[200px] bg-gray-200 rounded"></div>
-                        <div className="h-4 w-[300px] bg-gray-200 rounded"></div>
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight">
+                            Loading (Crop Status)
+                        </h1>
+                        <p className="text-muted-foreground">Field Location • 5 hectares • Planted on </p>
                     </div>
                 </div>
                 <div className="h-8 w-24 bg-gray-200 rounded animate-pulse"></div>
