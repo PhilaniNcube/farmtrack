@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { ChevronLeft } from 'lucide-react'
+import { ChevronLeft, Edit, Trash } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 
 
@@ -22,7 +23,18 @@ const loading = () => {
                         <p className="text-muted-foreground">Field Location • 5 hectares • Planted on </p>
                     </div>
                 </div>
-                <div className="h-8 w-24 bg-gray-200 rounded animate-pulse"></div>
+                <div className="rounded animate-pulse">
+                    <div className="flex items-center space-x-2">
+                        <Button variant="outline" asChild>
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit Crop
+                        </Button>
+                        <Button variant="destructive">
+                            <Trash className="mr-2 h-4 w-4" />
+                            Delete
+                        </Button>
+                    </div>
+                </div>
             </div>
             <div className="grid grid-cols-7 gap-4 mt-4">
                 <Card className="col-span-3 h-[250px] bg-gray-200 rounded animate-pulse"></Card>
