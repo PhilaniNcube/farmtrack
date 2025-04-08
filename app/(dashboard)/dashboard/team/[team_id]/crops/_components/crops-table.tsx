@@ -92,7 +92,7 @@ export function CropsTable({crops}:{crops:Crop[]}) {
                   <Progress
                     value={calculateProgress(crop.planting_date, crop.expected_harvest_date)}
                     className={cn("h-2",
-                      calculateProgress(crop.planting_date, crop.expected_harvest_date) < 50 ? "bg-red-500" : "bg-green-500"
+                   
                      )}
                     aria-label="Crop progress"
                     aria-valuenow={calculateProgress(crop.planting_date, crop.expected_harvest_date)}                    
