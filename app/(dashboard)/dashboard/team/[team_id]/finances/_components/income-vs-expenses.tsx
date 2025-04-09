@@ -75,13 +75,20 @@ export function IncomeVsExpenses({ summary, timeseries }: PageProps) {
 
 
     return (
-        <Card className={cn("w-full", isPending && "opacity-50")}>
+        <Card className={cn("w-full relative", isPending && "opacity-50")}>
+             <Button variant="outline" className="absolute top-3 right-2" onClick={() => {
+                    startTransition(() => { 
+                    setDate(undefined)
+                    setStartDate(null)
+                    setEndDate(null)})
+                }}>
+                    Clear Filters
+                </Button>
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                     <CardTitle>Income vs Expenses</CardTitle>
                     <CardDescription>Compare your income and expenses over time</CardDescription>
-                </div>
-                <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2">
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button
@@ -126,13 +133,9 @@ export function IncomeVsExpenses({ summary, timeseries }: PageProps) {
                     Search
                 </Button>
                 </div>
-                <Button variant="outline" onClick={() => {
-                    setDate(undefined)
-                    setStartDate(null)
-                    setEndDate(null)
-                }}>
-                    Clear Filters
-                </Button>
+                </div>
+           
+               
             </CardHeader>
             <CardContent>                <div className="h-[300px] w-full">
                     <ResponsiveContainer width="100%" height="100%">

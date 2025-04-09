@@ -55,15 +55,17 @@ const FinancesPage = async ({ params, searchParams }: { params: Promise<{ team_i
           <FinancesFilters />
           <RecentTransactions transactions={finances} />
         </TabsContent>
-        <TabsContent value="reports" className="space-y-4">
-          <IncomeVsExpenses summary={{
-            total_income: financial_summary.totalIncome,
-            total_expenses: financial_summary.totalExpenses,
-            net_profit: financial_summary.net_profit,
-            profit_margin: financial_summary.profit_margin
+        <TabsContent value="reports" className="space-y-4 ">
+          <div className="grid gap-4 md:grid-cols-2">
+            <IncomeVsExpenses summary={{
+              total_income: financial_summary.totalIncome,
+              total_expenses: financial_summary.totalExpenses,
+              net_profit: financial_summary.net_profit,
+              profit_margin: financial_summary.profit_margin
 
-          }}  timeseries={timeSeries} />
-          <CategoryBreakdown finances={finances} />
+            }} timeseries={timeSeries} />
+            <CategoryBreakdown finances={finances} />
+          </div>
         </TabsContent>
       </Tabs>
     </div>
