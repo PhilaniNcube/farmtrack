@@ -166,8 +166,6 @@ export const getCachedTotalFinances = unstable_cache(
 // Function that queries the finances table and returns the total income, total expenses, net profit and profit margin for a specific date range
 export async function getTotalFinancesLastXDays(id: string, start_date: Date, end_date: Date) {
 
-  console.log("Start Date: ", start_date)
-  console.log("End Date: ", end_date)
 
   const totalIncome = await db.select().from(finances).where(
     and(

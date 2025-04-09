@@ -7,13 +7,31 @@ import { FinancialOverview } from './_components/financial-overview'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FinancesFilters } from './_components/finance-filters'
 import { RecentTransactions } from './_components/recent-transactions'
+import type { SearchParams } from 'nuqs/server'
+import { loadSearchParams } from '@/lib/search-params'
+import { IncomeVsExpenses } from './_components/income-vs-expenses'
 
-const FinancesPage = async ({ params }: { params: Promise<{ team_id: string }> }) => {
+
+const FinancesPage = async ({ params, searchParams }: { params: Promise<{ team_id: string }>, searchParams:Promise<SearchParams> }) => {
+
+
+  const { start_date, end_date } = await loadSearchParams(searchParams)
+
+
+
+  // check if start_date and end_date are empty strings, if so, convert them to Dates separated by 90 days
+  const startDate = start_date ? new Date(start_date) : new Date(new Date().setDate(new Date().getDate() - 90))
+  const endDate = end_date ? new Date(end_date) : new Date(new Date().setDate(new Date().getDate() + 90))
+
+
+
+
+
 
   const { team_id } = await params
 
   const financeData = getFinances(team_id)
-  const summaryData = getTotalFinancesLastXDays(team_id, new Date(new Date().setDate(new Date().getDate() - 100)), new Date(new Date().setDate(new Date().getDate() + 50)))
+  const summaryData = getTotalFinancesLastXDays(team_id, startDate, endDate)
 
   const [finances, financial_summary] = await Promise.all([
     financeData,
@@ -45,9 +63,12 @@ const FinancesPage = async ({ params }: { params: Promise<{ team_id: string }> }
           <RecentTransactions transactions={finances} />
         </TabsContent>
         <TabsContent value="reports" className="space-y-4">
-          <div className='flex items-center justify-center h-full'>
-            <p className='text-muted-foreground'>No reports found for this farm.</p>
-          </div>
+          <IncomeVsExpenses summary={{
+            total_income: financial_summary.totalIncome,
+            total_expenses: financial_summary.totalExpenses,
+            net_profit: financial_summary.net_profit,
+            profit_margin: financial_summary.profit_margin
+          }} />
         </TabsContent>
       </Tabs>
     </div>
