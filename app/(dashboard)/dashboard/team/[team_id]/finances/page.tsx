@@ -22,8 +22,8 @@ const FinancesPage = async ({ params, searchParams }: { params: Promise<{ team_i
 
 
   // check if start_date and end_date are empty strings, if so, convert them to Dates separated by 90 days
-  const startDate = start_date ? new Date(start_date) : new Date(new Date().setDate(new Date().getDate() - 90))
-  const endDate = end_date ? new Date(end_date) : new Date(new Date().setDate(new Date().getDate() + 90))
+  const startDate = start_date ? new Date(start_date) : new Date(new Date().setDate(new Date().getDate() - 45))
+  const endDate = end_date ? new Date(end_date) : new Date(new Date().setDate(new Date().getDate() + 60))
 
 
 
