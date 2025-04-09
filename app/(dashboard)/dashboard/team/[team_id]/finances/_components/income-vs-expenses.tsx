@@ -11,6 +11,16 @@ import { useRouter } from "next/navigation"
 import { useQueryState } from "nuqs"
 import {  useState, useTransition } from "react"
 import { DateRange } from "react-day-picker"
+import { 
+    BarChart, 
+    Bar, 
+    XAxis, 
+    YAxis, 
+    CartesianGrid, 
+    Tooltip, 
+    Legend, 
+    ResponsiveContainer 
+} from "recharts"
 
 type PageProps = {
     summary: {
@@ -19,11 +29,16 @@ type PageProps = {
         net_profit: number,
         profit_margin: string
     }
+    timeseries: {
+        date: string,
+        income: number,
+        expenses: number    
+    }[]
 
 }
 
 
-export function IncomeVsExpenses({ summary }: PageProps) {
+export function IncomeVsExpenses({ summary, timeseries }: PageProps) {
 
     const router = useRouter()
     const [ isPending,startTransition] = useTransition()
@@ -119,15 +134,43 @@ export function IncomeVsExpenses({ summary }: PageProps) {
                     Clear Filters
                 </Button>
             </CardHeader>
-            <CardContent>
-                <div className="h-[300px] w-full">
-                    {/* This is a placeholder for the chart. In a real app, you would use a charting library like Chart.js or Recharts */}
-                    <div className="h-full w-full bg-muted/20 rounded-md flex items-center justify-center">
-                        <div className="text-center">
-                            <p className="text-muted-foreground">Chart visualization would go here</p>
-                            <p className="text-sm text-muted-foreground mt-2">Using a library like Chart.js or Recharts</p>
-                        </div>
-                    </div>
+            <CardContent>                <div className="h-[300px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart
+                            data={timeseries}
+                            margin={{
+                                top: 20,
+                                right: 30,
+                                left: 20,
+                                bottom: 5,
+                            }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="date" />
+                            <YAxis 
+                                tickFormatter={(value) => 
+                                    new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                        notation: 'compact',
+                                        maximumFractionDigits: 1
+                                    }).format(value)
+                                }
+                            />
+                            <Tooltip 
+                                formatter={(value) => 
+                                    new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD',
+                                        maximumFractionDigits: 0
+                                    }).format(Number(value))
+                                }
+                            />
+                            <Legend />
+                            <Bar dataKey="income" name="Income" fill="#10b981" />
+                            <Bar dataKey="expenses" name="Expenses" fill="#ef4444" />
+                        </BarChart>
+                    </ResponsiveContainer>
                 </div>
                 <div className="grid grid-cols-3 gap-4 mt-4">
                     <div className="space-y-1 text-center">

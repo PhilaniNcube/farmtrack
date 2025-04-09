@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import React from 'react'
 import { FinancesHeader } from './_components/finances-header'
-import { getFinances, getTotalFinancesLastXDays } from '@/lib/queries/finances'
+import { getFinances, getFinancesTimeSeries, getTotalFinancesLastXDays } from '@/lib/queries/finances'
 import { FinancialOverview } from './_components/financial-overview'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FinancesFilters } from './_components/finance-filters'
@@ -12,10 +12,12 @@ import { loadSearchParams } from '@/lib/search-params'
 import { IncomeVsExpenses } from './_components/income-vs-expenses'
 
 
-const FinancesPage = async ({ params, searchParams }: { params: Promise<{ team_id: string }>, searchParams:Promise<SearchParams> }) => {
+const FinancesPage = async ({ params, searchParams }: { params: Promise<{ team_id: string }>, searchParams: Promise<SearchParams> }) => {
 
 
   const { start_date, end_date } = await loadSearchParams(searchParams)
+
+
 
 
 
@@ -32,13 +34,15 @@ const FinancesPage = async ({ params, searchParams }: { params: Promise<{ team_i
 
   const financeData = getFinances(team_id)
   const summaryData = getTotalFinancesLastXDays(team_id, startDate, endDate)
+  const timeSeriesData = getFinancesTimeSeries(team_id, startDate, endDate)
 
-  const [finances, financial_summary] = await Promise.all([
+  const [finances, financial_summary, timeSeries] = await Promise.all([
     financeData,
     summaryData,
+    timeSeriesData
   ])
 
-  console.log("Finances: ", financial_summary)
+  console.log("Timeseries", timeSeries)
 
   if (!finances) {
     return <div className='p-6'>
@@ -68,7 +72,8 @@ const FinancesPage = async ({ params, searchParams }: { params: Promise<{ team_i
             total_expenses: financial_summary.totalExpenses,
             net_profit: financial_summary.net_profit,
             profit_margin: financial_summary.profit_margin
-          }} />
+
+          }}  timeseries={timeSeries} />
         </TabsContent>
       </Tabs>
     </div>
