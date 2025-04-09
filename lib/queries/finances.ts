@@ -14,6 +14,13 @@ export async function getFinances(team_id: string) {
   return financeData
 }
 
+export async function getFinanceById(finance_id: number) {
+  const financeData = await db.query.finances.findFirst({
+    where: eq(finances.id, finance_id),
+  })
+  return financeData
+}
+
 
 export async function getQuarterlyFinances(team_id:string) {
   // Get the current date
@@ -111,15 +118,7 @@ export const getCachedTotalExpenses = unstable_cache(
 export async function getTotalFinances(id: string) {
 
 
-  const isMember = await isFarmMember(id)
-  if (!isMember) {
-    return {
-      totalIncome: 0,
-      totalExpenses: 0,
-      net_profit: 0,
-      profit_margin: 0,
-    }
-  }
+ 
 
     const totalExpenses = await db.select().from(finances).where(
         and(
