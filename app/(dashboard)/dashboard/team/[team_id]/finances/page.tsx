@@ -10,25 +10,16 @@ import { RecentTransactions } from './_components/recent-transactions'
 import type { SearchParams } from 'nuqs/server'
 import { loadSearchParams } from '@/lib/search-params'
 import { IncomeVsExpenses } from './_components/income-vs-expenses'
+import { CategoryBreakdown } from './_components/ctaegory-breakdown'
 
 
 const FinancesPage = async ({ params, searchParams }: { params: Promise<{ team_id: string }>, searchParams: Promise<SearchParams> }) => {
 
-
   const { start_date, end_date } = await loadSearchParams(searchParams)
-
-
-
-
 
   // check if start_date and end_date are empty strings, if so, convert them to Dates separated by 90 days
   const startDate = start_date ? new Date(start_date) : new Date(new Date().setDate(new Date().getDate() - 45))
   const endDate = end_date ? new Date(end_date) : new Date(new Date().setDate(new Date().getDate() + 60))
-
-
-
-
-
 
   const { team_id } = await params
 
@@ -41,8 +32,6 @@ const FinancesPage = async ({ params, searchParams }: { params: Promise<{ team_i
     summaryData,
     timeSeriesData
   ])
-
-  console.log("Timeseries", timeSeries)
 
   if (!finances) {
     return <div className='p-6'>
@@ -74,6 +63,7 @@ const FinancesPage = async ({ params, searchParams }: { params: Promise<{ team_i
             profit_margin: financial_summary.profit_margin
 
           }}  timeseries={timeSeries} />
+          <CategoryBreakdown finances={finances} />
         </TabsContent>
       </Tabs>
     </div>
