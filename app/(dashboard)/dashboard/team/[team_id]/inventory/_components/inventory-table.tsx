@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, Edit, MoreHorizontal, Trash2 } from "lucide-react"
+import { ArrowUpDown, ChevronDown, Edit, Eye, MoreHorizontal, Trash2 } from "lucide-react"
  
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -201,6 +201,12 @@ export const columns: ColumnDef<Inventory>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                          <Link href={`/dashboard/team/${inventory.team_id}/inventory/${inventory.id}`} className="flex items-center space-x-2">
+                            <Eye className="h-4 w-4" />
+                            <span className="text-sm">View this item</span>
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Link href={`/dashboard/team/${inventory.team_id}/inventory/${inventory.id}/edit`} className="flex items-center space-x-2">
                             <Edit className="h-4 w-4" />
