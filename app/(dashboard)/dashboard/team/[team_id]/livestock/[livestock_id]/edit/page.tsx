@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { getLivestockById } from "@/lib/queries/livestock"
 import EditLivestockForm from "../../_components/edit-livestock-form"
+import { getFieldLocations } from "@/lib/queries/field-locations"
 
 interface EditLivestockPageProps {
   params: Promise<{
@@ -13,7 +14,12 @@ export default async function EditLivestockPage({ params }: EditLivestockPagePro
 
     const { livestock_id, team_id } = await params
 
-  const livestock = await getLivestockById(livestock_id)
+    const livestockData =  getLivestockById(livestock_id)
+    const fields =  getFieldLocations(team_id)
+    const [livestock, fieldLocations] = await Promise.all([
+      livestockData,
+      fields,
+    ])
 
   if (!livestock) {
     notFound()
@@ -22,7 +28,7 @@ export default async function EditLivestockPage({ params }: EditLivestockPagePro
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-3xl font-bold mb-6">Edit Livestock</h1>
-      <EditLivestockForm livestock={livestock} team_id={team_id} />
+      <EditLivestockForm livestock={livestock} team_id={team_id} locations={fieldLocations} />
     </div>
   )
 }

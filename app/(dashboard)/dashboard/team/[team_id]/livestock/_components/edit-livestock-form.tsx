@@ -35,24 +35,28 @@ import { cn } from "@/lib/utils"
 import { Livestock, LivestockSchema } from "@/lib/schema/livestock"
 import { updateLivestock } from "@/app/actions/livestock"
 import { formatDate } from "date-fns"
+import { FieldLocation } from "@/lib/schema"
 
 interface EditLivestockFormProps {
   livestock: Livestock
   team_id: string
+  locations: FieldLocation[]
 }
 
-export default function EditLivestockForm({ livestock, team_id }: EditLivestockFormProps) {
+export default function EditLivestockForm({ livestock, team_id, locations }: EditLivestockFormProps) {
   const router = useRouter()
   const [isPending, setIsPending] = useState(false)
   const [date, setDate] = useState<Date | undefined>(new Date(livestock.acquisition_date))
 
   const healthStatusOptions = [
-    "Healthy", 
-    "Sick", 
-    "Injured", 
-    "Pregnant", 
-    "Recovering", 
-    "Quarantined"
+    "healthy", 
+    "sick", 
+    "injured", 
+    "pregnant", 
+    "recovering", 
+    "quarantine",
+    "new born",
+    "needs attention",
   ]
 
   const purposeOptions = [
@@ -229,17 +233,28 @@ export default function EditLivestockForm({ livestock, team_id }: EditLivestockF
           </div>
           
           <div className="grid grid-cols-2 gap-4">
-            <FormField
+          <FormField
               control={form.control}
               name="location"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Location</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., North Pasture, Barn 2" {...field} />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Location" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {locations.map((location) => (
+                        <SelectItem key={location.id} value={location.name}>
+                          {location.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormDescription>
-                    Where this livestock is located
+                    Current health condition
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -255,12 +270,12 @@ export default function EditLivestockForm({ livestock, team_id }: EditLivestockF
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select health status" />
+                        <SelectValue className="capitalize" placeholder="Select health status" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {healthStatusOptions.map((status) => (
-                        <SelectItem key={status} value={status}>
+                        <SelectItem className="capitalize" key={status} value={status}>
                           {status}
                         </SelectItem>
                       ))}
