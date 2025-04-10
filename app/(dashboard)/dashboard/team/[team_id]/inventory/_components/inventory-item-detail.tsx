@@ -5,6 +5,7 @@ import { Package, Calendar, Tag, Warehouse, DollarSign, AlertTriangle } from "lu
 import { Progress } from "@/components/ui/progress"
 import { Inventory } from "@/lib/schema"
 import { cn } from "@/lib/utils"
+import { format } from "date-fns"
 
 interface InventoryItemDetailsProps {
   item: Inventory
@@ -77,7 +78,7 @@ export function InventoryItemDetails({ item }: InventoryItemDetailsProps) {
               <div className="pl-6 space-y-1">
                 <Progress
                   value={(Number(item.quantity) / Number(item.reorder_level)) * 100}
-                  className={cn("", stockStatus === "critical" ? "bg-red-500" : stockStatus === "low" ? "bg-amber-500" : "bg-green-500")}              
+                  className={cn("h-2", stockStatus === "critical" ? "bg-red-500" : stockStatus === "low" ? "bg-amber-500" : "bg-green-500")}              
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
                   <span>
@@ -119,7 +120,7 @@ export function InventoryItemDetails({ item }: InventoryItemDetailsProps) {
               <div className="rounded-md border p-2">
                 <div className="text-xs text-muted-foreground">Purchase Date</div>
                 <div className="font-medium">
-                  {item.purchase_date ? new Date(item.purchase_date).toLocaleDateString() : "N/A"}
+                  {item.purchase_date ? format(item.purchase_date, "PPP") : "N/A"}
                 </div>
               </div>
               <div className="rounded-md border p-2">
