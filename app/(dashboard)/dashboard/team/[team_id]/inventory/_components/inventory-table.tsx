@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, ChevronDown, Edit, MoreHorizontal, Trash2 } from "lucide-react"
  
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -39,6 +39,7 @@ import { Inventory } from "@/lib/schema"
 import { cn, formatCurrency } from "@/lib/utils"
 import { formatDate } from "date-fns"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 
 export const columns: ColumnDef<Inventory>[] = [
 
@@ -200,8 +201,15 @@ export const columns: ColumnDef<Inventory>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link href={`/dashboard/team/${inventory.team_id}/inventory/${inventory.id}/edit`} className="flex items-center space-x-2">
+                            <Edit className="h-4 w-4" />
+                            <span className="text-sm text-muted-foreground">Edit this item</span>
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Trash2 className="h-4 w-4" />
+                          Delete</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )

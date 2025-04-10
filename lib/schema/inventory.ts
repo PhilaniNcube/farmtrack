@@ -40,6 +40,7 @@ export const InventorySchema = z.object({
 });
 
 export const InventoryUpdateSchema = z.object({
+  team_id: z.string(),
   id: z.coerce.number(),
   item_name: z.string(),
   category: z.string(),
