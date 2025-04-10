@@ -37,7 +37,7 @@ export function LowStockAlerts({inventory}:{inventory:Inventory[]}) {
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">Low Stock Items</h2>
         <Button asChild>
-          <Link href="/dashboard/inventory/order">
+          <Link href={`/dashboard/team/${lowStockItems[0]?.team_id}/inventory/add`} className="flex items-center justify-center space-x-2">
             <ShoppingCart className="mr-2 h-4 w-4" />
             Order Supplies
           </Link>
