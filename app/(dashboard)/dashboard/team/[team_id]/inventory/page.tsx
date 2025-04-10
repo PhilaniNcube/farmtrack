@@ -4,6 +4,11 @@ import Link from 'next/link'
 import React from 'react'
 import InventoryTable from './_components/inventory-table'
 import { getInventoryItems } from '@/lib/queries/inventory'
+import { InventoryHeader } from './_components/inventory-header'
+import { InventoryOverview } from './_components/inventory-overview'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { LowStockAlerts } from './_components/low-stock-alerts'
+import { CategoryBreakdown } from './_components/category-breakdown'
 
 const InventoryPage = async ({ params }: { params: Promise<{ team_id: string }> }) => {
 
@@ -17,15 +22,30 @@ const InventoryPage = async ({ params }: { params: Promise<{ team_id: string }> 
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold mb-4">Inventory</h2>
-        <Link href={`/dashboard/team/${team_id}/inventory/add`} passHref>
-          <Button className="bg-green-700 hover:bg-green-800 text-white">
-            <Plus className="mr-1 h-4 w-4" />
-            Add Inventory</Button>
-        </Link>
-      </div>
-      <InventoryTable inventory={inventory} />
+      <InventoryHeader team_id={team_id} />
+      <InventoryOverview inventory={inventory} />
+
+      <Tabs defaultValue="all-items" className="mt-6">
+        <TabsList>
+          <TabsTrigger value="all-items">All Items</TabsTrigger>
+          <TabsTrigger value="low-stock">Low Stock</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        </TabsList>
+        <TabsContent value="all-items" className="space-y-4">
+          {/* <InventoryFilters /> */}
+          <InventoryTable inventory={inventory} />
+        </TabsContent>
+        <TabsContent value="low-stock" className="space-y-4">
+          <LowStockAlerts inventory={inventory} />
+        </TabsContent>
+        <TabsContent value="analytics" className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <CategoryBreakdown inventory={inventory} />
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      
     </div>
   )
 }
