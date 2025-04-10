@@ -204,7 +204,7 @@ export const columns: ColumnDef<Inventory>[] = [
                         <DropdownMenuItem>
                           <Link href={`/dashboard/team/${inventory.team_id}/inventory/${inventory.id}/edit`} className="flex items-center space-x-2">
                             <Edit className="h-4 w-4" />
-                            <span className="text-sm text-muted-foreground">Edit this item</span>
+                            <span className="text-sm">Edit this item</span>
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
