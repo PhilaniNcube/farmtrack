@@ -3,14 +3,17 @@ import { getLivestockById } from "@/lib/queries/livestock"
 import EditLivestockForm from "../../_components/edit-livestock-form"
 
 interface EditLivestockPageProps {
-  params: {
-    id: string
+  params: Promise<{
+    livestock_id: number
     team_id: string
-  }
+  }>
 }
 
 export default async function EditLivestockPage({ params }: EditLivestockPageProps) {
-  const livestock = await getLivestockById(parseInt(params.id, 10))
+
+    const { livestock_id, team_id } = await params
+
+  const livestock = await getLivestockById(livestock_id)
 
   if (!livestock) {
     notFound()
@@ -19,7 +22,7 @@ export default async function EditLivestockPage({ params }: EditLivestockPagePro
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-3xl font-bold mb-6">Edit Livestock</h1>
-      <EditLivestockForm livestock={livestock} team_id={params.team_id} />
+      <EditLivestockForm livestock={livestock} team_id={team_id} />
     </div>
   )
 }

@@ -48,6 +48,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { toast } from "@/components/ui/use-toast"
 import { deleteLivestock } from "@/app/actions/livestock"
+import Link from 'next/link'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -376,9 +377,10 @@ const columns: ColumnDef<Livestock>[] = [
               <Eye className="mr-2 h-4 w-4" /> View Details
             </DropdownMenuItem>
             <DropdownMenuItem 
-              onClick={() => router.push(`/dashboard/team/${team_id}/livestock/${livestock.id}/edit`)}
-            >
+            > 
+              <Link href={`/dashboard/team/${team_id}/livestock/${livestock.id}/edit`}>
               <Pencil className="mr-2 h-4 w-4" /> Edit
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
  
