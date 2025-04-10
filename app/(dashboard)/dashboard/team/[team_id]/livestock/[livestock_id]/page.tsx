@@ -9,14 +9,17 @@ import { getLivestockById } from "@/lib/queries/livestock"
 import { formatDate } from "@/lib/utils"
 
 interface LivestockDetailPageProps {
-  params: {
-    id: string
+  params: Promise<{
+    livestock_id: number
     team_id: string
-  }
+  }>
 }
 
 export default async function LivestockDetailPage({ params }: LivestockDetailPageProps) {
-  const livestock = await getLivestockById(parseInt(params.id, 10))
+
+  const { livestock_id, team_id } = await params
+
+  const livestock = await getLivestockById(livestock_id)
 
   if (!livestock) {
     notFound()
@@ -25,7 +28,7 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
   return (
     <div className="container mx-auto py-10">
       <div className="flex items-center mb-6">
-        <Link href={`/dashboard/team/${params.team_id}/livestock`} passHref>
+        <Link href={`/dashboard/team/${team_id}/livestock`} passHref>
           <Button variant="ghost">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Livestock
@@ -51,7 +54,7 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
               <span className="font-semibold">{livestock.type}</span>
             </div>
             <Separator />
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Tag className="mr-2 h-4 w-4 text-muted-foreground" />
@@ -60,7 +63,7 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
               <span className="font-semibold">{livestock.breed}</span>
             </div>
             <Separator />
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Users className="mr-2 h-4 w-4 text-muted-foreground" />
@@ -69,7 +72,7 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
               <span className="font-semibold">{livestock.count}</span>
             </div>
             <Separator />
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Calendar className="mr-2 h-4 w-4 text-muted-foreground" />
@@ -78,7 +81,7 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
               <span className="font-semibold">{formatDate(livestock.acquisition_date)}</span>
             </div>
             <Separator />
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <MapPin className="mr-2 h-4 w-4 text-muted-foreground" />
@@ -105,7 +108,7 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
               </Badge>
             </div>
             <Separator />
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Tag className="mr-2 h-4 w-4 text-muted-foreground" />
@@ -114,7 +117,7 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
               <span className="font-semibold">{livestock.purpose || "Not specified"}</span>
             </div>
             <Separator />
-            
+
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <DollarSign className="mr-2 h-4 w-4 text-muted-foreground" />
@@ -123,7 +126,7 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
               <span className="font-semibold">{livestock.source || "Not specified"}</span>
             </div>
             <Separator />
-            
+
             <div>
               <div className="flex items-center mb-2">
                 <FileText className="mr-2 h-4 w-4 text-muted-foreground" />
@@ -135,13 +138,8 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
             </div>
           </CardContent>
           <CardFooter className="flex justify-between border-t pt-6">
-            <Button 
-              variant="outline"
-              onClick={() => { window.print(); }}
-            >
-              Print Details
-            </Button>
-            <Link href={`/dashboard/team/${params.team_id}/livestock/edit/${params.id}`} passHref>
+          
+            <Link href={`/dashboard/team/${team_id}/livestock/${livestock_id}/edit`} passHref>
               <Button>Edit Livestock</Button>
             </Link>
           </CardFooter>

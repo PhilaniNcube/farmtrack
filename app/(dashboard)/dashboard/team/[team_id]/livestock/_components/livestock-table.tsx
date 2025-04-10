@@ -84,7 +84,7 @@ export function DataTable<TData, TValue>({
       },
     },
   })
-  
+
   const handleDeleteClick = (id: number) => {
     setLivestockToDelete(id)
     setDeleteDialogOpen(true)
@@ -94,7 +94,7 @@ export function DataTable<TData, TValue>({
     if (livestockToDelete) {
       try {
         const result = await deleteLivestock(livestockToDelete)
-        
+
         if (result.error) {
           toast({
             title: "Error",
@@ -106,7 +106,7 @@ export function DataTable<TData, TValue>({
             title: "Success",
             description: `Livestock has been deleted successfully.`,
           })
-          
+
           // Refresh the data
           router.refresh()
         }
@@ -141,10 +141,10 @@ export function DataTable<TData, TValue>({
       return columns
         .filter(column => column.id !== 'actions')
         .map(column => {
-          const columnId = 'accessorKey' in column ? 
-            (column.accessorKey as string) : 
+          const columnId = 'accessorKey' in column ?
+            (column.accessorKey as string) :
             column.id as string
-            
+
           const value = row.getValue(columnId)
           if (columnId === 'acquisition_date' && value instanceof Date) {
             return formatDate(value)
@@ -162,17 +162,17 @@ export function DataTable<TData, TValue>({
     // Create a blob and download link
     const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' })
     const link = document.createElement('a')
-    
+
     const url = URL.createObjectURL(blob)
     link.href = url
     link.setAttribute('download', `livestock-export-${new Date().toISOString().split('T')[0]}.csv`)
     document.body.appendChild(link)
     link.click()
-    
+
     // Clean up
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
-    
+
     toast({
       title: "Export successful",
       description: "The livestock data has been exported as CSV.",
@@ -205,9 +205,9 @@ export function DataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   )
                 })}
@@ -261,7 +261,7 @@ export function DataTable<TData, TValue>({
           </Button>
         </div>
       </div>
-      
+
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -336,13 +336,13 @@ const columns: ColumnDef<Livestock>[] = [
       const status = row.getValue("health_status") as string
       return (
         <Badge className={cn(
-            status === "healthy" ? "bg-green-500 text-white" : 
+          status === "healthy" ? "bg-green-500 text-white" :
             status === "sick" ? "bg-red-500 text-white" :
-            status === "quarantine" ? "bg-yellow-500 text-white" :
-            status === "sick" ? "bg-red-700 text-white" :
-            status === "quarantine" ? "bg-yellow-500 text-white" :
-            "bg-blue-700 text-white" 
-            ,
+              status === "quarantine" ? "bg-yellow-500 text-white" :
+                status === "sick" ? "bg-red-700 text-white" :
+                  status === "quarantine" ? "bg-yellow-500 text-white" :
+                    "bg-blue-700 text-white"
+          ,
         )}>
           {status}
         </Badge>
@@ -360,7 +360,7 @@ const columns: ColumnDef<Livestock>[] = [
       const router = useRouter()
       const params = useParams()
       const team_id = params.team_id as string
-      
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -371,19 +371,20 @@ const columns: ColumnDef<Livestock>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem 
-              onClick={() => router.push(`/dashboard/team/${team_id}/livestock/${livestock.id}`)}
+            <DropdownMenuItem
             >
-              <Eye className="mr-2 h-4 w-4" /> View Details
+              <Link href={`/dashboard/team/${team_id}/livestock/${livestock.id}`} className='flex items-center'>
+                <Eye className="mr-2 h-4 w-4" /> View Details
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem 
-            > 
-              <Link href={`/dashboard/team/${team_id}/livestock/${livestock.id}/edit`}>
-              <Pencil className="mr-2 h-4 w-4" /> Edit
+            <DropdownMenuItem
+            >
+              <Link href={`/dashboard/team/${team_id}/livestock/${livestock.id}/edit`} className='flex items-center'>
+                <Pencil className="mr-2 h-4 w-4" /> Edit
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
- 
+
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -392,13 +393,12 @@ const columns: ColumnDef<Livestock>[] = [
 ]
 
 // Main livestock table component that fetches data for specific team
-export default function LivestockTable({livestock}:{livestock:Livestock[]}) {
+export default function LivestockTable({ livestock }: { livestock: Livestock[] }) {
   const params = useParams()
-  const team_id = params.team_id as string
+
 
   return (
-    <div className="container mx-auto py-10">
-   
+    <div className="">
       <DataTable columns={columns} data={livestock} />
     </div>
   )
