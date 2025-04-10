@@ -119,7 +119,7 @@ export function LivestockDetails({ livestock }: LivestockDetailsProps) {
               <Tag className="mr-2 h-4 w-4 text-green-500" />
               <span className="font-medium">Purpose</span>
             </div>
-            <p className="pl-6">{getPurposeBadge(livestock.purpose)}</p>
+            <div className="pl-6">{getPurposeBadge(livestock.purpose)}</div>
           </div>
 
           <Separator />
