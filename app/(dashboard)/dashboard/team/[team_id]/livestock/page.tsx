@@ -4,6 +4,8 @@ import { getLivestock } from '@/lib/queries/livestock'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
+import { LivestockHeader } from './_components/livestock-header'
+import { LivestockOverview } from './_components/livestock-overview'
 
 export default async function LivestockPage({ params }: { params: Promise<{ team_id: string }> }) {
 
@@ -19,14 +21,8 @@ export default async function LivestockPage({ params }: { params: Promise<{ team
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold mb-4">Livestock Inventory</h2>
-        <Link href={`/dashboard/team/${team_id}/livestock/add`} passHref>
-          <Button className="bg-green-700 hover:bg-green-800 text-white">
-            <Plus className="mr-1 h-4 w-4" />
-            Add Livestock</Button>
-        </Link>
-      </div>
+      <LivestockHeader team_id={team_id} />
+      <LivestockOverview livestock={livestock} />
       <LivestockTable livestock={livestock} />
     </div>
   )

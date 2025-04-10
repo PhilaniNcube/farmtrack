@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { getLivestockById } from "@/lib/queries/livestock"
-import EditLivestockForm from "./_components/edit-livestock-form"
+import EditLivestockForm from "../../_components/edit-livestock-form"
 
 interface EditLivestockPageProps {
   params: {

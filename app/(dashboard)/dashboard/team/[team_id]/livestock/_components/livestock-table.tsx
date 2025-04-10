@@ -376,7 +376,7 @@ const columns: ColumnDef<Livestock>[] = [
               <Eye className="mr-2 h-4 w-4" /> View Details
             </DropdownMenuItem>
             <DropdownMenuItem 
-              onClick={() => router.push(`/dashboard/team/${team_id}/livestock/edit/${livestock.id}`)}
+              onClick={() => router.push(`/dashboard/team/${team_id}/livestock/${livestock.id}/edit`)}
             >
               <Pencil className="mr-2 h-4 w-4" /> Edit
             </DropdownMenuItem>
