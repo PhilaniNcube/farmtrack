@@ -5,6 +5,9 @@ import { db, query } from "@/lib/db"
 
 import { Livestock, livestock, LivestockHealthStatus, LivestockSchema, LivestockUpdateSchema } from "@/lib/schema"
 import { eq, is } from "drizzle-orm"
+import { stackServerApp } from "@/stack"
+import { redirect } from "next/navigation"
+import { format } from "date-fns"
 
 
 
@@ -31,20 +34,25 @@ export async function addLivestock(prevState:unknown, formData: FormData) {
     console.log("Validation error:", parsedData.error.format())
    throw new Error("Invalid data")
   }
+   
 
-
+  //  convert acquisition_date to a Date object make sure it is in the correct timezone format to prevent the postgres error "RangeError: Invalid time value" 
+  
+  const acquisitionDate = new Date(parsedData.data.acquisition_date)
 
   const newLivestock = await db.insert(livestock).values({
     type: parsedData.data.type,
     breed: parsedData.data.breed,
     count: parsedData.data.count,
-    acquisition_date: new Date(parsedData.data.acquisition_date),
+    acquisition_date: acquisitionDate,
     source: parsedData.data.source,
     location: parsedData.data.location,
     health_status: parsedData.data.health_status as LivestockHealthStatus,
     purpose: parsedData.data.purpose,
     notes: parsedData.data.notes,
     team_id: parsedData.data.team_id,
+    created_at: new Date(),
+    updated_at: new Date()
   }).returning()
 
   revalidateTag("getLivestock")
@@ -433,18 +441,51 @@ export async function updateLivestockSource(prevState:unknown, formData:FormData
 
 }
 
-export async function deleteLivestock(id: number) {
+export async function deleteLivestock(id: number, team_id: string) { 
+
+  if (!id) {
+    return {
+      error: "Invalid data"
+    }
+  }
+
+  // get the current user from stack auth
+  const authUser = await stackServerApp.getUser()
+  if (!authUser) {  
+    return {
+      error: "User not authenticated"
+    }
+  }
+  
+  // get all the users' teams
+  const userTeams = await stackServerApp.listTeams()
+  if (!userTeams) {
+    return {
+      error: "User has no teams"
+    }
+  }
+
+  // check if the team_id is in the user's teams
+  const team = userTeams.find((team) => team.id === team_id)
+
+  if (!team) {
+    return {
+      error: "User does not have access to this team"
+    }
+  }
+
+
+
   try {
     const deletedLivestock = await db.delete(livestock)
       .where(eq(livestock.id, id))
       .returning();
     
-    revalidateTag("getLivestock")
+ 
+    revalidatePath(`/dashboard/team/${team_id}/livestock`)
     
-    return {
-      success: true,
-      livestock: deletedLivestock
-    }
+    return deletedLivestock
+
   } catch (error) {
     console.error("Error deleting livestock:", error)
     return {

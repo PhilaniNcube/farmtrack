@@ -12,6 +12,7 @@ import { getFieldLocations } from "@/lib/queries/field-locations"
 import { incrementLivestockCount } from "@/app/actions/livestock"
 import AddAnimalsCount from "../_components/add-animals-count"
 import ReduceAnimalCount from "../_components/reduce-animal-count"
+import DeleteLivestock from "../_components/delete-livestock"
 
 interface LivestockDetailPageProps {
   params: Promise<{
@@ -57,17 +58,14 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
         <div className="flex items-center space-x-2">
           <AddAnimalsCount livestock={livestock} />
           <ReduceAnimalCount livestock={livestock} />
-          
+
           <Button variant="outline" asChild>
             <Link href={`/dashboard/team/${livestock.team_id}/livestock/${livestock.id}/edit`}>
               <Edit className="mr-2 h-4 w-4" />
               Edit
             </Link>
           </Button>
-          <Button variant="destructive">
-            <Trash className="mr-2 h-4 w-4" />
-            Delete
-          </Button>
+          <DeleteLivestock />
         </div>
       </div>
       <div className="mt-6">
