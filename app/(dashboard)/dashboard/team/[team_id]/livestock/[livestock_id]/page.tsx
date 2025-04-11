@@ -36,7 +36,7 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto p-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Button variant="outline" size="icon" asChild>
