@@ -3,7 +3,7 @@
 import { revalidatePath, revalidateTag } from "next/cache"
 import { db, query } from "@/lib/db"
 
-import { livestock, LivestockSchema } from "@/lib/schema"
+import { livestock, LivestockHealthStatus, LivestockSchema } from "@/lib/schema"
 import { eq, is } from "drizzle-orm"
 
 
@@ -41,7 +41,7 @@ export async function addLivestock(prevState:unknown, formData: FormData) {
     acquisition_date: new Date(parsedData.data.acquisition_date),
     source: parsedData.data.source,
     location: parsedData.data.location,
-    health_status: parsedData.data.health_status,
+    health_status: parsedData.data.health_status as LivestockHealthStatus,
     purpose: parsedData.data.purpose,
     notes: parsedData.data.notes,
     team_id: parsedData.data.team_id,
@@ -91,7 +91,7 @@ export async function updateLivestock(prevState:unknown, formData: FormData) {
       acquisition_date: new Date(parsedData.data.acquisition_date),
       source: parsedData.data.source,
       location: parsedData.data.location,
-      health_status: parsedData.data.health_status,
+      health_status: parsedData.data.health_status as LivestockHealthStatus,
       purpose: parsedData.data.purpose,
       notes: parsedData.data.notes,
       team_id: parsedData.data.team_id
@@ -213,7 +213,7 @@ export async function updateLivestockHealthStatus(prevState:unknown, formData:Fo
 
   try {
     const updatedLivestockHealthStatus = await db.update(livestock).set({
-      health_status: health_status,
+      health_status: health_status as LivestockHealthStatus,
       updated_at: new Date()
     }).where(eq(livestock.id, id)).returning()
 

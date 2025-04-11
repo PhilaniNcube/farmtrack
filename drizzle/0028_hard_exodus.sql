@@ -1,0 +1,1 @@
+ALTER TABLE "livestock" DROP COLUMN "created_at";

@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { MilkIcon as Cow, Tag, MapPin, Clipboard, AlertTriangle } from "lucide-react"
-import { Livestock } from "@/lib/schema"
+import { Livestock, LivestockHealthStatus } from "@/lib/schema"
 import { format } from "date-fns"
 
 interface LivestockDetailsProps {
@@ -10,7 +10,7 @@ interface LivestockDetailsProps {
 }
 
 export function LivestockDetails({ livestock }: LivestockDetailsProps) {
-  const getHealthStatusBadge = (status: string) => {
+  const getHealthStatusBadge = (status: LivestockHealthStatus) => {
     switch (status) {
       case "healthy":
         return <Badge variant="default">Healthy</Badge>
@@ -102,12 +102,12 @@ export function LivestockDetails({ livestock }: LivestockDetailsProps) {
               <span className="font-medium">Health Status</span>
             </div>
             <div className="pl-6">
-              {getHealthStatusBadge(livestock.health_status)}
+              {/* {getHealthStatusBadge(livestock.health_status)} */}
               {livestock.health_status !== "healthy" && (
                 <p className="text-sm text-muted-foreground mt-1">
                   {livestock.health_status === "needs_attention" && "Some animals in this group need attention."}
                   {livestock.health_status === "sick" && "Some animals in this group are sick and need treatment."}
-                  {livestock.health_status === "quarantined" && "This group is currently quarantined."}
+                  {livestock.health_status === "quarantine" && "This group is currently quarantined."}
                   {livestock.health_status === "recovering" && "This group is recovering from illness."}
                 </p>
               )}

@@ -2,7 +2,7 @@
 
 import { users } from "./users";
 import { priorityEnum, statusEnum, tasks } from "./tasks";
-import { livestock } from "./livestock";
+import { healthStatusEnum, livestock } from "./livestock";
 import { inventory } from "./inventory";
 import { finances } from "./finances";
 import { crops } from "./crops";
@@ -31,6 +31,7 @@ export const schema = {
   activityTypeEnum: activityTypeEnum,
   statusEnum: statusEnum,
   priorityEnum: priorityEnum,
+  healthStatusEnum: healthStatusEnum,
 };
 
 export * from "./users";
@@ -46,3 +47,5 @@ export * from "./farm-members";
 export * from "./field-location";
 export * from "./teams";
 export * from "./crop_notes";
+
+

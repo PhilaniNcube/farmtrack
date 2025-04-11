@@ -31,6 +31,17 @@ import AddFieldDialog from './add-field-dialog';
 
 const AddLivestockForm = ({ locations }: { locations: FieldLocation[] }) => {
 
+    const healthStatusOptions  = [
+        "healthy",
+        "new born",
+        "sick",
+        "needs_attention",
+        "quarantine",
+        "recovering",
+        "unknown",
+        "other"
+      ] as const
+
     const params = useParams()
     const team_id = params.team_id as string
 
@@ -232,14 +243,11 @@ const AddLivestockForm = ({ locations }: { locations: FieldLocation[] }) => {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="healthy">Healthy</SelectItem>
-                                                <SelectItem value="sick">Sick</SelectItem>
-                                                <SelectItem value="new born">New Born</SelectItem>
-                                                <SelectItem value="injured">Injured</SelectItem>
-                                                <SelectItem value="quarantine">Quarantine</SelectItem>
-
-                                                <SelectItem value="slaughtered">Slaughtered</SelectItem>
-                                                <SelectItem value="other">Other</SelectItem>
+                                                {healthStatusOptions.map((status) => (
+                                                    <SelectItem key={status} value={status}>
+                                                        {status}
+                                                    </SelectItem>
+                                                ))}
                                             </SelectContent>
                                         </Select>
 

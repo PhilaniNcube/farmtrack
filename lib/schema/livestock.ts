@@ -1,7 +1,18 @@
-import { pgTable, serial, varchar, timestamp, text, numeric, integer } from 'drizzle-orm/pg-core';
-import { farms } from './farms';
+import { pgTable, serial, varchar, timestamp, text, numeric, integer, pgEnum, index } from 'drizzle-orm/pg-core';
 import { z } from 'zod';
 import { teams } from './teams';
+
+export const healthStatusEnum = pgEnum('health_status', [
+  'healthy',
+  'new born',
+  'sick',
+  'needs_attention',
+  'quarantine',
+  'recovering',
+  'unknown',
+  'other'
+]
+)
 
 export const livestock = pgTable('livestock', {
   id: serial('id').primaryKey(),
@@ -11,16 +22,30 @@ export const livestock = pgTable('livestock', {
   acquisition_date: timestamp('acquisition_date').notNull(),
   source: varchar('source', { length: 255 }),
   location: varchar('location', { length: 255 }).notNull(),
-  health_status: varchar('health_status', { length: 50 }).notNull(),
+  health_status: healthStatusEnum('health_status').default("healthy"), // default to healthy
   purpose: varchar('purpose', { length: 100 }), // e.g., dairy, meat, breeding
   notes: text('notes'),
   team_id: varchar('team_id').references(() => teams.id).notNull(),
-  created_at: timestamp('created_at').defaultNow().notNull(),
-  updated_at: timestamp('updated_at').defaultNow().notNull()
-});
+  created_at: timestamp('created_at', {
+    mode: 'date',
+    withTimezone: false,
+  }).defaultNow().notNull(),
+  updated_at: timestamp('updated_at', {
+    mode: 'date',
+    withTimezone: false,
+  }).defaultNow().notNull()
+}, 
+(table) => ({
+  titleIndex: index('idx_health_status').on(table.health_status),
+  statusIndex: index('idx_purpose').on(table.purpose),
+}) 
+);
 
 export type Livestock = typeof livestock.$inferSelect;
 export type LivestockInsert = typeof livestock.$inferInsert;
+
+
+export type LivestockHealthStatus =  'healthy' | 'new born' | 'sick' | 'needs_attention' | 'quarantine' | 'recovering' | 'unknown' | 'other'
 
 export const LivestockSchema = z.object({
   type: z.string().min(1, 'Type is required'),

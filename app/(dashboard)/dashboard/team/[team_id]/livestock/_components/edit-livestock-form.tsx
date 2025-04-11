@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/popover"
 import { toast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
-import { Livestock, LivestockSchema } from "@/lib/schema/livestock"
+import { Livestock, LivestockHealthStatus, LivestockSchema } from "@/lib/schema/livestock"
 import { updateLivestock } from "@/app/actions/livestock"
 import { formatDate } from "date-fns"
 import { FieldLocation } from "@/lib/schema"
@@ -48,16 +48,19 @@ export default function EditLivestockForm({ livestock, team_id, locations }: Edi
   const [isPending, setIsPending] = useState(false)
   const [date, setDate] = useState<Date | undefined>(new Date(livestock.acquisition_date))
 
-  const healthStatusOptions = [
-    "healthy", 
-    "sick", 
-    "injured", 
-    "pregnant", 
-    "recovering", 
-    "quarantine",
+//  list of health_status options should be in the same order as the enum in the schema
+  // this is to ensure that the select options are in the same order as the enum in the schema
+
+  const healthStatusOptions  = [
+    "healthy",
     "new born",
-    "needs attention",
-  ]
+    "sick",
+    "needs_attention",
+    "quarantine",
+    "recovering",
+    "unknown",
+    "other"
+  ] as const
 
   const purposeOptions = [
     "Dairy",
@@ -267,7 +270,7 @@ export default function EditLivestockForm({ livestock, team_id, locations }: Edi
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Health Status</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value!}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue className="capitalize" placeholder="Select health status" />
