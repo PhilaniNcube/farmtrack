@@ -9,6 +9,7 @@ import { getLivestockById } from "@/lib/queries/livestock"
 import { formatDate } from "@/lib/utils"
 import { LivestockDetails } from "../_components/livestock-details"
 import { getFieldLocations } from "@/lib/queries/field-locations"
+import { incrementLivestockCount } from "@/app/actions/livestock"
 
 interface LivestockDetailPageProps {
   params: Promise<{
@@ -21,8 +22,8 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
 
   const { livestock_id, team_id } = await params
 
-  const livestockData =  getLivestockById(livestock_id)
-  const fields =  getFieldLocations(team_id)
+  const livestockData = getLivestockById(livestock_id)
+  const fields = getFieldLocations(team_id)
   const [livestock, fieldLocations] = await Promise.all([
     livestockData,
     fields,

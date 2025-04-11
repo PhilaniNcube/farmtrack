@@ -70,3 +70,10 @@ export const LivestockSchema = z.object({
   notes: z.string().optional(),
   team_id: z.string()
 })
+
+
+// extend LivestockSchema to include id for update
+
+export const LivestockUpdateSchema = LivestockSchema.extend({
+  id: z.coerce.number().min(1, 'ID is required')
+})

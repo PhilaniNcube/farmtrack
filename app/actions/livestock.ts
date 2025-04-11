@@ -3,7 +3,7 @@
 import { revalidatePath, revalidateTag } from "next/cache"
 import { db, query } from "@/lib/db"
 
-import { livestock, LivestockHealthStatus, LivestockSchema } from "@/lib/schema"
+import { livestock, LivestockHealthStatus, LivestockSchema, LivestockUpdateSchema } from "@/lib/schema"
 import { eq, is } from "drizzle-orm"
 
 
@@ -75,13 +75,15 @@ export async function updateLivestock(prevState:unknown, formData: FormData) {
   try {
     const data = Object.fromEntries(formData.entries())
 
-    const parsedData = await LivestockSchema.safeParse(data)
+    const parsedData = await LivestockUpdateSchema.safeParse(data)
 
     if (!parsedData.success) {
       return {
         error: parsedData.error.format()
       }
     }
+
+    console.log("Parsed data:", parsedData.data)  
 
 
     const updatedLivestock = await db.update(livestock).set({
@@ -95,7 +97,7 @@ export async function updateLivestock(prevState:unknown, formData: FormData) {
       purpose: parsedData.data.purpose,
       notes: parsedData.data.notes,
       team_id: parsedData.data.team_id
-    }).where(eq(livestock.id, Number(data.id))).returning()
+    }).where(eq(livestock.id, Number(parsedData.data.id))).returning()
 
 
 
@@ -113,7 +115,7 @@ export async function updateLivestock(prevState:unknown, formData: FormData) {
 }
 
 
-export async function incrementLivestockCount(prevState:unknown, id: number ) {
+export async function incrementLivestockCount( id: number ) {
 
 
   try {
@@ -132,7 +134,7 @@ export async function incrementLivestockCount(prevState:unknown, id: number ) {
   } 
 }
 
-export async function decrementLivestockCount(prevState:unknown, id: number, ) {
+export async function decrementLivestockCount( id: number, ) {
   
 
   try {

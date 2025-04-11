@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/popover"
 import { toast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
-import { Livestock, LivestockHealthStatus, LivestockSchema } from "@/lib/schema/livestock"
+import { Livestock, LivestockHealthStatus, LivestockSchema, LivestockUpdateSchema } from "@/lib/schema/livestock"
 import { updateLivestock } from "@/app/actions/livestock"
 import { formatDate } from "date-fns"
 import { FieldLocation } from "@/lib/schema"
@@ -62,23 +62,12 @@ export default function EditLivestockForm({ livestock, team_id, locations }: Edi
     "other"
   ] as const
 
-  const purposeOptions = [
-    "Dairy",
-    "Meat",
-    "Breeding",
-    "Wool/Fiber",
-    "Draft/Labor",
-    "Companionship",
-    "Show/Exhibition",
-    "Research",
-    "Conservation",
-    "Other"
-  ]
+
 
   const form = useForm({
-    resolver: zodResolver(LivestockSchema),
+    resolver: zodResolver(LivestockUpdateSchema),
     defaultValues: {
-      id: livestock.id.toString(),
+      id: livestock.id,
       type: livestock.type,
       breed: livestock.breed,
       count: livestock.count,
@@ -86,7 +75,7 @@ export default function EditLivestockForm({ livestock, team_id, locations }: Edi
       source: livestock.source || "",
       location: livestock.location,
       health_status: livestock.health_status,
-      purpose: livestock.purpose || "",
+      purpose: livestock.purpose ,
       notes: livestock.notes || "",
       team_id: team_id,
     },
@@ -316,26 +305,15 @@ export default function EditLivestockForm({ livestock, team_id, locations }: Edi
               name="purpose"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Purpose</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value || undefined}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select purpose" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {purposeOptions.map((purpose) => (
-                        <SelectItem key={purpose} value={purpose}>
-                          {purpose}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    The primary purpose of this livestock
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
+                <FormLabel>Purpose</FormLabel>
+                <FormControl>
+                  <Input placeholder="e.g., Meat, Dairy, Breeding" {...field} value={field.value ?? ''} />
+                </FormControl>
+                <FormDescription>
+                  The primary purpose of this livestock
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
               )}
             />
           </div>
