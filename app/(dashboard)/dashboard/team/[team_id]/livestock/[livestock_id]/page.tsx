@@ -57,12 +57,7 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
         <div className="flex items-center space-x-2">
           <AddAnimalsCount livestock={livestock} />
           <ReduceAnimalCount livestock={livestock} />
-          <Button variant="outline" asChild>
-            <Link href={`/dashboard/team/${livestock.team_id}/livestock/${livestock.id}`}>
-              <FileText className="mr-2 h-4 w-4" />
-              Health Records
-            </Link>
-          </Button>
+          
           <Button variant="outline" asChild>
             <Link href={`/dashboard/team/${livestock.team_id}/livestock/${livestock.id}/edit`}>
               <Edit className="mr-2 h-4 w-4" />
