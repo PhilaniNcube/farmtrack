@@ -3,7 +3,7 @@
 import { revalidatePath, revalidateTag } from "next/cache"
 import { db, query } from "@/lib/db"
 
-import { livestock, LivestockHealthStatus, LivestockSchema, LivestockUpdateSchema } from "@/lib/schema"
+import { Livestock, livestock, LivestockHealthStatus, LivestockSchema, LivestockUpdateSchema } from "@/lib/schema"
 import { eq, is } from "drizzle-orm"
 
 
@@ -115,16 +115,22 @@ export async function updateLivestock(prevState:unknown, formData: FormData) {
 }
 
 
-export async function incrementLivestockCount( id: number ) {
+export async function incrementLivestockCount( animal: Livestock, count: number ) {
+
+
+
 
 
   try {
    
     const updatedLivestockCount = await db.update(livestock).set({
-      count: Number(livestock.count) + 1
-    }).where(eq(livestock.id, id)).returning()
+      count: Number(animal.count) + Number(count),
+      updated_at: new Date()
+    }).where(eq(livestock.id, animal.id)).returning()
 
- 
+    console.log("Updated livestock count:", updatedLivestockCount)
+
+    revalidatePath(`/dashboard/team/${animal.team_id}/livestock/${animal.id}`)
     return updatedLivestockCount
   } catch (error) {
     console.error("Error incrementing livestock count:", error)
@@ -134,13 +140,22 @@ export async function incrementLivestockCount( id: number ) {
   } 
 }
 
-export async function decrementLivestockCount( id: number, ) {
+export async function decrementLivestockCount( animal: Livestock, count: number  ) {
   
+  if (animal.count <= 0) {
+    return {
+      error: "Livestock count cannot be negative."
+    }
+  }
+
 
   try {
     const updatedLivestockCount = await db.update(livestock).set({
-      count: Number(livestock.count) - 1
-    }).where(eq(livestock.id, id)).returning()
+      count: Number(animal.count) - count,
+      updated_at: new Date()
+    }).where(eq(livestock.id, animal.id)).returning()
+
+    revalidatePath(`/dashboard/team/${animal.team_id}/livestock/${animal.id}`)
 
     return updatedLivestockCount
   } catch (error) {

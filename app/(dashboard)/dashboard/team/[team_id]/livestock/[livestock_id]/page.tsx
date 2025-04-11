@@ -10,6 +10,8 @@ import { formatDate } from "@/lib/utils"
 import { LivestockDetails } from "../_components/livestock-details"
 import { getFieldLocations } from "@/lib/queries/field-locations"
 import { incrementLivestockCount } from "@/app/actions/livestock"
+import AddAnimalsCount from "../_components/add-animals-count"
+import ReduceAnimalCount from "../_components/reduce-animal-count"
 
 interface LivestockDetailPageProps {
   params: Promise<{
@@ -53,14 +55,8 @@ export default async function LivestockDetailPage({ params }: LivestockDetailPag
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Animals
-          </Button>
-          <Button variant="outline" size="sm">
-            <Minus className="mr-2 h-4 w-4" />
-            Remove Animals
-          </Button>
+          <AddAnimalsCount livestock={livestock} />
+          <ReduceAnimalCount livestock={livestock} />
           <Button variant="outline" asChild>
             <Link href={`/dashboard/team/${livestock.team_id}/livestock/${livestock.id}`}>
               <FileText className="mr-2 h-4 w-4" />
