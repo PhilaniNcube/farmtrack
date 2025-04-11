@@ -58,7 +58,7 @@ const AddLivestockForm = ({ locations }: { locations: FieldLocation[] }) => {
             acquisition_date: "",
             source: "",
             location: "",
-            health_status: "",
+            health_status: "healthy",
             purpose: "",
             notes: "",
             team_id: team_id,

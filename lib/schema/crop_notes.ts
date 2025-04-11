@@ -6,7 +6,11 @@ export const crop_notes = pgTable('crop_notes', {
     text: text('name').notNull(),
     crop_id: integer('crop_id').notNull(), // Foreign key to crops table
     team_id: varchar('team_id').references(() => teams.id).notNull(),
-    created_date: timestamp('created_date').defaultNow().notNull(),
+    created_date: timestamp('created_date', {
+        mode: 'date',
+        withTimezone: false,
+    }).defaultNow().notNull(),
+    
 });
 
 export type CropNote = typeof crop_notes.$inferSelect;

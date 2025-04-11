@@ -1,4 +1,4 @@
-import { pgTable, serial, varchar, timestamp, text, numeric, integer } from 'drizzle-orm/pg-core';
+import { pgTable, serial, varchar, timestamp, text, numeric, integer, index } from 'drizzle-orm/pg-core';
 import { farms } from './farms';
 import { teams } from './teams';
 
@@ -15,7 +15,13 @@ export const finances = pgTable('finances', {
   team_id: varchar('team_id').references(() => teams.id).notNull(),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().notNull()
-});
+},
+(t) => [
+  
+  index('idx_transaction_date').on(t.transaction_date),
+  index('idx_payment_method').on(t.payment_method),
+] 
+);
 
 export type Finance = typeof finances.$inferSelect;
 export type FinanceInsert = typeof finances.$inferInsert;

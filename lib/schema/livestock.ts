@@ -35,10 +35,12 @@ export const livestock = pgTable('livestock', {
     withTimezone: false,
   }).defaultNow().notNull()
 }, 
-(table) => ({
-  titleIndex: index('idx_health_status').on(table.health_status),
-  statusIndex: index('idx_purpose').on(table.purpose),
-}) 
+(table) => [
+  index('idx_health_status').on(table.health_status),
+  index('idx_purpose').on(table.purpose),
+]
+
+
 );
 
 export type Livestock = typeof livestock.$inferSelect;
@@ -54,7 +56,16 @@ export const LivestockSchema = z.object({
   acquisition_date: z.string(),
   source: z.string().optional(),
   location: z.string().min(1, 'Location is required'),
-  health_status: z.string().min(1, 'Health status is required'),
+  health_status: z.enum([
+    'healthy',
+    'new born',
+    'sick',
+    'needs_attention',
+    'quarantine',
+    'recovering',
+    'unknown',
+    'other'
+  ]).default('healthy'),
   purpose: z.string().optional(),
   notes: z.string().optional(),
   team_id: z.string()
